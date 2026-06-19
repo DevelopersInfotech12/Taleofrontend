@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -6,6 +5,7 @@ const nextConfig = {
       { protocol: "http", hostname: "localhost", port: "5000" },
       { protocol: "https", hostname: "images.pexels.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "taleobackend.onrender.com" },
     ],
   },
   async rewrites() {
