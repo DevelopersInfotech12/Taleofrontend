@@ -44,17 +44,17 @@ const SwatchItem = ({ label, hex, selected, onChange }) => (
   <button onClick={onChange} title={label} className={`relative h-7 w-7 rounded-full transition-all duration-200 ${selected ? "scale-110 ring-2 ring-[#b8975a] ring-offset-2" : "hover:scale-105"}`} style={{ backgroundColor: hex }} />
 );
 
-const GEMSTONES   = ["Diamond","Ruby","Emerald","Sapphire","Pearl","Amethyst","Moissanite","No Stone"];
-const METALS      = ["Yellow Gold","White Gold","Rose Gold","Platinum","Silver 925","Two-Tone"];
+const GEMSTONES = ["Diamond", "Ruby", "Emerald", "Sapphire", "Pearl", "Amethyst", "Moissanite", "No Stone"];
+const METALS = ["Yellow Gold", "White Gold", "Rose Gold", "Platinum", "Silver 925", "Two-Tone"];
 const PRICE_RANGES = [
-  { label: "Under ₹5,000",        min: 0,      max: 5000   },
-  { label: "₹5,000 – ₹15,000",    min: 5000,   max: 15000  },
-  { label: "₹15,000 – ₹50,000",   min: 15000,  max: 50000  },
-  { label: "₹50,000 – ₹1,00,000", min: 50000,  max: 100000 },
-  { label: "Above ₹1,00,000",     min: 100000, max: null   },
+  { label: "Under ₹5,000", min: 0, max: 5000 },
+  { label: "₹5,000 – ₹15,000", min: 5000, max: 15000 },
+  { label: "₹15,000 – ₹50,000", min: 15000, max: 50000 },
+  { label: "₹50,000 – ₹1,00,000", min: 50000, max: 100000 },
+  { label: "Above ₹1,00,000", min: 100000, max: null },
 ];
 
-export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideClearHeader = false }) {
+export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideClearHeader = false, sort, onSortChange }) {
   const [categories, setCategories] = useState([]);
   const [catsLoading, setCatsLoading] = useState(true);
 
@@ -65,7 +65,7 @@ export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideC
         const cats = (json.data ?? []).filter((c) => c.isActive !== false);
         setCategories(cats);
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setCatsLoading(false));
   }, []);
 
@@ -164,14 +164,14 @@ export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideC
         <FilterSection title="Stone Color">
           <div className="flex flex-wrap gap-2.5">
             {[
-              { label: "White",  hex: "#F8F4F0" },
+              { label: "White", hex: "#F8F4F0" },
               { label: "Yellow", hex: "#F5C842" },
-              { label: "Pink",   hex: "#E8829A" },
-              { label: "Blue",   hex: "#3B7DC8" },
-              { label: "Green",  hex: "#3DAA6C" },
-              { label: "Red",    hex: "#C83B3B" },
+              { label: "Pink", hex: "#E8829A" },
+              { label: "Blue", hex: "#3B7DC8" },
+              { label: "Green", hex: "#3DAA6C" },
+              { label: "Red", hex: "#C83B3B" },
               { label: "Purple", hex: "#8B5CF6" },
-              { label: "Black",  hex: "#2C2C2C" },
+              { label: "Black", hex: "#2C2C2C" },
             ].map((c) => (
               <SwatchItem key={c.label} {...c} selected={filters.stoneColors?.includes(c.label)} onChange={() => onFilterChange("stoneColors", c.label)} />
             ))}
@@ -181,9 +181,9 @@ export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideC
         {/* Toggles */}
         <div className="py-5 space-y-2.5">
           {[
-            { label: "New Arrivals",     key: "newArrivals" },
-            { label: "On Sale / Offers", key: "onSale"      },
-            { label: "In Stock Only",    key: "inStock"     },
+            { label: "New Arrivals", key: "newArrivals" },
+            { label: "On Sale / Offers", key: "onSale" },
+            { label: "In Stock Only", key: "inStock" },
           ].map((t) => (
             <label key={t.key} className="flex cursor-pointer items-center justify-between">
               <span className="text-[11px] text-[#5c4f42]" style={{ fontFamily: BODY }}>{t.label}</span>
@@ -195,7 +195,31 @@ export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideC
               </div>
             </label>
           ))}
+
         </div>
+
+        {/* Sort by Price */}
+        <FilterSection title="Sort By">
+          <div className="space-y-1">
+            {[
+              { label: "Default", value: "featured" },
+              { label: "Price: Low to High", value: "price_asc" },
+              { label: "Price: High to Low", value: "price_desc" },
+            ].map((s) => (
+              <label key={s.value} className="group flex cursor-pointer items-center gap-2.5 py-1.5">
+                <div
+                  onClick={() => onSortChange?.(s.value)}
+                  className={`h-4 w-4 rounded-full border transition-all duration-200 flex items-center justify-center ${sort === s.value ? "border-[#b8975a] bg-[#b8975a]" : "border-[#d4c4b0] bg-white group-hover:border-[#b8975a]"}`}
+                >
+                  {sort === s.value && (
+                    <div className="h-2 w-2 rounded-full bg-white" />
+                  )}
+                </div>
+                <span className="text-[13px] text-[#5c4f42] group-hover:text-[#2c2418]" style={{ fontFamily: BODY }}>{s.label}</span>
+              </label>
+            ))}
+          </div>
+        </FilterSection>
 
       </div>
     </aside>

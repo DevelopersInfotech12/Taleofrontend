@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import NecklacesScreen from '../screens/NecklacesScreen'
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#fdfaf6" }} />}>
       <NecklacesScreen />
-    </div>
+    </Suspense>
   )
 }
 

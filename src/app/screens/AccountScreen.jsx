@@ -11,15 +11,15 @@ import { useCart } from "../lib/CartContext";
 import { fmtPrice, fmtDate, imgUrl } from "../lib/api";
 
 const C = {
-  dark:   "#1a0c06",
-  brown:  "#3d1f10",
-  gold:   "#b08850",
+  dark: "#1a0c06",
+  brown: "#3d1f10",
+  gold: "#b08850",
   goldLt: "#c9a96e",
-  cream:  "#f5efe8",
+  cream: "#f5efe8",
   border: "#e8ddd0",
-  muted:  "#8a7560",
-  text:   "#2a1a0e",
-  white:  "#ffffff",
+  muted: "#8a7560",
+  text: "#2a1a0e",
+  white: "#ffffff",
 };
 
 function Field({ label, name, type = "text", value, onChange, required, autoComplete }) {
@@ -39,7 +39,7 @@ function Field({ label, name, type = "text", value, onChange, required, autoComp
           transition: "border-color 0.2s, box-shadow 0.2s",
         }}
         onFocus={(e) => { e.target.style.borderColor = C.gold; e.target.style.boxShadow = `0 0 0 3px ${C.gold}22`; }}
-        onBlur={(e)  => { e.target.style.borderColor = C.border; e.target.style.boxShadow = "none"; }}
+        onBlur={(e) => { e.target.style.borderColor = C.border; e.target.style.boxShadow = "none"; }}
       />
     </div>
   );
@@ -91,45 +91,25 @@ function LoginForm({ onSwitch }) {
 
   return (
     <>
-      <h1 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.8rem,3vw,2.4rem)", fontWeight: 600, color: C.text }}>
-        Welcome Back
+      <h1 className="mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.1rem,2.1vw,1rem)", fontWeight: 600, color: C.text }}>
+        Sign In to Your Account
       </h1>
-      <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: C.muted, marginTop: 6, marginBottom: 28 }}>
-        Sign in to view your orders, wishlist and saved cart.
-      </p>
-
       <div className="mb-2">
         <GoogleSignInButton onCredential={handleGoogle} />
       </div>
       <Divider />
-
-      {error && (
-        <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b", marginBottom: 16 }}>{error}</p>
-      )}
-
+      {error && <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b", marginBottom: 16 }}>{error}</p>}
       <form onSubmit={submit} className="flex flex-col gap-4">
-        <Field label="Email" name="email" type="email" value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
-        <Field label="Password" name="password" type="password" value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="current-password" />
-
-        <button type="submit" disabled={busy}
-          className="w-full rounded-full py-3.5 text-xs font-bold uppercase tracking-[0.15em] transition-opacity mt-2"
-          style={{
-            fontFamily: "var(--font-jost)",
-            background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`,
-            color: C.goldLt, boxShadow: "0 4px 20px rgba(26,12,6,0.25)",
-            opacity: busy ? 0.6 : 1,
-          }}>
+        <Field label="Email" name="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
+        <Field label="Password" name="password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="current-password" />
+        <button type="submit" disabled={busy} className="w-full rounded-full py-3.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-opacity mt-2 text-[#fff] font-poppins"
+          style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, boxShadow: "0 4px 20px rgba(26,12,6,0.25)", opacity: busy ? 0.6 : 1 }}>
           {busy ? "Signing in…" : "Sign In"}
         </button>
       </form>
-
-      <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: C.muted, marginTop: 24, textAlign: "center" }}>
+      <p style={{ fontFamily: "var(--font-jost)", fontSize: 14, color: C.muted, marginTop: 24, textAlign: "center" }}>
         New here?{" "}
-        <button onClick={onSwitch} style={{ color: C.gold, fontWeight: 600, textDecoration: "underline" }}>
-          Create an account
-        </button>
+        <button onClick={onSwitch} style={{ color: C.gold, fontWeight: 600, textDecoration: "underline" }}>Create an account</button>
       </p>
     </>
   );
@@ -171,49 +151,27 @@ function RegisterForm({ onSwitch }) {
 
   return (
     <>
-      <h1 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.8rem,3vw,2.4rem)", fontWeight: 600, color: C.text }}>
-        Create Account
+      <h1 className="mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.1rem,2.1vw,1rem)", fontWeight: 600, color: C.text }}>
+        Register Your Account
       </h1>
-      <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: C.muted, marginTop: 6, marginBottom: 28 }}>
-        Join us for faster checkout and order tracking.
-      </p>
-
       <div className="mb-2">
         <GoogleSignInButton onCredential={handleGoogle} text="signup_with" />
       </div>
       <Divider />
-
-      {error && (
-        <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b", marginBottom: 16 }}>{error}</p>
-      )}
-
+      {error && <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b", marginBottom: 16 }}>{error}</p>}
       <form onSubmit={submit} className="flex flex-col gap-4">
-        <Field label="Full Name" name="name" value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })} required autoComplete="name" />
-        <Field label="Email" name="email" type="email" value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
-        <Field label="Phone" name="phone" type="tel" value={form.phone}
-          onChange={(e) => setForm({ ...form, phone: e.target.value })} autoComplete="tel" />
-        <Field label="Password" name="password" type="password" value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="new-password" />
-
-        <button type="submit" disabled={busy}
-          className="w-full rounded-full py-3.5 text-xs font-bold uppercase tracking-[0.15em] transition-opacity mt-2"
-          style={{
-            fontFamily: "var(--font-jost)",
-            background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`,
-            color: C.goldLt, boxShadow: "0 4px 20px rgba(26,12,6,0.25)",
-            opacity: busy ? 0.6 : 1,
-          }}>
+        <Field label="Full Name" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required autoComplete="name" />
+        <Field label="Email" name="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
+        <Field label="Phone" name="phone" type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} autoComplete="tel" />
+        <Field label="Password" name="password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="new-password" />
+        <button type="submit" disabled={busy} className="w-full rounded-full py-3.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-opacity mt-2 text-[#fff] font-poppins"
+          style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, boxShadow: "0 4px 20px rgba(26,12,6,0.25)", opacity: busy ? 0.6 : 1 }}>
           {busy ? "Creating account…" : "Create Account"}
         </button>
       </form>
-
-      <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: C.muted, marginTop: 24, textAlign: "center" }}>
+      <p style={{ fontFamily: "var(--font-jost)", fontSize: 14, color: C.muted, marginTop: 24, textAlign: "center" }}>
         Already have an account?{" "}
-        <button onClick={onSwitch} style={{ color: C.gold, fontWeight: 600, textDecoration: "underline" }}>
-          Sign in
-        </button>
+        <button onClick={onSwitch} style={{ color: C.gold, fontWeight: 600, textDecoration: "underline" }}>Sign in</button>
       </p>
     </>
   );
@@ -221,26 +179,26 @@ function RegisterForm({ onSwitch }) {
 
 /* ─── Icons ──────────────────────────────────────── */
 const Icon = {
-  user: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>),
-  bag: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>),
-  box: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>),
-  map: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>),
-  logout: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5" /><path d="M21 12H9" /></svg>),
-  edit: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4Z" /></svg>),
+  user:    (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>),
+  bag:     (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>),
+  box:     (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>),
+  heart:   (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>),
+  logout:  (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5" /><path d="M21 12H9" /></svg>),
   chevron: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>),
+  trash:   (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>),
 };
 
 /* ─── Status badge ──────────────────────────────────────── */
 function StatusBadge({ status }) {
   const s = (status || "pending").toLowerCase();
   const map = {
-    pending:   { bg: "#fdf3e3", fg: "#a9762f" },
-    processing:{ bg: "#fdf3e3", fg: "#a9762f" },
-    confirmed: { bg: "#eef3ee", fg: "#5c8a6a" },
-    shipped:   { bg: "#eaf1f7", fg: "#3f6f9c" },
-    delivered: { bg: "#eef6ee", fg: "#4a8a4a" },
-    cancelled: { bg: "#fbeceb", fg: "#c0392b" },
-    refunded:  { bg: "#f1eef6", fg: "#7d5fa6" },
+    pending:    { bg: "#fdf3e3", fg: "#a9762f" },
+    processing: { bg: "#fdf3e3", fg: "#a9762f" },
+    confirmed:  { bg: "#eef3ee", fg: "#5c8a6a" },
+    shipped:    { bg: "#eaf1f7", fg: "#3f6f9c" },
+    delivered:  { bg: "#eef6ee", fg: "#4a8a4a" },
+    cancelled:  { bg: "#fbeceb", fg: "#c0392b" },
+    refunded:   { bg: "#f1eef6", fg: "#7d5fa6" },
   };
   const c = map[s] || map.pending;
   return (
@@ -258,31 +216,22 @@ function OrderCard({ order, expanded, onToggle }) {
   const orderId = order.orderNumber || order._id?.slice(-8)?.toUpperCase();
 
   return (
-    <div className="rounded-2xl overflow-hidden"
-      style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
-      <button onClick={onToggle}
-        className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left">
+    <div className="rounded-2xl overflow-hidden" style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
+      <button onClick={onToggle} className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left">
         <div className="flex items-center gap-4 min-w-0">
-          <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: C.cream, color: C.gold }}>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: C.cream, color: C.gold }}>
             <Icon.box style={{ width: 20, height: 20 }} />
           </div>
           <div className="min-w-0">
-            <p style={{  fontSize: 13, fontWeight: 700, color: C.text }} className="font-poppins">
-              Order #{orderId}
-            </p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: C.text }} className="font-poppins">Order #{orderId}</p>
             <p style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: C.muted, marginTop: 2 }}>
               {fmtDate(order.createdAt)} • {items.length} item{items.length !== 1 ? "s" : ""}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
-          <div className="text-right hidden sm:block">
-            <StatusBadge status={order.status} />
-          </div>
-          <p style={{ fontSize: 16, fontWeight: 700, color: C.text }} className="font-poppins">
-            {fmtPrice(total)}
-          </p>
+          <div className="text-right hidden sm:block"><StatusBadge status={order.status} /></div>
+          <p style={{ fontSize: 16, fontWeight: 700, color: C.text }} className="font-poppins">{fmtPrice(total)}</p>
           <Icon.chevron style={{ width: 16, height: 16, color: C.muted, transform: expanded ? "rotate(90deg)" : "none", transition: "transform 0.2s" }} />
         </div>
       </button>
@@ -293,55 +242,32 @@ function OrderCard({ order, expanded, onToggle }) {
           <div className="flex flex-col gap-3 mt-3">
             {items.map((it, idx) => (
               <div key={it._id || idx} className="flex items-center gap-3">
-                <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0"
-                  style={{ background: C.cream, border: `1px solid ${C.border}` }}>
-                  {it.image && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={imgUrl(it.image)} alt={it.name} className="w-full h-full object-cover" />
-                  )}
+                <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0" style={{ background: C.cream, border: `1px solid ${C.border}` }}>
+                  {it.image && <img src={imgUrl(it.image)} alt={it.name} className="w-full h-full object-cover" />}
                 </div>
                 <div className="flex-1 min-w-0 font-poppins">
-                  <p style={{  fontSize: 13, fontWeight: 600, color: C.text }} className="truncate">
-                    {it.name}
-                  </p>
-                  <p style={{  fontSize: 12, color: C.muted, marginTop: 2 }}>
-                    {[it.variant, it.size].filter(Boolean).join(" / ") || "—"} • Qty {it.qty}
-                  </p>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: C.text }} className="truncate">{it.name}</p>
+                  <p style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{[it.variant, it.size].filter(Boolean).join(" / ") || "—"} • Qty {it.qty}</p>
                 </div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: C.text }}>
-                  {fmtPrice((it.price || 0) * (it.qty || 1))}
-                </p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{fmtPrice((it.price || 0) * (it.qty || 1))}</p>
               </div>
             ))}
           </div>
-
           {order.shippingAddress && (
             <div className="mt-4 pt-4" style={{ borderTop: `1px solid ${C.border}` }}>
-              <p style={{  fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>
-                Delivery Address
-              </p>
-              <p style={{  fontSize: 13, color: C.text, lineHeight: 1.6 }}>
+              <p style={{ fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Delivery Address</p>
+              <p style={{ fontSize: 13, color: C.text, lineHeight: 1.6 }}>
                 {[order.shippingAddress.fullName, order.shippingAddress.address, order.shippingAddress.city,
-                  order.shippingAddress.state, order.shippingAddress.postalCode, order.shippingAddress.country]
-                  .filter(Boolean).join(", ")}
+                  order.shippingAddress.state, order.shippingAddress.postalCode, order.shippingAddress.country].filter(Boolean).join(", ")}
               </p>
             </div>
           )}
-
           <div className="mt-4 pt-4 flex flex-col gap-2" style={{ borderTop: `1px solid ${C.border}` }}>
-            {order.subtotal != null && (
-              <Row label="Subtotal" value={fmtPrice(order.subtotal)} />
-            )}
-            {order.shippingCost != null && (
-              <Row label="Shipping" value={order.shippingCost ? fmtPrice(order.shippingCost) : "Free"} />
-            )}
-            {order.discount > 0 && (
-              <Row label="Discount" value={`− ${fmtPrice(order.discount)}`} />
-            )}
+            {order.subtotal != null && <Row label="Subtotal" value={fmtPrice(order.subtotal)} />}
+            {order.shippingCost != null && <Row label="Shipping" value={order.shippingCost ? fmtPrice(order.shippingCost) : "Free"} />}
+            {order.discount > 0 && <Row label="Discount" value={`− ${fmtPrice(order.discount)}`} />}
             <Row label="Total" value={fmtPrice(total)} bold />
-            {order.paymentMethod && (
-              <Row label="Payment Method" value={String(order.paymentMethod).toUpperCase()} />
-            )}
+            {order.paymentMethod && <Row label="Payment Method" value={String(order.paymentMethod).toUpperCase()} />}
           </div>
         </div>
       )}
@@ -368,7 +294,7 @@ function OrdersTab() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await authFetch("/orders");
+        const res = await authFetch("/orders/my");
         setOrders(res.data?.orders ?? res.data ?? []);
       } catch (err) {
         setError(err.message || "Failed to load orders");
@@ -378,17 +304,13 @@ function OrdersTab() {
     })();
   }, []);
 
-  if (loading) {
-    return <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: C.muted }}>Loading orders…</p>;
-  }
-  if (error) {
-    return <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b" }}>{error}</p>;
-  }
+  if (loading) return <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: C.muted }}>Loading orders…</p>;
+  if (error) return <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b" }}>{error}</p>;
   if (!orders.length) {
     return (
       <div className="text-center py-14 rounded-2xl font-poppins" style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
         <Icon.box style={{ width: 36, height: 36, color: C.muted, margin: "0 auto 14px" }} />
-        <p style={{  fontSize: 18, fontWeight: 600, color: C.text }}>No orders yet</p>
+        <p style={{ fontSize: 18, fontWeight: 600, color: C.text }}>No orders yet</p>
         <p style={{ fontSize: 13, color: C.muted, marginTop: 6 }}>When you place an order, it will show up here.</p>
         <Link href="/shop" className="inline-block mt-5 rounded-full px-6 py-3 text-xs font-bold uppercase tracking-[0.15em]"
           style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, color: C.goldLt }}>
@@ -402,6 +324,98 @@ function OrdersTab() {
     <div className="flex flex-col gap-3">
       {orders.map((o) => (
         <OrderCard key={o._id} order={o} expanded={openId === o._id} onToggle={() => setOpenId(openId === o._id ? null : o._id)} />
+      ))}
+    </div>
+  );
+}
+
+/* ─── Wishlist tab ──────────────────────────────────────── */
+function WishlistTab() {
+  const { addToCart } = useCart();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await authFetch("/wishlist");
+        setItems(res.data ?? []);
+      } catch {
+        // silent
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const removeItem = async (productId) => {
+    try {
+      await authFetch(`/wishlist/${productId}`, { method: "POST" }); // toggle = remove
+      setItems((prev) => prev.filter((p) => p._id !== productId));
+    } catch {}
+  };
+
+  const handleAddToCart = (p) => {
+    addToCart(
+      { id: p._id, slug: p.slug, name: p.name, image: p.images?.[0] || "", price: p.price, originalPrice: p.comparePrice },
+      { variant: "", size: "", qty: 1 }
+    );
+  };
+
+  if (loading) return <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: C.muted }}>Loading wishlist…</p>;
+
+  if (!items.length) {
+    return (
+      <div className="text-center py-14 rounded-2xl font-poppins" style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
+        <Icon.heart style={{ width: 36, height: 36, color: C.muted, margin: "0 auto 14px" }} />
+        <p style={{ fontSize: 18, fontWeight: 600, color: C.text }}>No saved items</p>
+        <p style={{ fontSize: 13, color: C.muted, marginTop: 6 }}>Tap the heart on any product to save it here.</p>
+        <Link href="/shop" className="inline-block mt-5 rounded-full px-6 py-3 text-xs font-bold uppercase tracking-[0.15em]"
+          style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, color: C.goldLt }}>
+          Browse Collection
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid sm:grid-cols-2 gap-4">
+      {items.map((p) => (
+        <div key={p._id} className="rounded-2xl overflow-hidden flex gap-4 p-4"
+          style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
+          {/* Image */}
+          <Link href={`/products/${p.slug}`} className="shrink-0">
+            <div className="w-20 h-20 rounded-xl overflow-hidden" style={{ background: C.cream }}>
+              {p.images?.[0] && (
+                <img src={imgUrl(p.images[0])} alt={p.name} className="w-full h-full object-cover" />
+              )}
+            </div>
+          </Link>
+
+          {/* Info */}
+          <div className="flex-1 min-w-0 font-poppins">
+            <Link href={`/products/${p.slug}`} style={{ textDecoration: "none" }}>
+              <p style={{ fontSize: 14, fontWeight: 700, color: C.text }} className="truncate">{p.name}</p>
+            </Link>
+            <p style={{ fontSize: 15, fontWeight: 700, color: C.text, marginTop: 4 }}>{fmtPrice(p.price)}</p>
+            {p.comparePrice > 0 && (
+              <p style={{ fontSize: 11, color: C.muted, textDecoration: "line-through" }}>{fmtPrice(p.comparePrice)}</p>
+            )}
+
+            <div className="flex gap-2 mt-3">
+              <button onClick={() => handleAddToCart(p)}
+                className="flex-1 rounded-full py-1.5 text-xs font-bold uppercase tracking-wider"
+                style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, color: C.goldLt }}>
+                Add to Cart
+              </button>
+              <button onClick={() => removeItem(p._id)} aria-label="Remove"
+                className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: C.cream, border: `1px solid ${C.border}` }}>
+                <Icon.trash style={{ width: 14, height: 14, color: "#c0392b" }} />
+              </button>
+            </div>
+          </div>
+        </div>
       ))}
     </div>
   );
@@ -432,12 +446,8 @@ function CartTab() {
         {items.map((it, idx) => (
           <div key={it.key} className="flex items-center gap-4 px-5 py-4"
             style={{ borderTop: idx === 0 ? "none" : `1px solid ${C.border}` }}>
-            <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0"
-              style={{ background: C.cream, border: `1px solid ${C.border}` }}>
-              {it.image && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={imgUrl(it.image)} alt={it.name} className="w-full h-full object-cover" />
-              )}
+            <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0" style={{ background: C.cream, border: `1px solid ${C.border}` }}>
+              {it.image && <img src={imgUrl(it.image)} alt={it.name} className="w-full h-full object-cover" />}
             </div>
             <div className="flex-1 min-w-0 font-poppins">
               <p style={{ fontSize: 14, fontWeight: 600, color: C.text }} className="truncate">{it.name}</p>
@@ -448,24 +458,20 @@ function CartTab() {
             </div>
             <div className="flex items-center rounded-full border overflow-hidden flex-shrink-0 font-poppins" style={{ borderColor: C.border, background: C.cream }}>
               <button onClick={() => updateQty(it.key, -1)} className="w-8 h-8 flex items-center justify-center text-base" style={{ color: C.text }}>−</button>
-              <span className="w-8 text-center text-sm font-semibold" style={{  color: C.text }}>{it.qty}</span>
+              <span className="w-8 text-center text-sm font-semibold" style={{ color: C.text }}>{it.qty}</span>
               <button onClick={() => updateQty(it.key, 1)} className="w-8 h-8 flex items-center justify-center text-base" style={{ color: C.text }}>+</button>
             </div>
             <button onClick={() => removeItem(it.key)} aria-label="Remove"
-              className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0"
-              style={{ color: C.muted }}>
+              className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0" style={{ color: C.muted }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
             </button>
           </div>
         ))}
       </div>
-
       <div className="rounded-2xl p-5 flex items-center justify-between font-poppins" style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
         <div>
-          <p style={{  fontSize: 12, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>
-            {count} item{count !== 1 ? "s" : ""}
-          </p>
-          <p style={{  fontSize: 22, fontWeight: 700, color: C.text, marginTop: 2 }}>{fmtPrice(subtotal)}</p>
+          <p style={{ fontSize: 12, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>{count} item{count !== 1 ? "s" : ""}</p>
+          <p style={{ fontSize: 22, fontWeight: 700, color: C.text, marginTop: 2 }}>{fmtPrice(subtotal)}</p>
         </div>
         <Link href="/checkout" className="rounded-full px-7 py-3.5 text-xs font-bold uppercase tracking-[0.15em]"
           style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, color: C.goldLt, boxShadow: "0 4px 20px rgba(26,12,6,0.25)" }}>
@@ -476,43 +482,37 @@ function CartTab() {
   );
 }
 
-/* ─── Profile details tab ──────────────────────────────────────── */
+/* ─── Profile tab ──────────────────────────────────────── */
 function ProfileTab() {
   const { user } = useAuth();
-
   return (
     <div className="flex flex-col gap-4">
       <div className="rounded-2xl p-6" style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
-        <div className="flex items-center justify-between mb-5">
-          <p style={{ fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 700 }} >
-            Personal Details
-          </p>
+        <div className="flex items-center justify-between mb-5 font-poppins">
+          <p style={{ fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 700 }}>Personal Details</p>
         </div>
         <div className="grid sm:grid-cols-2 gap-5 font-poppins">
           <div>
             <p style={{ fontWeight: 700, fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>Full Name</p>
-            <p style={{  fontSize: 17, fontWeight: 600, color: C.text, marginTop: 4 }}>{user.name}</p>
+            <p style={{ fontSize: 17, fontWeight: 600, color: C.text, marginTop: 4 }}>{user.name}</p>
           </div>
           <div>
             <p style={{ fontWeight: 700, fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>Email Address</p>
-            <p style={{  fontSize: 17, fontWeight: 600, color: C.text, marginTop: 4 }}>{user.email}</p>
+            <p style={{ fontSize: 17, fontWeight: 600, color: C.text, marginTop: 4 }}>{user.email}</p>
           </div>
           <div>
-            <p style={{  fontWeight: 700, fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>Phone Number</p>
-            <p style={{fontSize: 17, fontWeight: 600, color: C.text, marginTop: 4 }}>{user.phone || "Not set"}</p>
+            <p style={{ fontWeight: 700, fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>Phone Number</p>
+            <p style={{ fontSize: 17, fontWeight: 600, color: C.text, marginTop: 4 }}>{user.phone || "Not set"}</p>
           </div>
           <div>
-            <p className="font-700" style={{fontWeight: 700, fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>Member Since</p>
-            <p style={{  fontSize: 17, fontWeight: 600, color: C.text, marginTop: 4 }}>{fmtDate(user.createdAt) || "—"}</p>
+            <p style={{ fontWeight: 700, fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>Member Since</p>
+            <p style={{ fontSize: 17, fontWeight: 600, color: C.text, marginTop: 4 }}>{fmtDate(user.createdAt) || "—"}</p>
           </div>
         </div>
       </div>
-
       {Array.isArray(user.addresses) && user.addresses.length > 0 && (
         <div className="rounded-2xl p-6" style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
-          <p style={{ fontFamily: "var(--font-jost)", fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 700, marginBottom: 14 }}>
-            Saved Addresses
-          </p>
+          <p style={{ fontFamily: "var(--font-jost)", fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 700, marginBottom: 14 }}>Saved Addresses</p>
           <div className="grid sm:grid-cols-2 gap-4">
             {user.addresses.map((a, i) => (
               <div key={a._id || i} className="rounded-xl p-4" style={{ background: C.cream, border: `1px solid ${C.border}` }}>
@@ -531,23 +531,26 @@ function ProfileTab() {
 }
 
 /* ─── Sidebar nav ──────────────────────────────────────── */
-function SideNav({ tab, setTab, user, onLogout, cartCount, ordersCount }) {
+function SideNav({ tab, setTab, user, onLogout, cartCount, ordersCount, wishlistCount }) {
   const items = [
-    { id: "profile", label: "Profile", icon: Icon.user },
-    { id: "orders", label: "Orders", icon: Icon.box, count: ordersCount },
-    { id: "cart", label: "My Cart", icon: Icon.bag, count: cartCount },
+    { id: "profile",  label: "Profile",  icon: Icon.user },
+    { id: "orders",   label: "Orders",   icon: Icon.box,   count: ordersCount },
+    { id: "wishlist", label: "Wishlist", icon: Icon.heart, count: wishlistCount },
+    { id: "cart",     label: "My Cart",  icon: Icon.bag,   count: cartCount },
   ];
 
   return (
     <div className="rounded-3xl p-5 sm:p-6 flex flex-col gap-1 sticky top-32"
       style={{ background: C.white, border: `1.5px solid ${C.border}`, boxShadow: "0 8px 40px rgba(26,12,6,0.05)" }}>
       <div className="flex items-center gap-3 mb-4 px-1">
-        <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold flex-shrink-0"
-          style={{ background: C.brown, color: C.goldLt, fontFamily: "var(--font-playfair)" }}>
+        <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" style={{ background: C.brown }}>
           {user.avatar
-            ? // eslint-disable-next-line @next/next/no-img-element
-              <img src={user.avatar} alt={user.name} className="w-12 h-12 rounded-full object-cover" />
-            : user.name?.[0]?.toUpperCase()}
+            ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            : <span className="w-full h-full flex items-center justify-center text-lg font-semibold"
+                style={{ color: C.goldLt, fontFamily: "var(--font-playfair)" }}>
+                {user.name?.[0]?.toUpperCase()}
+              </span>
+          }
         </div>
         <div className="min-w-0 font-poppins">
           <p style={{ fontSize: 15, fontWeight: 700, color: C.text }} className="truncate">{user.name}</p>
@@ -558,12 +561,8 @@ function SideNav({ tab, setTab, user, onLogout, cartCount, ordersCount }) {
       {items.map((it) => (
         <button key={it.id} onClick={() => setTab(it.id)}
           className="flex items-center justify-between gap-3 px-3.5 py-3 rounded-xl text-left transition-colors"
-          style={{
-            fontSize: 13, fontWeight: 700,
-            background: tab === it.id ? C.cream : "transparent",
-            color: tab === it.id ? C.text : C.muted,
-          }}>
-          <span className="flex items-center gap-3 font-poppins">
+          style={{ fontSize: 13, fontWeight: 700, background: tab === it.id ? C.cream : "transparent", color: tab === it.id ? C.text : C.muted }}>
+          <span className="flex items-center gap-3">
             <it.icon style={{ width: 17, height: 17, color: tab === it.id ? C.gold : C.muted }} />
             {it.label}
           </span>
@@ -578,8 +577,7 @@ function SideNav({ tab, setTab, user, onLogout, cartCount, ordersCount }) {
 
       <div className="h-px my-2" style={{ background: C.border }} />
 
-      <button onClick={onLogout}
-        className="flex items-center gap-3 px-3.5 py-3 rounded-xl text-left font-poppins"
+      <button onClick={onLogout} className="flex items-center gap-3 px-3.5 py-3 rounded-xl text-left font-poppins"
         style={{ fontSize: 13, fontWeight: 700, color: "#c0392b" }}>
         <Icon.logout style={{ width: 17, height: 17 }} />
         Log Out
@@ -595,16 +593,19 @@ function Dashboard() {
   const router = useRouter();
   const [tab, setTab] = useState("profile");
   const [ordersCount, setOrdersCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await authFetch("/orders");
-        const list = res.data?.orders ?? res.data ?? [];
-        setOrdersCount(Array.isArray(list) ? list.length : 0);
-      } catch {
-        // ignore
-      }
+        const [ordRes, wishRes] = await Promise.all([
+          authFetch("/orders/my"),
+          authFetch("/wishlist"),
+        ]);
+        const orders = ordRes.data?.orders ?? ordRes.data ?? [];
+        setOrdersCount(Array.isArray(orders) ? orders.length : 0);
+        setWishlistCount(Array.isArray(wishRes.data) ? wishRes.data.length : 0);
+      } catch {}
     })();
   }, []);
 
@@ -613,24 +614,26 @@ function Dashboard() {
     router.push("/");
   };
 
-  const tabLabels = { profile: "My Profile", orders: "My Orders", cart: "My Cart" };
+  const tabLabels = { profile: "My Profile", orders: "My Orders", wishlist: "My Wishlist", cart: "My Cart" };
 
   return (
     <div className="grid lg:grid-cols-[280px_1fr] gap-6 items-start">
-      <SideNav tab={tab} setTab={setTab} user={user} onLogout={handleLogout} cartCount={count} ordersCount={ordersCount} />
-
+      <SideNav tab={tab} setTab={setTab} user={user} onLogout={handleLogout}
+        cartCount={count} ordersCount={ordersCount} wishlistCount={wishlistCount} />
       <div>
-        <h1 className="mb-6 mt-16" style={{  fontSize: "clamp(1.6rem,2.8vw,2.2rem)", fontFamily: "var(--font-playfair)", fontWeight: 600, color: C.text }}>
+        <h1 className="mb-6 mt-16" style={{ fontSize: "clamp(1.6rem,2.8vw,2.2rem)", fontWeight: 600, color: C.text }}>
           {tabLabels[tab]}
         </h1>
-        {tab === "profile" && <ProfileTab />}
-        {tab === "orders" && <OrdersTab />}
-        {tab === "cart" && <CartTab />}
+        {tab === "profile"  && <ProfileTab />}
+        {tab === "orders"   && <OrdersTab />}
+        {tab === "wishlist" && <WishlistTab />}
+        {tab === "cart"     && <CartTab />}
       </div>
     </div>
   );
 }
 
+/* ─── Main export ──────────────────────────────────────── */
 export default function AccountScreen() {
   const { user, loading } = useAuth();
   const [mode, setMode] = useState("login");
@@ -639,16 +642,11 @@ export default function AccountScreen() {
     <>
       <Navbar />
       <main className="min-h-screen" style={{ background: C.cream }}>
-
-        {/* Dark hero band — matches Checkout */}
         <div style={{ background: C.brown, paddingTop: 114 }}>
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-10 text-center">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-16 text-center">
             <h1 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(2rem,4vw,3rem)", fontWeight: 600, color: C.goldLt, marginTop: 8 }}>
-              {user ? "My Account" : "Account Access"}
+              {user ? "My Account" : "Welcome to Taleo"}
             </h1>
-            <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "rgba(245,239,232,0.6)", marginTop: 10, letterSpacing: "0.04em" }}>
-              {user ? "Manage your profile, orders and bag" : "Sign in to view your orders, wishlist and saved cart"}
-            </p>
           </div>
         </div>
 
@@ -661,14 +659,12 @@ export default function AccountScreen() {
             <Dashboard />
           </div>
         ) : (
-          <div className="max-w-md mx-auto px-4 sm:px-6 pb-16" style={{ marginTop: -32 }}>
+          <div className="max-w-md mx-auto px-4 sm:px-6 pb-16" style={{ marginTop: -90 }}>
             <div className="rounded-3xl p-6 sm:p-10"
               style={{ background: C.white, border: `1.5px solid ${C.border}`, boxShadow: "0 8px 40px rgba(26,12,6,0.05)" }}>
-              {mode === "login" ? (
-                <LoginForm onSwitch={() => setMode("register")} />
-              ) : (
-                <RegisterForm onSwitch={() => setMode("login")} />
-              )}
+              {mode === "login"
+                ? <LoginForm onSwitch={() => setMode("register")} />
+                : <RegisterForm onSwitch={() => setMode("login")} />}
             </div>
           </div>
         )}

@@ -1,5 +1,0 @@
-1:"$Sreact.fragment"
-2:I[64381,["/_next/static/chunks/1w19dkg8hl1vf.js","/_next/static/chunks/21p-i82-2u343.js","/_next/static/chunks/027jocmjaf1mo.js"],"ViewportBoundary"]
-3:I[64381,["/_next/static/chunks/1w19dkg8hl1vf.js","/_next/static/chunks/21p-i82-2u343.js","/_next/static/chunks/027jocmjaf1mo.js"],"MetadataBoundary"]
-4:"$Sreact.suspense"
-0:{"rsc":["$","$1","h",{"children":[null,["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Checkout — Luxéor Fine Jewellery"}],["$","meta","1",{"name":"description","content":"Exquisite fine jewellery, made with rare stones and exceptional craftsmanship."}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"pLdX0uI5CBlPw1IHvEANg"}

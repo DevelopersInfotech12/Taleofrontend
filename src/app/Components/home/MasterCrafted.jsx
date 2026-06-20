@@ -3,14 +3,16 @@
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
 
+// dinamond, floral, gold
+
 const col1Images = [
     { src: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80", alt: "Diamond pendant" },
     { src: "https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=600&q=80", alt: "Gemstone necklace" },
-    { src: "https://images.unsplash.com/photo-1573408301185-9519f94b6c4e?w=600&q=80", alt: "Floral ring" },
-    { src: "https://images.unsplash.com/photo-1601121141418-7e1b2b3a4b2b?w=600&q=80", alt: "Gold cuff" },
+    { src: "./master2.png", alt: "Floral ring" },
+    { src: "./master1.png", alt: "Gold cuff" },
     { src: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=600&q=80", alt: "Gold hoops" },
     { src: "https://images.unsplash.com/photo-1589128777073-263566ae5e4d?w=600&q=80", alt: "Layered necklaces" },
-    { src: "https://images.unsplash.com/photo-1627293620999-e9b5c2325942?w=600&q=80", alt: "Diamond ring" },
+    { src: "./other.png", alt: "Diamond ring" },
     { src: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80", alt: "Jewellery flat lay" },
 ];
 
@@ -77,7 +79,7 @@ export default function MasterCrafted() {
                         </div>
 
                         {/* Body */}
-                        <p className="text-justify" style={{ fontFamily: BODY, color: "#91826e", fontSize: 13, lineHeight: 1.7, margin: 0, fontWeight: 300 }}>
+                        <p className="text-justify sm:w-[92%]" style={{ fontFamily: BODY, color: "#b1a99f", fontSize: 13, lineHeight: 1.7, margin: 0, fontWeight: 300 }}>
                             Thoughtfully handcrafted using premium 925 sterling silver, finished with refined 18kt and 22kt gold-plated details. Hypoallergenic and designed for lasting comfort. Enjoy secure payments, complimentary shipping across India, worldwide delivery, and Cash on Delivery on select styles.
 
                             Each TALEO creation is crafted with meticulous attention to detail, blending timeless elegance with contemporary design. 
@@ -86,7 +88,7 @@ export default function MasterCrafted() {
                         {/* Pills */}
                         <div className="flex flex-wrap gap-1.5">
                             {["925 Silver", "18k Gold Plated", "Hypoallergenic"].map((t) => (
-                                <span key={t} style={{ fontFamily: BODY, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", padding: "5px 10px", border: "1px solid #2e2318", color: "#74624b", borderRadius: 4, fontWeight: 600 }}>
+                                <span key={t} style={{ fontFamily: BODY, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", padding: "5px 10px", border: "1px solid #2e2318", color: "#8a7c6b", borderRadius: 4, fontWeight: 600 }}>
                                     {t}
                                 </span>
                             ))}

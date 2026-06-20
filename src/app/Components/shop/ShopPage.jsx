@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import ShopSidebar from "./ShopSidebar";
 import ProductCard from "./ProductCard";
 import { API, normaliseProduct } from "../../lib/api";
@@ -34,8 +35,9 @@ const PRICE_RANGES = [
   { label: "Above ₹1,00,000",     min: 100000, max: null   },
 ];
 
-function buildQueryParams(filters, sort, page, categoryId) {
+function buildQueryParams(filters, sort, page, categoryId, search) {
   const p = { page, limit: 18 };
+  if (search) p.search = search;
   if (categoryId) {
     p.category = categoryId;
   } else if (filters.categoryIds?.length === 1) {
@@ -65,8 +67,12 @@ function buildQueryParams(filters, sort, page, categoryId) {
 }
 
 export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
+  const searchParams = useSearchParams();
+  const urlSearch = searchParams.get("search") || "";
+
   const [filters, setFilters]                     = useState(initialFilters);
   const [sort, setSort]                           = useState("featured");
+  const [searchTerm, setSearchTerm]                = useState(urlSearch);
   const [viewMode, setViewMode]                   = useState("grid");
   const [sidebarOpen, setSidebarOpen]             = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -82,6 +88,8 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
 
   const abortRef = useRef(null);
 
+  useEffect(() => { setSearchTerm(urlSearch); }, [urlSearch]);
+
   useEffect(() => {
     if (!categorySlug) { setCategoryId(null); return; }
     fetch(`${API}/categories`).then(r => r.json()).then(json => {
@@ -91,7 +99,7 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
     }).catch(() => {});
   }, [categorySlug]);
 
-  const loadProducts = useCallback(async (f, s, pg) => {
+  const loadProducts = useCallback(async (f, s, pg, term) => {
     const ctrl = new AbortController();
     const prev = abortRef.current;
     abortRef.current = ctrl;
@@ -99,7 +107,7 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
     setLoading(true);
     setError(null);
     try {
-      const params = buildQueryParams(f, s, pg, categoryId);
+      const params = buildQueryParams(f, s, pg, categoryId, term);
       const qs = new URLSearchParams();
       Object.entries(params).forEach(([k, v]) => {
         if (v !== undefined && v !== null && v !== "") qs.set(k, String(v));
@@ -121,8 +129,8 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
     }
   }, [categoryId]);
 
-  useEffect(() => { setPage(1); loadProducts(filters, sort, 1); }, [filters, sort, loadProducts, categoryId]);
-  useEffect(() => { if (page > 1) loadProducts(filters, sort, page); }, [page]); // eslint-disable-line
+  useEffect(() => { setPage(1); loadProducts(filters, sort, 1, searchTerm); }, [filters, sort, loadProducts, categoryId, searchTerm]);
+  useEffect(() => { if (page > 1) loadProducts(filters, sort, page, searchTerm); }, [page]); // eslint-disable-line
 
   const handleFilterChange = useCallback((group, value) => {
     setFilters((prev) => ({ ...prev, [group]: toggleArrayItem(prev[group], value) }));
@@ -152,6 +160,26 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
       `}</style>
 
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
+
+        {/* ── Search banner ── */}
+        {searchTerm && (
+          <div className="flex items-center justify-between gap-3 border-b border-[#e8ddd0] py-3">
+            <p className="text-[13px] text-[#5c4f42]">
+              Search results for <span className="font-medium text-[#2c2418]">&ldquo;{searchTerm}&rdquo;</span>
+            </p>
+            <button
+              onClick={() => {
+                setSearchTerm("");
+                const url = new URL(window.location.href);
+                url.searchParams.delete("search");
+                window.history.replaceState({}, "", url.pathname + url.search);
+              }}
+              className="text-[11px] uppercase tracking-widest text-[#9c8a78] underline underline-offset-2 hover:text-[#b8975a]"
+            >
+              Clear search
+            </button>
+          </div>
+        )}
 
         {/* ── Toolbar ── */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e8ddd0] py-4">
@@ -271,6 +299,8 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
                   onFilterChange={handleFilterChange}
                   onClearAll={() => { handleClearAll(); setMobileSidebarOpen(false); }}
                   hideClearHeader
+                  sort={sort}
+                  onSortChange={setSort}
                 />
               </div>
             </div>
@@ -282,7 +312,7 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
 
           {/* Desktop sidebar — hidden on mobile */}
           <div className={`hidden lg:block transition-all duration-300 ease-in-out overflow-hidden shrink-0 ${sidebarOpen ? "w-[260px] opacity-100" : "w-0 opacity-0"}`}>
-            <ShopSidebar filters={filters} onFilterChange={handleFilterChange} onClearAll={handleClearAll} />
+            <ShopSidebar filters={filters} onFilterChange={handleFilterChange} onClearAll={handleClearAll} sort={sort} onSortChange={setSort} />
           </div>
 
           {/* Product area — full width on mobile */}
@@ -292,7 +322,7 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <p className="text-[14px] text-red-600">{error}</p>
                 <button
-                  onClick={() => loadProducts(filters, sort, page)}
+                  onClick={() => loadProducts(filters, sort, page, searchTerm)}
                   className="mt-4 rounded border border-[#2c2418] px-6 py-2 text-[12px] uppercase tracking-widest text-[#2c2418] hover:bg-[#2c2418] hover:text-white transition-all"
                 >
                   Retry

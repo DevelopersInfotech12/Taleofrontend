@@ -8,17 +8,18 @@ import { fmtPrice } from "../../lib/api";
 import { useCart } from "../../lib/CartContext";
 import Navbar from "../../Components/Navbar";
 import Footer from "../../Components/Footer";
+import ProductCard from "@/app/Components/shop/ProductCard";
 
 /* ── palette ───────────────────────────────── */
-const G   = "#b08850";
+const G = "#b08850";
 const GLT = "#c9a96e";
-const BR  = "#1a0c06";
+const BR = "#1a0c06";
 const BRM = "#3d1f10";
-const CR  = "#f5efe8";
+const CR = "#f5efe8";
 const CRD = "#ede4d8";
-const BD  = "#e8ddd0";
-const TX  = "#2c2418";
-const MT  = "#8a7560";
+const BD = "#e8ddd0";
+const TX = "#2c2418";
+const MT = "#8a7560";
 
 /* ── Stars ──────────────────────────────────── */
 function Stars({ value, size = 14 }) {
@@ -31,43 +32,6 @@ function Stars({ value, size = 14 }) {
         </svg>
       ))}
     </div>
-  );
-}
-
-/* ── Related card ───────────────────────────── */
-function RelatedCard({ p }) {
-  return (
-    <Link href={`/products/${p.slug}`} className="group block">
-      <div className="rounded-2xl overflow-hidden border transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_20px_50px_-10px_rgba(176,136,80,0.18)]"
-        style={{ background: "#fff", borderColor: BD }}>
-        <div className="relative aspect-square overflow-hidden" style={{ background: CRD }}>
-          <Image src={p.image} alt={p.name} fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 50vw, 25vw" />
-          {p.badge && (
-            <span className="absolute top-2 left-2 px-2.5 py-1 rounded-full"
-              style={{ fontFamily: "var(--font-jost)", fontSize: 10, fontWeight: 700,
-                letterSpacing: "0.1em", textTransform: "uppercase",
-                background: "rgba(0,0,0,0.6)", color: p.badgeColor || GLT }}>
-              {p.badge}
-            </span>
-          )}
-        </div>
-        <div className="p-4">
-          <p className="font-semibold text-sm truncate mb-1" style={{ fontFamily: "var(--font-jost)", color: TX }}>{p.name}</p>
-          <div className="flex items-center gap-2 mb-2">
-            <Stars value={p.rating} size={11} />
-            <span style={{ fontFamily: "var(--font-jost)", fontSize: 11, color: MT }}>({p.reviews})</span>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span style={{ fontFamily: "var(--font-jost)", fontSize: 15, fontWeight: 700, color: TX }}>{fmtPrice(p.price)}</span>
-            {p.originalPrice && (
-              <span style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: "#a08060", textDecoration: "line-through" }}>{fmtPrice(p.originalPrice)}</span>
-            )}
-          </div>
-        </div>
-      </div>
-    </Link>
   );
 }
 
@@ -122,7 +86,7 @@ function Gallery({ images, name }) {
           <div key={b.label} className="flex flex-col items-center gap-2 py-4 rounded-2xl"
             style={{ border: `1.5px solid ${BD}`, background: "#fff" }}>
             <span style={{ color: G, fontSize: 18 }}>{b.icon}</span>
-            <span style={{ fontFamily: "var(--font-jost)", fontSize: 11, color: MT, textAlign: "center", lineHeight: 1.4 }}>{b.label}</span>
+            <span style={{ fontSize: 12, color: MT, textAlign: "center", lineHeight: 1.4, fontWeight: "600" }}>{b.label}</span>
           </div>
         ))}
       </div>
@@ -144,9 +108,9 @@ function Gallery({ images, name }) {
 /* ── REVIEWS ─────────────────────────────── */
 const SAMPLE_REVIEWS = [
   { name: "Ananya Sharma", rating: 5, date: "2 weeks ago", title: "Absolutely stunning piece", body: "The craftsmanship exceeded my expectations. The stone catches light beautifully and the finish feels premium. Packaging was elegant too.", verified: true },
-  { name: "Rohit Mehta",   rating: 5, date: "1 month ago", title: "Perfect anniversary gift", body: "Bought this for my wife's anniversary. She loved it! Sizing was accurate and delivery was faster than expected.", verified: true },
-  { name: "Priya Nair",    rating: 4, date: "1 month ago", title: "Beautiful, slightly heavier than expected", body: "Gorgeous design and the gold tone is rich. Slightly heavier than I imagined from photos — but that just feels substantial and well made.", verified: true },
-  { name: "Karan Verma",   rating: 5, date: "2 months ago", title: "Exceeded expectations", body: "The hallmark certification gave me confidence. Customer service was responsive when I asked about resizing. Highly recommend!", verified: false },
+  { name: "Rohit Mehta", rating: 5, date: "1 month ago", title: "Perfect anniversary gift", body: "Bought this for my wife's anniversary. She loved it! Sizing was accurate and delivery was faster than expected.", verified: true },
+  { name: "Priya Nair", rating: 4, date: "1 month ago", title: "Beautiful, slightly heavier than expected", body: "Gorgeous design and the gold tone is rich. Slightly heavier than I imagined from photos — but that just feels substantial and well made.", verified: true },
+  { name: "Karan Verma", rating: 5, date: "2 months ago", title: "Exceeded expectations", body: "The hallmark certification gave me confidence. Customer service was responsive when I asked about resizing. Highly recommend!", verified: false },
 ];
 const RATING_DIST = [{ stars: 5, pct: 68 }, { stars: 4, pct: 22 }, { stars: 3, pct: 7 }, { stars: 2, pct: 2 }, { stars: 1, pct: 1 }];
 const TABS = ["Description", "Specifications", "Shipping & Returns", "Reviews"];
@@ -161,13 +125,13 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
   const p = product;
   const images = p.images?.length ? p.images : [p.image].filter(Boolean);
 
-  const [activeImg, setActiveImg]       = useState(0);
-  const [qty, setQty]                   = useState(1);
-  const [added, setAdded]               = useState(false);
-  const [selectedVariant, setVariant]   = useState(p.variants?.[0] ?? null);
-  const [selectedSize, setSize]         = useState(null);
-  const [tab, setTab]                   = useState("Description");
-  const [wishlist, setWishlist]         = useState(false);
+  const [activeImg, setActiveImg] = useState(0);
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+  const [selectedVariant, setVariant] = useState(p.variants?.[0] ?? null);
+  const [selectedSize, setSize] = useState(null);
+  const [tab, setTab] = useState("Description");
+  const [wishlist, setWishlist] = useState(false);
 
   const discount = p.originalPrice
     ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
@@ -221,29 +185,31 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
                 )}
                 {p.badge && (
                   <span className="px-2.5 py-0.5 rounded-full border"
-                    style={{ fontFamily: "var(--font-jost)", fontSize: 10, fontWeight: 700,
+                    style={{
+                      fontFamily: "var(--font-jost)", fontSize: 10, fontWeight: 700,
                       textTransform: "uppercase", letterSpacing: "0.1em",
                       color: p.badgeColor || GLT, borderColor: (p.badgeColor || GLT) + "55",
-                      background: "rgba(0,0,0,0.03)" }}>
+                      background: "rgba(0,0,0,0.03)"
+                    }}>
                     {p.badge}
                   </span>
                 )}
               </div>
 
               {/* Title */}
-              <h1 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.8rem,3vw,2.8rem)", fontWeight: 600, color: TX, lineHeight: 1.1, margin: 0 }}>
+              <h1 style={{ fontSize: "clamp(1.8rem,3vw,2.8rem)", fontWeight: 600, color: TX, lineHeight: 1.1, margin: 0 }}>
                 {p.name}
               </h1>
 
               {/* Rating + stock */}
               <div className="flex items-center gap-3 flex-wrap">
                 <Stars value={p.rating} />
-                <span style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: G, fontWeight: 600 }}>{p.rating}</span>
+                <span style={{ fontSize: 13, color: G, fontWeight: 600 }}>{p.rating}</span>
                 <a href="#reviews" style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: MT, textDecoration: "underline", textUnderlineOffset: 3 }}>
                   ({p.reviews} reviews)
                 </a>
                 <span style={{ width: 1, height: 14, background: BD, display: "inline-block" }} />
-                <span style={{ fontFamily: "var(--font-jost)", fontSize: 12, fontWeight: 600, color: p.stock === 0 ? "#c0392b" : "#2d6a4f" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: p.stock === 0 ? "#c0392b" : "#2d6a4f" }}>
                   {p.stock === 0 ? "Out of Stock" : "In Stock"}
                 </span>
               </div>
@@ -252,12 +218,12 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
 
               {/* Price */}
               <div className="flex items-baseline gap-3 flex-wrap">
-                <span style={{ fontFamily: "var(--font-jost)", fontSize: 34, fontWeight: 700, color: TX, lineHeight: 1 }}>{fmtPrice(p.price)}</span>
+                <span style={{ fontSize: 34, fontWeight: 700, color: TX, lineHeight: 1 }}>{fmtPrice(p.price)}</span>
                 {p.originalPrice && (
                   <>
-                    <span style={{ fontFamily: "var(--font-jost)", fontSize: 18, color: "#a08060", textDecoration: "line-through" }}>{fmtPrice(p.originalPrice)}</span>
-                    <span className="rounded-full px-3 py-1"
-                      style={{ fontFamily: "var(--font-jost)", fontSize: 11, fontWeight: 700, background: BRM, color: GLT }}>
+                    <span style={{ fontSize: 18, color: "#a08060", textDecoration: "line-through" }}>{fmtPrice(p.originalPrice)}</span>
+                    <span className="rounded-full px-3 py-1 font-poppins"
+                      style={{ fontSize: 11, fontWeight: 600, background: BRM, color: GLT }}>
                       {discount}% OFF
                     </span>
                   </>
@@ -269,7 +235,7 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
 
               {/* Short description */}
               {p.description && (
-                <p style={{ fontFamily: "var(--font-jost)", fontSize: 14, lineHeight: 1.8, color: "#5c4f42" }}>{p.description}</p>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: "#584e42", fontWeight: 500 }}>{p.description}</p>
               )}
 
               {/* Variants */}
@@ -325,17 +291,6 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
                     {/* vertical divider */}
                     <span className="h-10 w-px mx-1" style={{ background: BD }} />
 
-                    {/* Qty stepper */}
-                    <div className="flex items-center rounded-full border overflow-hidden" style={{ borderColor: BD }}>
-                      <button onClick={() => setQty((q) => Math.max(1, q - 1))}
-                        className="w-9 h-10 flex items-center justify-center hover:bg-[#f0e9df] transition-colors"
-                        style={{ color: BRM, fontSize: 18 }}>−</button>
-                      <span className="w-7 text-center text-sm font-semibold" style={{ fontFamily: "var(--font-jost)", color: TX }}>{qty}</span>
-                      <button onClick={() => setQty((q) => q + 1)}
-                        className="w-9 h-10 flex items-center justify-center hover:bg-[#f0e9df] transition-colors"
-                        style={{ color: BRM, fontSize: 18 }}>+</button>
-                    </div>
-
                     {/* Wishlist */}
                     <button onClick={() => setWishlist((w) => !w)}
                       className="w-10 h-10 rounded-full border flex items-center justify-center transition-all"
@@ -346,6 +301,7 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
                         <path d="M12 21C12 21 2 13.5 2 7a5 5 0 0 1 10 0 5 5 0 0 1 10 0c0 6.5-10 14-10 14z" />
                       </svg>
                     </button>
+
                   </div>
                 </div>
               )}
@@ -376,9 +332,9 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
               {/* ── ADD TO CART + BUY NOW — ONE ROW ── */}
               <div className="flex gap-3">
                 <button onClick={handleAdd} disabled={p.stock === 0}
-                  className="flex-1 py-4 rounded-full flex items-center justify-center gap-2 font-semibold text-sm transition-all duration-300 active:scale-95 hover:brightness-110"
+                  className="flex-1 py-3 rounded-full flex items-center justify-center gap-2 font-semibold text-[15px] transition-all duration-300 active:scale-95 hover:brightness-110"
                   style={{
-                    fontFamily: "var(--font-jost)", letterSpacing: "0.08em",
+                    letterSpacing: "0.08em",
                     background: p.stock === 0 ? CRD : added
                       ? "linear-gradient(135deg, #1a5c3a, #2d6a4f)"
                       : `linear-gradient(135deg, ${BRM} 0%, #5a2e16 100%)`,
@@ -394,9 +350,9 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
                 </button>
 
                 <button onClick={handleBuyNow} disabled={p.stock === 0}
-                  className="flex-1 py-4 rounded-full flex items-center justify-center gap-2 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-[#3d1f10] hover:text-[#c9a96e] hover:border-[#3d1f10]"
+                  className="flex-1 py-3 rounded-full flex items-center justify-center gap-2 font-semibold text-[15px] transition-all duration-300 active:scale-95 hover:bg-[#3d1f10] hover:text-[#c9a96e] hover:border-[#3d1f10]"
                   style={{
-                    fontFamily: "var(--font-jost)", letterSpacing: "0.08em",
+                    letterSpacing: "0.08em",
                     color: BRM, border: `2px solid ${BRM}`, background: "transparent",
                     cursor: p.stock === 0 ? "not-allowed" : "pointer",
                     opacity: p.stock === 0 ? 0.4 : 1,
@@ -409,32 +365,18 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
               </div>
 
               {/* Service icons */}
-              <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl" style={{ background: "#fff", border: `1.5px solid ${BD}` }}>
+              <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl items-center" style={{ background: "#fff", border: `1.5px solid ${BD}` }}>
                 {[{ icon: "🚚", label: "Free Shipping" }, { icon: "🔒", label: "Secure Payment" }, { icon: "🎁", label: "Gift Wrapping" }].map((s) => (
-                  <div key={s.label} className="flex items-center gap-2">
-                    <span style={{ fontSize: 16 }}>{s.icon}</span>
-                    <span style={{ fontFamily: "var(--font-jost)", fontSize: 11.5, color: MT }}>{s.label}</span>
+                  <div key={s.label} className="flex items-center justify-center gap-2 h-full">
+                    <span style={{ fontSize: 16, lineHeight: 1 }}>{s.icon}</span>
+                    <span style={{ fontFamily: "var(--font-jost)", fontSize: 11.5, color: MT, fontWeight: 500, lineHeight: 1 }}>{s.label}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Material / SKU / Weight */}
-              {(p.material || p.sku || p.weight) && (
-                <div className="flex flex-wrap gap-6 pt-2 border-t" style={{ borderColor: BD }}>
-                  {[["Material", p.material], ["SKU", p.sku], ["Weight", p.weight]].filter(([, v]) => v).map(([k, v]) => (
-                    <div key={k}>
-                      <p style={{ fontFamily: "var(--font-jost)", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: MT }}>
-                        {k}
-                      </p>
-                      <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: TX, marginTop: 3 }}>{v}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
               {/* Share */}
               <div className="flex items-center gap-3">
-                <span style={{ fontFamily: "var(--font-jost)", fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: MT }}>Share:</span>
+                <span style={{ fontFamily: "var(--font-jost)", fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", color: MT }}>Share:</span>
                 {["f", "𝕏", "in", "✉"].map((s) => (
                   <button key={s} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f0e8dc] transition-colors"
                     style={{ border: `1px solid ${BD}`, fontFamily: "var(--font-jost)", fontSize: 12, color: MT }}>{s}</button>
@@ -448,9 +390,10 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
             <div className="flex gap-0 overflow-x-auto" style={{ borderBottom: `1px solid ${BD}` }}>
               {TABS.map((t) => (
                 <button key={t} onClick={() => setTab(t)}
-                  className="relative pb-4 px-6 whitespace-nowrap transition-colors"
+                  className="relative pb-4 px-6 whitespace-nowrap transition-colors "
                   style={{
-                    fontFamily: "var(--font-jost)", fontSize: 12, fontWeight: 600,
+                    fontFamily: "serif",
+                    fontSize: 11.5, fontWeight: 700,
                     letterSpacing: "0.12em", textTransform: "uppercase",
                     color: tab === t ? TX : MT,
                   }}>
@@ -497,8 +440,8 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
                     <div key={s.title} className="flex gap-4">
                       <span style={{ color: G, fontSize: 18, lineHeight: 1, marginTop: 2 }}>✦</span>
                       <div>
-                        <p style={{ fontFamily: "var(--font-playfair)", fontSize: 17, fontWeight: 600, color: TX, marginBottom: 4 }}>{s.title}</p>
-                        <p style={{ fontFamily: "var(--font-jost)", fontSize: 13.5, lineHeight: 1.8, color: "#5c4f42" }}>{s.body}</p>
+                        <p style={{ fontSize: 17, fontWeight: 600, color: TX, marginBottom: 4 }}>{s.title}</p>
+                        <p style={{ fontSize: 13.5, lineHeight: 1.8, color: "#5c4f42" }}>{s.body}</p>
                       </div>
                     </div>
                   ))}
@@ -558,19 +501,38 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
           </div>
 
           {/* ── Related ── */}
+ {/* ── Related ── */}
           {relatedProducts?.length > 0 && (
             <div className="mt-16 pt-12" style={{ borderTop: `1px solid ${BD}` }}>
               <div className="flex items-end justify-between mb-8">
                 <div>
-                  <p style={{ fontFamily: "var(--font-jost)", fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", color: G, marginBottom: 6 }}>You May Also Like</p>
-                  <h2 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.6rem,2.5vw,2.2rem)", fontWeight: 600, color: TX }}>Complete the Look</h2>
+                  <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: G, marginBottom: 6 }}>You May Also Like</p>
+                  <h2 style={{ fontSize: "clamp(1.7rem,2.6vw,2.3rem)", fontWeight: 600, color: TX }}>Related Products</h2>
                 </div>
                 <Link href="/shop" style={{ fontFamily: "var(--font-jost)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: TX, borderBottom: `1px solid ${G}`, paddingBottom: 4 }}>
                   View All
                 </Link>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {relatedProducts.map((rp) => <RelatedCard key={rp.id || rp.slug} p={rp} />)}
+                {relatedProducts.map((rp) => (
+                  <ProductCard
+                    key={rp.id || rp.slug}
+                    id={rp.id}
+                    slug={rp.slug}
+                    image={rp.image}
+                    images={rp.images}
+                    name={rp.name}
+                    category={rp.category}
+                    description={rp.description}
+                    price={rp.price}
+                    originalPrice={rp.originalPrice}
+                    rating={rp.rating}
+                    reviews={rp.reviews}
+                    badge={rp.badge}
+                    badgeColor={rp.badgeColor}
+                    variants={rp.variants}
+                  />
+                ))}
               </div>
             </div>
           )}

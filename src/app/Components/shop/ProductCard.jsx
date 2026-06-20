@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "../../lib/CartContext";
+import { useAuth, authFetch } from "../../lib/AuthContext";
 
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
@@ -26,7 +27,17 @@ export default function ProductCard({
   onAddToCart,
 }) {
   const { addToCart } = useCart();
+  const { user } = useAuth();
   const [added, setAdded] = useState(false);
+  const [wishlisted, setWishlisted] = useState(false);
+  const [wishBusy, setWishBusy] = useState(false);
+
+  // Sync wishlist state from user object
+  useEffect(() => {
+    if (user?.wishlist && id) {
+      setWishlisted(user.wishlist.some((w) => (w._id || w) === id));
+    }
+  }, [user, id]);
 
   const discount = originalPrice
     ? Math.round(((originalPrice - price) / originalPrice) * 100)
@@ -42,6 +53,25 @@ export default function ProductCard({
     );
     onAddToCart?.();
     setTimeout(() => setAdded(false), 2000);
+  };
+
+  const handleWishlist = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      window.location.href = "/account";
+      return;
+    }
+    if (wishBusy) return;
+    setWishBusy(true);
+    try {
+      const res = await authFetch(`/wishlist/${id}`, { method: "POST" });
+      setWishlisted(res.data?.action === "added");
+    } catch {
+      // silent fail
+    } finally {
+      setWishBusy(false);
+    }
   };
 
   const cardContent = (
@@ -92,14 +122,18 @@ export default function ProductCard({
           </div>
         )}
 
-        {/* Wishlist */}
+        {/* Wishlist button */}
         <button
           aria-label="Add to wishlist"
-          onClick={(e) => e.preventDefault()}
-          className="absolute right-2 top-2 sm:right-3 sm:top-3 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
-          style={{ background: "rgba(0,0,0,0.4)" }}
+          onClick={handleWishlist}
+          disabled={wishBusy}
+          className="absolute right-2 top-2 sm:right-3 sm:top-3 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-colors"
+          style={{
+            background: wishlisted ? "rgba(176,56,56,0.85)" : "rgba(0,0,0,0.4)",
+            border: wishlisted ? "1px solid rgba(255,100,100,0.4)" : "none",
+          }}
         >
-          <svg width="11" height="11" viewBox="0 0 24 22" fill="none" stroke="#ccc" strokeWidth="2">
+          <svg width="11" height="11" viewBox="0 0 24 22" fill={wishlisted ? "#fff" : "none"} stroke={wishlisted ? "#fff" : "#ccc"} strokeWidth="2">
             <path d="M12 21C12 21 2 13.5 2 7a5 5 0 0 1 10 0 5 5 0 0 1 10 0c0 6.5-10 14-10 14z" />
           </svg>
         </button>

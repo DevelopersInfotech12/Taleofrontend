@@ -60,8 +60,8 @@ const FALLBACK_PRODUCTS = [
   },
 ];
 
-export default async function FeaturedCollection() {
-  const raw      = await fetchFeaturedProducts(4);
+export default function FeaturedCollection() {
+  const raw      =  fetchFeaturedProducts(4);
   const products = (raw.length > 0 ? raw : FALLBACK_PRODUCTS).map(normaliseProduct);
 
   return (

@@ -71,7 +71,7 @@ export default function NewCollectionBanner() {
             </div>
 
             {/* Body — full text on mobile, no clamp */}
-            <p className="text-justify" style={{ ...fade(0.43), fontFamily: BODY, color: "#7a6548", fontSize: 13, lineHeight: 1.7, margin: 0, fontWeight: 300 }}>
+            <p className="text-justify sm:mb-6 sm:w-[94%]" style={{ ...fade(0.43), fontFamily: BODY, color: "#c0b8ad", fontSize: 13, lineHeight: 1.7,fontWeight: 300 }}>
               Each piece cast in 22k chocolate gold, stone-set by hand in batches of forty.
               Created in limited numbers to preserve exclusivity and craftsmanship.
               Every detail is meticulously finished by skilled artisans, ensuring exceptional quality.
@@ -108,7 +108,7 @@ export default function NewCollectionBanner() {
               <Link
                 href="/collections"
                 className="transition-colors duration-200"
-                style={{ fontFamily: BODY, fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "#706150" }}
+                style={{ fontFamily: BODY, fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "#bdb5ad" }}
               >
                 Browse all →
               </Link>

@@ -16,11 +16,11 @@ const DEFAULT_POST = {
     cta: "Read story",
     alsoIn: ["The Gem Cutters", "Wax & Fire", "Patron Portraits"],
     imageCaption: "Atelier, Jaipur — 2024",
-  desktop:
-  "./blogbanner1.png",
+    desktop:
+        "./blogbanner1.png",
 
-mobile:
-  "https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?w=800&q=80&fit=crop",
+    mobile:
+        "https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?w=800&q=80&fit=crop",
 };
 
 export default function BlogHero({
@@ -115,7 +115,7 @@ export default function BlogHero({
         .bh2-foot-tag {
           font-family: 'DM Sans', sans-serif; font-size: 11px;
           letter-spacing: 0.14em; text-transform: uppercase;
-          color: rgba(240,230,216,0.45); padding: 4px 10px; background: rgba(255,255,255,0.07); border-radius: 6px; border: 0.5px solid rgba(255,255,255,0.1);
+          color: rgba(240, 230, 216, 0.81); padding: 4px 10px; background: rgba(255,255,255,0.07); border-radius: 6px; border: 0.5px solid rgba(255,255,255,0.1);
         }
         @media (prefers-reduced-motion: reduce) {
           .bh2 * { transition: none !important; }
@@ -208,7 +208,7 @@ export default function BlogHero({
                     {/* Excerpt */}
                     <p style={{
                         fontSize: 14, fontWeight: 300, lineHeight: 1.78,
-                        color: "rgba(240,230,216,0.55)", maxWidth: 380, marginBottom: 28,
+                        color: "rgb(240, 230, 216)", maxWidth: 400, marginBottom: 28,
                         clear: "both", ...fade(0.18),
                     }}>
                         {p.excerpt}
@@ -218,7 +218,7 @@ export default function BlogHero({
                     <div style={{ display: "flex", alignItems: "center", gap: 0, marginBottom: 28, ...fade(0.24) }}>
                         <div style={{
                             width: 34, height: 34, borderRadius: "50%",
-                            background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)",
+                            background: "rgba(255, 255, 255, 0.47)", border: "0.5px solid rgba(255,255,255,0.12)",
                             display: "flex", alignItems: "center", justifyContent: "center",
                             fontSize: 12, fontWeight: 500, color: "rgba(240,230,216,0.6)", marginRight: 12, flexShrink: 0,
                         }}>
@@ -226,7 +226,7 @@ export default function BlogHero({
                         </div>
                         <div>
                             <div style={{ fontSize: 13, fontWeight: 500, color: "#f0e6d8" }}>{p.author}</div>
-                            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginTop: 1 }}>{p.date} · {p.readTime}</div>
+                            <div style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.53)", marginTop: 1 }}>{p.date} · {p.readTime}</div>
                         </div>
                         <div style={{ marginLeft: "auto" }}>
                             <button className="bh2-cta" onClick={onCtaClick}>
@@ -243,12 +243,12 @@ export default function BlogHero({
                     {p.alsoIn.length > 0 && (
                         <div style={{ marginTop: "auto", ...fade(0.32) }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                                <span style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)", whiteSpace: "nowrap" }}>
+                                <span style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255, 255, 255, 0.79)", whiteSpace: "nowrap" }}>
                                     Also in this issue
                                 </span>
                                 <div style={{ flex: 1, height: "0.5px", background: "rgba(255,255,255,0.08)" }} />
                             </div>
-                            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingTop: 6, borderTop: "0.5px solid rgba(255,255,255,0.06)" }}>
+                            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", color: "rgba(255, 255, 255, 0.74)", paddingTop: 6, borderTop: "0.5px solid rgba(255,255,255,0.06)" }}>
                                 {p.alsoIn.map((t, i) => (
                                     <span key={i} className="bh2-foot-tag">{t}</span>
                                 ))}

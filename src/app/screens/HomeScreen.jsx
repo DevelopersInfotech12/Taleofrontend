@@ -1,3 +1,5 @@
+"use client";   // ← ADD THIS LINE
+
 import HeroBanner          from "../Components/home/HeroBanner";
 import TrustBar            from "../Components/home/TrustBar";
 import ShopByCategory      from "../Components/home/ShopByCategory";
@@ -10,6 +12,7 @@ import BlogSection         from "../Components/home/BlogSection";
 import TestimonialsSection from "../Components/home/TestimonialsSection";
 import InstagramSlider     from "../Components/home/InstagramSlider";
 import NewsletterBar       from "../Components/home/NewsletterBar";
+import Faq from "../Components/home/Faq";
 
 export default function HomeScreen() {
   return (
@@ -44,6 +47,8 @@ export default function HomeScreen() {
 
       {/* 9 — Instagram photo slider */}
       <InstagramSlider />
+
+     <Faq/>
 
       {/* 10 — Newsletter subscribe bar */}
       <NewsletterBar />

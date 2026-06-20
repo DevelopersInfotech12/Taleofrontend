@@ -34,7 +34,7 @@ export default function NewsletterBar() {
   return (
     <section
       ref={ref}
-      className="py-10 bg-[#f0e8dc] border-y border-[#2a1a0e]/10"
+      className="py-10 bg-[#0d0702] border-y border-[#2a1a0e]/10"
       style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(24px)", transition: "opacity 0.7s ease, transform 0.7s ease" }}
     >
       <div className="max-w-[900px] mx-auto px-8">
@@ -57,7 +57,7 @@ export default function NewsletterBar() {
       fontSize: "clamp(2.4rem, 4.2vw, 3.2rem)",
       fontWeight: 700,
       lineHeight: 1.08,
-      color: "#3d1f10",
+      color: "#ffffffe5",
       margin: 0,
       letterSpacing: "-0.02em",
       whiteSpace: "nowrap",
@@ -77,7 +77,7 @@ export default function NewsletterBar() {
   </h2>
 </div>
             {/* Body — Inter */}
-            <p style={{ fontFamily: BODY, fontSize: 14, color: "#7a6a5a", lineHeight: 1.6, maxWidth: 300, margin: 0, fontWeight: 600 }}>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: "#948577", lineHeight: 1.6, maxWidth: 300, margin: 0, fontWeight: 600 }}>
               First access to new collections, exclusive offers, and stories that endure.
             </p>
           </div>
@@ -98,14 +98,14 @@ export default function NewsletterBar() {
                   onChange={e => { setEmail(e.target.value); setError(false); }}
                   onKeyDown={e => e.key === "Enter" && handleSubmit()}
                   placeholder="Your email address"
-                  className="flex-1 border-none outline-none bg-transparent px-4 py-3.5 placeholder-[#6b4c35]/35"
-                  style={{ fontFamily: BODY, fontSize: 13, color: "#2a1a0e" }}
+                  className="flex-1 border-none outline-none bg-transparent px-4 py-3.5 placeholder-[#6b4c35]/90"
+                  style={{ fontFamily: BODY, fontSize: 13, color: "#998779" }}
                 />
                 <button
                   type="button"
                   onClick={handleSubmit}
                   className="bg-[#2a1a0e] hover:bg-[#c9a96e] text-white transition-colors duration-300 shrink-0 px-6 py-3.5"
-                  style={{ fontFamily: BODY, fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 500 }}
+                  style={{ fontFamily: BODY, fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 600 }}
                 >
                   Subscribe
                 </button>
@@ -118,8 +118,8 @@ export default function NewsletterBar() {
                 { icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z", label: "Early access" },
                 { icon: "M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z", label: "Member offers" },
               ].map(({ icon, label }) => (
-                <span key={label} className="flex items-center gap-1.5" style={{ fontFamily: BODY, fontSize: 12, color: "#7a6a5a" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" strokeWidth="1.5"><path d={icon} /></svg>
+                <span key={label} className="flex items-center gap-1.5" style={{ fontFamily: BODY, fontSize: 12, color: "#aca299" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bdab8a" strokeWidth="1.5"><path d={icon} /></svg>
                   {label}
                 </span>
               ))}

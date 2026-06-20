@@ -38,9 +38,6 @@ export default function CartScreen() {
         {/* ── Dark hero band (matches Checkout) ── */}
         <div style={{ background: C.brown, paddingTop: 114 }}>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-10 text-center">
-            <span style={{ fontFamily: "var(--font-jost)", fontSize: 11, letterSpacing: "0.3em", color: C.gold, fontWeight: 600, textTransform: "uppercase" }}>
-              Shopping Bag
-            </span>
             <h1 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(2rem,4vw,3rem)", fontWeight: 600, color: C.goldLt, marginTop: 8 }}>
               Your Bag
             </h1>
@@ -58,7 +55,7 @@ export default function CartScreen() {
               style={{ background: C.white, border: `1.5px solid ${C.border}`, boxShadow: "0 12px 40px rgba(26,12,6,0.08)" }}>
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full flex items-center justify-center"
-                  style={{ background: `linear-gradient(135deg, ${C.brown}, #5a2e16)`, boxShadow: `0 4px 16px rgba(61,31,16,0.3)` }}>
+                  style={{  boxShadow: `0 4px 16px rgba(61,31,16,0.3)`, color:"#333232" }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.goldLt} strokeWidth="2.5">
                     <path d="M6 6h15l-1.5 9h-12z" strokeLinecap="round" strokeLinejoin="round" />
                     <circle cx="9" cy="20" r="1" fill={C.goldLt} stroke="none" />
@@ -66,7 +63,7 @@ export default function CartScreen() {
                     <path d="M6 6L4 3H2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <span style={{ fontFamily: "var(--font-jost)", fontSize: 13, fontWeight: 700, color: C.text, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: C.text, textTransform: "uppercase", letterSpacing: "0.08em" }}>
                   Bag
                 </span>
               </div>
@@ -76,7 +73,7 @@ export default function CartScreen() {
                 {["Delivery", "Payment", "Confirmed"].map((s, i) => (
                   <div key={s} className="flex items-center">
                     <div className="w-px h-5 mx-4" style={{ background: C.border }} />
-                    <span style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: C.muted, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                    <span className="" style={{ fontSize: 13, color: C.muted, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
                       {s}
                     </span>
                   </div>
@@ -85,7 +82,7 @@ export default function CartScreen() {
 
               {!user && (
                 <Link href="/account?redirect=checkout"
-                  style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: C.gold, fontWeight: 700, letterSpacing: "0.05em" }}>
+                  style={{ fontSize: 15, color: C.gold, fontWeight: 700, letterSpacing: "0.05em" }}>
                   Sign in →
                 </Link>
               )}
@@ -117,8 +114,8 @@ export default function CartScreen() {
                 Discover pieces made to be treasured.
               </p>
               <Link href="/shop"
-                className="inline-block rounded-full px-9 py-3.5 text-xs font-bold uppercase tracking-[0.2em] hover-lift"
-                style={{ fontFamily: "var(--font-jost)", background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, color: C.goldLt, boxShadow: "0 4px 20px rgba(61,31,16,0.25)" }}>
+                className="inline-block rounded-full px-9 py-3.5 text-xs font-bold uppercase tracking-[0.2em] hover-lift font-poppins"
+                style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, color: C.goldLt, boxShadow: "0 4px 20px rgba(61,31,16,0.25)" }}>
                 Continue Shopping
               </Link>
             </div>
@@ -130,7 +127,7 @@ export default function CartScreen() {
               <div className="rounded-3xl p-6 sm:p-8"
                 style={{ background: C.white, border: `1.5px solid ${C.border}`, boxShadow: "0 8px 40px rgba(26,12,6,0.05)" }}>
 
-                <h2 style={{ fontFamily: "var(--font-jost)", fontSize: 13, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 24 }}>
+                <h2 style={{  fontSize: 13, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 24 }}>
                   {count} {count === 1 ? "Item" : "Items"}
                 </h2>
 
@@ -155,7 +152,7 @@ export default function CartScreen() {
                           <div className="min-w-0">
                             <Link href={`/products/${item.slug}`}
                               className="line-clamp-2"
-                              style={{ fontFamily: "var(--font-playfair)", fontSize: 17, fontWeight: 600, color: C.text, lineHeight: 1.3 }}>
+                              style={{  fontSize: 19, fontWeight: 600, color: C.text, lineHeight: 1.3 }}>
                               {item.name}
                             </Link>
                             {(item.variant || item.size) && (
@@ -169,7 +166,7 @@ export default function CartScreen() {
                                 {fmtPrice(item.price)}
                               </span>
                               {item.originalPrice && item.originalPrice > item.price && (
-                                <span style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: C.muted, textDecoration: "line-through" }}>
+                                <span style={{  fontSize: 12, color: C.muted, textDecoration: "line-through" }}>
                                   {fmtPrice(item.originalPrice)}
                                 </span>
                               )}
@@ -208,7 +205,7 @@ export default function CartScreen() {
                               style={{ color: C.brown, fontSize: 16 }}>+</button>
                           </div>
 
-                          <p style={{ fontFamily: "var(--font-playfair)", fontSize: 18, fontWeight: 700, color: C.text }}>
+                          <p style={{ fontSize: 18, fontWeight: 700, color: C.text }}>
                             {fmtPrice(item.price * item.qty)}
                           </p>
                         </div>
@@ -267,10 +264,10 @@ export default function CartScreen() {
                   {/* Total */}
                   <div className="flex justify-between items-center my-5 rounded-xl px-4 py-4"
                     style={{ background: C.brown }}>
-                    <span style={{ fontFamily: "var(--font-jost)", fontSize: 14, fontWeight: 700, color: C.goldLt, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                    <span style={{  fontSize: 14, fontWeight: 700, color: C.goldLt, textTransform: "uppercase", letterSpacing: "0.1em" }}>
                       Estimated Total
                     </span>
-                    <span style={{ fontFamily: "var(--font-playfair)", fontSize: 22, fontWeight: 700, color: C.white }}>
+                    <span style={{  fontSize: 22, fontWeight: 700, color: C.white }}>
                       {fmtPrice(subtotal + gst)}
                     </span>
                   </div>
@@ -291,12 +288,12 @@ export default function CartScreen() {
 
                   {/* CTA */}
                   <Link href="/checkout"
-                    className="block text-center rounded-full py-4 text-xs font-bold uppercase tracking-[0.2em] hover-lift active:scale-95 transition-all"
-                    style={{ fontFamily: "var(--font-jost)", background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, color: C.goldLt, boxShadow: "0 4px 20px rgba(26,12,6,0.25)" }}>
+                    className="block text-center rounded-full py-4 text-xs font-bold uppercase tracking-[0.2em] hover-lift active:scale-95 transition-all font-poppins text-[#fff]"
+                    style={{  background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, boxShadow: "0 4px 20px rgba(26,12,6,0.25)" }}>
                     Proceed to Checkout →
                   </Link>
 
-                  <p style={{ fontFamily: "var(--font-jost)", fontSize: 11, color: C.muted, marginTop: 14, textAlign: "center", letterSpacing: "0.03em" }}>
+                  <p style={{  fontSize: 11, color: C.muted, marginTop: 14, textAlign: "center", letterSpacing: "0.03em" }}>
                     Final price calculated at checkout
                   </p>
 
@@ -305,7 +302,7 @@ export default function CartScreen() {
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="1.8">
                       <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
                     </svg>
-                    <span style={{ fontFamily: "var(--font-jost)", fontSize: 11, color: C.muted }}>256-bit SSL encrypted checkout</span>
+                    <span style={{ fontSize: 11, color: C.muted }}>256-bit SSL encrypted checkout</span>
                   </div>
                 </div>
               </div>

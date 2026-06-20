@@ -146,8 +146,8 @@ export default function Footer() {
             <div className="flex items-center gap-2.5 mt-1 flex-wrap">
               {socials.map(({ label, href, icon }) => (
                 <a key={label} href={href} aria-label={label}
-                  className="w-8 h-8 flex items-center justify-center text-[#c9a96e]/50 hover:text-[#c9a96e] transition-all duration-300 shrink-0"
-                  style={{ border: "1px solid rgba(201,169,110,0.18)", borderRadius: "2px" }}>
+                  className="w-8 h-8 flex items-center justify-center text-[#c9a96e]/90 hover:text-[#c9a96e] transition-all duration-300 shrink-0"
+                  style={{ border: "1px solid rgba(211, 185, 137, 0.18)", borderRadius: "2px" }}>
                   {icon}
                 </a>
               ))}

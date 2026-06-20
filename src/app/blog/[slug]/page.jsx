@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 const SERIF = "'Cormorant Garamond', Georgia, serif";
-const SANS  = "'Inter', 'Poppins', sans-serif";
+const SANS = "'Inter', 'Poppins', sans-serif";
 
 /* ─── block renderer ──────────────────────────────────────────────── */
 function renderBlock(b, i) {
@@ -147,6 +147,7 @@ function TOCSidebar({ sections, blog }) {
 export default function BlogDetailPage() {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
+  const [related, setRelated] = useState([]);   // ← ADD
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
 
@@ -154,7 +155,22 @@ export default function BlogDetailPage() {
     if (!slug) return;
     fetch(`${API}/blogs/public/${slug}`)
       .then(r => r.json())
-      .then(d => { if (d.data) setBlog(d.data); else setErr("Blog not found"); })
+      .then(d => {
+        if (d.data) {
+          setBlog(d.data);
+          // ← ADD: fetch other published blogs as "related"
+          fetch(`${API}/blogs/published?limit=4`)
+            .then(r => r.json())
+            .then(rd => {
+              const list = rd.data?.blogs ?? rd.data ?? [];
+              // exclude current blog
+              setRelated(list.filter(b => b.slug !== slug).slice(0, 3));
+            })
+            .catch(() => { });
+        } else {
+          setErr("Blog not found");
+        }
+      })
       .catch(() => setErr("Failed to load blog"))
       .finally(() => setLoading(false));
   }, [slug]);
@@ -270,19 +286,44 @@ export default function BlogDetailPage() {
             </div>
           )}
 
-          {/* Related articles */}
-          {blog.related?.length > 0 && (
+          {related.length > 0 && (
             <div style={{ marginTop: "3.5rem" }}>
               <h3 style={{ fontFamily: SERIF, fontSize: "1.7rem", color: "var(--text)", marginBottom: "1.5rem", fontWeight: 700 }}>Keep Reading</h3>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
-                {blog.related.map((r, i) => (
-                  <Link key={i} href={r.slug ? `/blog/${r.slug}` : "#"} style={{ textDecoration: "none" }}>
-                    <article style={{ background: "#fff", border: "1px solid var(--cream-dk)", borderRadius: 14, overflow: "hidden", transition: "transform 0.2s, box-shadow 0.2s", cursor: "pointer" }}
+                {related.map((r, i) => (
+                  <Link key={i} href={`/blog/${r.slug}`} style={{ textDecoration: "none" }}>
+                    <article style={{
+                      background: "#fff",
+                      border: "1px solid var(--cream-dk)",
+                      borderRadius: 14,
+                      overflow: "hidden",
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                      cursor: "pointer",
+                      height: "100%",           // ← ADD
+                      display: "flex",          // ← ADD
+                      flexDirection: "column",  // ← ADD
+                    }}
                       onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(61,31,16,0.12)"; }}
                       onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
-                      {r.img && <img src={r.img} alt={r.title} style={{ width: "100%", height: 140, objectFit: "cover" }} />}
-                      <div style={{ padding: "1rem" }}>
-                        {r.tag && <span style={{ fontFamily: SANS, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", color: r.tagColor || "var(--gold)", fontWeight: 700 }}>{r.tag}</span>}
+
+                      {/* Force fixed height image — always rendered, fallback guaranteed */}
+                      <div style={{
+                        width: "100%",
+                        height: 160,              // ← fixed height
+                        flexShrink: 0,
+                        overflow: "hidden",
+                        background: "#f0e8dc",
+                      }}>
+                        <img
+                          src={r.heroImg || r.img || "https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=500&q=80"}
+                          alt={r.title}
+                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                          onError={e => { e.target.src = "https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=500&q=80"; }}
+                        />
+                      </div>
+
+                      <div style={{ padding: "1rem", flex: 1 }}>
+                        {r.tag && <span style={{ fontFamily: SANS, fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--gold)", fontWeight: 700 }}>{r.tag}</span>}
                         {r.date && <span style={{ fontFamily: SANS, fontSize: "0.72rem", color: "var(--text-muted)", marginLeft: 8 }}>{r.date}</span>}
                         <p style={{ fontFamily: SERIF, fontSize: "1rem", fontWeight: 600, color: "var(--text)", margin: "6px 0 0", lineHeight: 1.4 }}>{r.title}</p>
                       </div>

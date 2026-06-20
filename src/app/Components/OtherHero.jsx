@@ -329,7 +329,8 @@ export default function OtherHero({
                                 style={{ position: "absolute", inset: 0, zIndex: isActive ? 2 : 1 }}>
                                 <img src={src} alt="" style={{
                                     width: "100%", height: "100%", objectFit: "cover", objectPosition: "center",
-                                    filter: "brightness(0.88) saturate(0.75)", display: "block",
+                                    // filter: "brightness(0.88) saturate(0.75)", 
+                                    display: "block",
                                 }} />
                             </div>
                         );
