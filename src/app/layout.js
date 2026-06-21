@@ -27,7 +27,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: 'Luxéor — Fine Jewellery',
+  title: 'Taleo — Fine Jewellery',
   description: 'Exquisite fine jewellery, made with rare stones and exceptional craftsmanship.',
 };
 
