@@ -31,7 +31,9 @@ const config = {
         poppins: ["Poppins", "system-ui", "sans-serif"],
         serif: ["Georgia", "Times New Roman", "serif"],
         cormorant: ["Cormorant Garamond", "serif"],
-                bodoni: ["Bodoni Moda", "serif"],
+        bodoni: ["Bodoni Moda", "serif"],
+        serifnew: "'Cormorant Garamond', 'Georgia', serif",
+        sans: "'Outfit', 'system-ui', sans-serif",
 
 
       },

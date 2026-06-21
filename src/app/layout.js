@@ -3,6 +3,7 @@ import Script from 'next/script';
 import './globals.css';
 import { CartProvider } from './lib/CartContext';
 import { AuthProvider } from './lib/AuthContext';
+import { ThemeProvider } from './lib/ThemeContext';
 import CartDrawer from './Components/CartDrawer';
 import WhatsAppWidget from './Components/WhatsAppWidget';
 
@@ -33,15 +34,25 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${playfair.variable} ${jost.variable} ${poppins.variable}`}>
-      <body className="bg-[#f5efe8] text-[#2a1a0e] antialiased">
-        <AuthProvider>
-          <CartProvider>
-            {children}
-            <WhatsAppWidget />
+      <head>
+        {/* runs before paint, sets dark class so there's no flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="bg-[#f5efe8] dark:bg-[#1a0c06] text-[#2a1a0e] dark:text-[#e8d5b0] antialiased transition-colors duration-300">
+        <ThemeProvider>
+          <AuthProvider>
+            <CartProvider>
+              {children}
+              <WhatsAppWidget />
 
-            <CartDrawer />
-          </CartProvider>
-        </AuthProvider>
+              <CartDrawer />
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
       </body>
     </html>

@@ -12,7 +12,6 @@ export default function HeroBanner() {
       {/* DESKTOP: side-by-side (lg+) */}
       <div className="hidden lg:block">
         <div className="relative h-[570px]">
-          {/* Full-width model image on right */}
           <div className="absolute inset-0">
             <img
               src="./bannernew.png"
@@ -21,7 +20,6 @@ export default function HeroBanner() {
               style={{ width: "62%" }}
             />
           </div>
-
           <div className="relative z-10 max-w-[1320px] mx-auto px-16 h-full flex items-center">
             <div className="max-w-[520px]">
               <EyebrowRow visible={visible} />
@@ -35,15 +33,12 @@ export default function HeroBanner() {
 
       {/* MOBILE: stacked (below lg) */}
       <div className="lg:hidden flex flex-col">
-        {/* Text block */}
         <div className="px-6 pt-12 pb-8 flex flex-col">
           <EyebrowRow visible={visible} />
           <Headline visible={visible} />
           <Subtext visible={visible} />
           <CTAs visible={visible} />
         </div>
-
-        {/* Image below */}
         <div className="w-full">
           <img
             src="./bannernew.png"
@@ -74,7 +69,7 @@ function EyebrowRow({ visible }) {
 function Headline({ visible }) {
   return (
     <h1
-      className="text-white leading-[1.05] mt-16 text-[4.5rem] lg:text-[clamp(3.2rem,5.5vw,5.5rem)]"
+      className="text-white leading-[1.05] sm:mt-[80px] mt-[50px] text-[4.5rem] lg:text-[clamp(3.2rem,5.5vw,5.5rem)]"
       style={{
         fontFamily: "'Cormorant Garamond', Georgia, serif",
         fontWeight: 400,
@@ -108,7 +103,7 @@ function Subtext({ visible }) {
 function CTAs({ visible }) {
   return (
     <div
-      className="flex flex-wrap gap-4"
+      className="flex flex-row gap-3 lg:gap-4"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(20px)",
@@ -117,15 +112,29 @@ function CTAs({ visible }) {
     >
       <Link
         href="/collections"
-        className="border border-white/80 text-white hover:bg-white hover:text-[#1a0c06] transition-all duration-300"
-        style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", padding: "16px 32px" }}
+        className="border border-white/80 text-white hover:bg-white hover:text-[#1a0c06] transition-all duration-300 text-center whitespace-nowrap"
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 600,
+          fontSize: 10,
+          letterSpacing: "0.16em",
+          textTransform: "uppercase",
+          padding: "13px 16px",
+        }}
       >
         Explore Collection
       </Link>
       <Link
         href="/new-arrivals"
-        className="border border-white/40 text-white hover:border-[#b08850] hover:text-[#b08850] transition-all duration-300"
-        style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", padding: "16px 32px" }}
+        className="border border-white/40 text-white hover:border-[#b08850] hover:text-[#b08850] transition-all duration-300 text-center whitespace-nowrap"
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 600,
+          fontSize: 10,
+          letterSpacing: "0.16em",
+          textTransform: "uppercase",
+          padding: "13px 16px",
+        }}
       >
         New Arrivals
       </Link>

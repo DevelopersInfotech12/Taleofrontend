@@ -15,22 +15,21 @@ const FAQS = [
 function FaqItem({ item, index, open, onToggle, fade }) {
     return (
         <div
-            style={{ ...fade(0.15 + index * 0.08), borderBottom: "1px solid rgba(42,26,14,0.12)" }}
+            style={fade(0.15 + index * 0.08)}
+            className="border-b border-[#2a1a0e]/12 dark:border-[#e8d9c4]/12"
         >
             <button
                 type="button"
                 onClick={() => onToggle(index)}
                 className="w-full flex items-center justify-between gap-6 py-5 text-left bg-transparent border-none cursor-pointer"
             >
-                <span style={{ fontFamily: DISPLAY, fontSize: 19, fontWeight: 600, color: "#3d1f10" }}>
+                <span style={{ fontFamily: DISPLAY, fontSize: 19, fontWeight: 600 }} className="text-[#3d1f10] ">
                     {item.q}
                 </span>
                 <span
-                    className="shrink-0 flex items-center justify-center"
+                    className="shrink-0 flex items-center justify-center border border-[#a67c2e] dark:border-[#c9a96e] text-[#9b7020] dark:text-[#c9a96e]"
                     style={{
                         width: 28, height: 28, borderRadius: "50%",
-                        border: "1px solid #c9a96e",
-                        color: "#9b7020",
                         transform: open ? "rotate(45deg)" : "rotate(0deg)",
                         transition: "transform 0.3s ease",
                     }}
@@ -47,7 +46,7 @@ function FaqItem({ item, index, open, onToggle, fade }) {
                     transition: "max-height 0.4s ease",
                 }}
             >
-                <p style={{ fontFamily: BODY, fontSize: 14, color: "#7a6a5a", lineHeight: 1.7, fontWeight: 500, margin: "0 0 22px", maxWidth: 560 }}>
+                <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.7, fontWeight: 500, margin: "0 0 22px", maxWidth: 560 }} className="text-[#7a6a5a] dark:text-[#b1a99f]">
                     {item.a}
                 </p>
             </div>
@@ -78,26 +77,26 @@ export default function Faq() {
     const handleToggle = (i) => setOpenIndex((cur) => (cur === i ? -1 : i));
 
     return (
-        <section ref={ref} className="py-20 bg-[#f0e8dc]">
+        <section ref={ref} className="py-20 bg-[#faf7f2] transition-colors duration-300">
             <div className="max-w-[900px] mx-auto px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {/* Left — heading block + image */}
                     <div className="flex flex-col gap-1.5">
                         <div className="flex items-center gap-3" style={fade(0)}>
-                            <span style={{ display: "block", width: 24, height: 1, background: "#c9a96e" }} />
-                            <span style={{ fontFamily: DISPLAY, fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase", color: "#c9a96e" }}>
+                            <span style={{ display: "block", width: 24, height: 1 }} className="bg-[#a67c2e] dark:bg-[#c9a96e]" />
+                            <span style={{ fontFamily: DISPLAY, fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
                                 Got Questions
                             </span>
                         </div>
                         <div style={fade(0.1)}>
-                            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2rem, 3.6vw, 2.8rem)", fontWeight: 700, lineHeight: 1.1, color: "#3d1f10", margin: 0, letterSpacing: "-0.02em" }}>
+                            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2rem, 3.6vw, 2.8rem)", fontWeight: 700,color: "#3d1f10", lineHeight: 1.1, margin: 0, letterSpacing: "-0.02em" }} className="text-[#3d1f10] dark:text-[#e8d9c4]">
                                 Frequently{" "}
-                                <span style={{ fontWeight: 400, fontStyle: "italic", color: "#9b7020", letterSpacing: "-0.01em" }}>
+                                <span style={{ fontWeight: 400, fontStyle: "italic", letterSpacing: "-0.01em" }} className="text-[#9b7020] dark:text-[#c9a96e]">
                                     asked
                                 </span>
                             </h2>
                         </div>
-                        <p style={{ fontFamily: BODY, fontSize: 14, color: "#7a6a5a", lineHeight: 1.6, margin: "8px 0 0", fontWeight: 600, ...fade(0.2) }}>
+                        <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.6, margin: "8px 0 0", fontWeight: 600, ...fade(0.2) }} className="text-[#7a6a5a]">
                             Everything you need to know before your purchase.
                         </p>
 

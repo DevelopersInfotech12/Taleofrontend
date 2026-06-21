@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 const ThemeContext = createContext({
   theme: "light",
   toggleTheme: () => {},
+  mounted: false,
 });
 
 export function ThemeProvider({ children }) {
@@ -11,14 +12,12 @@ export function ThemeProvider({ children }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    const initial =
-      stored ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light");
+    // html already has correct class from the inline script in layout.js,
+    // just sync react state to it.
+    const initial = document.documentElement.classList.contains("dark")
+      ? "dark"
+      : "light";
     setTheme(initial);
-    document.documentElement.classList.toggle("dark", initial === "dark");
     setMounted(true);
   }, []);
 

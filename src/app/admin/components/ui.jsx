@@ -106,8 +106,8 @@ export function ConfirmDialog({ open, title = "Are you sure?", message, onConfir
         <h3 className="text-[15px] font-semibold text-[#1a1008] mb-2">{title}</h3>
         <p className="text-[12px] text-[#9c8a78] mb-5">{message}</p>
         <div className="flex justify-end gap-2">
-          <button onClick={onCancel} className="text-[12px] px-4 py-2 rounded-lg border border-[#e0d4c4] text-[#5c4f42] hover:bg-[#fdfaf6]">Cancel</button>
-          <button onClick={onConfirm} disabled={loading} className="text-[12px] px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-60">
+          <button onClick={onCancel} className="text-[12px] px-4 font-bold py-2 rounded-lg border border-[#e0d4c4] text-[#5c4f42] hover:bg-[#fdfaf6]">Cancel</button>
+          <button onClick={onConfirm} disabled={loading} className="text-[12px] px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 font-bold disabled:opacity-60">
             {loading ? "Working…" : confirmLabel}
           </button>
         </div>
@@ -168,11 +168,11 @@ export function PageHeader({ eyebrow, title, subtitle, action }) {
   return (
     <div className="flex items-end justify-between mb-8 flex-wrap gap-3">
       <div>
-        <p className="text-[10px] tracking-[0.2em] uppercase text-[#c9a84c] font-semibold mb-1.5">
+        <p className="text-[11px] tracking-[0.2em] uppercase text-[#c9a84c] font-bold mb-1.5">
           {eyebrow || subtitle || "\u00A0"}
         </p>
         <h1
-          className="text-[36px] font-bold text-[#1a1008] leading-none tracking-tight m-0"
+          className="text-[32px] font-bold text-[#1a1008] leading-none tracking-tight m-0"
           style={{ fontFamily: "Georgia, serif", letterSpacing: "-0.02em" }}
         >
           {title}
@@ -282,7 +282,7 @@ export function Thead({ headers }) {
     <thead>
       <tr className="bg-[#fdfaf6] border-b border-[#ede4d8]">
         {headers.map(h => (
-          <th key={h} className="text-left px-4 py-[11px] text-[9px] tracking-[0.18em] uppercase text-[#b8a898] font-bold">
+          <th key={h} className="text-left px-4 py-[11px] text-[11px] tracking-[0.18em] uppercase text-[#b8a898] font-bold">
             {h}
           </th>
         ))}

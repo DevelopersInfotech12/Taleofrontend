@@ -8,12 +8,6 @@ import { useState } from "react";
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
 
-// ─── Unified section-header pattern ─────────────────────────────────────────
-// Eyebrow: Inter 10px / 500 / 0.32em tracking / uppercase / gold #c9a96e
-//          preceded by 24px gold rule
-// Heading: Cormorant Garamond / weight 400 / color by bg
-// ────────────────────────────────────────────────────────────────────────────
-
 export const AnimatedTestimonialsDemo = () => {
   const [active, setActive] = useState(testimonials[0]);
 
@@ -28,21 +22,18 @@ export const AnimatedTestimonialsDemo = () => {
   const isActive = (index) => testimonials[index] === active;
   const randomRotateY = () => Math.floor(Math.random() * 21) - 10;
 
-  const fade = (delay = 0) => ({
-
-
-  });
+  const fade = (delay = 0) => ({});
 
   return (
-    <section className="py-16 px-6" style={{ background: "#ffffff", position: "relative", zIndex: 0 }}>
+    <section className="py-16 px-6 bg-[#faf7f2] transition-colors duration-300" style={{ position: "relative", zIndex: 0 }}>
 
       {/* ── Section Header (unified pattern) ── */}
       <div className="flex flex-col items-center text-center mb-12 gap-3">
 
         {/* Eyebrow row: gold rule + label */}
         <div className="flex items-center gap-3 ">
-          <span style={{ display: "block", width: 24, height: 1, background: "#c9a96e" }} />
-          <span style={{ fontFamily: BODY, fontSize: 12, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase", color: "#c9a96e" }}>
+          <span style={{ display: "block", width: 24, height: 1 }} className="bg-[#a67c2e] dark:bg-[#c9a96e]" />
+          <span style={{ fontFamily: BODY, fontSize: 12, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
             What our customers say
           </span>
         </div>
@@ -54,19 +45,20 @@ export const AnimatedTestimonialsDemo = () => {
               fontSize: "clamp(2.4rem, 4.2vw, 3.2rem)",
               fontWeight: 700,
               lineHeight: 1.08,
-              color: "#3d1f10",
               margin: 0,
+              color: "#3d1f10",
               letterSpacing: "-0.02em",
             }}
+            className=""
           >
             What Our{" "}
             <span
               style={{
                 fontWeight: 400,
                 fontStyle: "italic",
-                color: "#c9a96e",
                 letterSpacing: "-0.01em",
               }}
+              className="text-[#a67c2e] dark:text-[#c9a96e]"
             >
               Clients Say
             </span>
@@ -75,7 +67,7 @@ export const AnimatedTestimonialsDemo = () => {
       </div>
 
       {/* Card */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto bg-[#1e1510] rounded-2xl p-8 border border-[#c9a96e]/10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto bg-white dark:bg-[#1e1510] rounded-2xl p-8 border border-[#e8d5b0]/10 dark:border-[#c9a96e]/10 transition-colors duration-300">
 
         {/* Image stack */}
         <div className="relative h-80 w-full">
@@ -99,27 +91,27 @@ export const AnimatedTestimonialsDemo = () => {
         <div className="flex flex-col justify-between py-4">
           <motion.div key={active.name} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }} transition={{ duration: 0.2, ease: "easeInOut" }}>
             {/* Name — Cormorant Garamond */}
-            <h3 style={{ fontFamily: DISPLAY, fontSize: "1.9rem", fontWeight: 700, color: "#f5efe8", margin: 0 }}>{active.name}</h3>
+            <h3 style={{ fontFamily: DISPLAY, fontSize: "1.9rem", fontWeight: 700, margin: 0 }} className="text-[#2c2317] dark:text-[#f5efe8]">{active.name}</h3>
             {/* Designation — Inter */}
-            <p style={{ fontFamily: BODY, fontSize: 12, color: "#a89880", marginTop: 4, fontWeight: 300 }}>{active.designation}</p>
+            <p style={{ fontFamily: BODY, fontSize: 12, marginTop: 4, fontWeight: 300 }} className="text-[#7a6a5a] dark:text-[#a89880]">{active.designation}</p>
 
             {/* Opening quote — Cormorant Garamond */}
-            <span style={{ fontFamily: DISPLAY, fontSize: "4rem", lineHeight: 1, color: "#c9a96e", opacity: 0.3, display: "block", marginTop: "1rem" }}>"</span>
+            <span style={{ fontFamily: DISPLAY, fontSize: "4rem", lineHeight: 1, opacity: 0.3, display: "block", marginTop: "1rem" }} className="text-[#a67c2e] dark:text-[#c9a96e]">"</span>
 
-            {/* Quote — Inter */}
             {/* Quote — Inter */}
             <motion.p
               style={{
                 fontFamily: BODY,
-                fontSize: 14,
-                color: "#c8b8a2",
+                fontSize: 15,
                 lineHeight: 1.75,
                 marginTop: -16,
                 fontWeight: 300,
                 textAlign: "justify",
                 textAlignLast: "left",
                 width: "95%",
+                // color:"#afa9a2"
               }}
+              className="text-[#3f3529] dark:text-[#3f3529]"
             >
               {active.quote.split(" ").map((word, index) => (
                 <motion.span
@@ -150,8 +142,8 @@ export const AnimatedTestimonialsDemo = () => {
 
           {/* Nav */}
           <div className="flex gap-4 mt-8">
-            <button onClick={handleprev} className="h-9 w-9 rounded-full border border-[#c9a96e]/40 text-[#c9a96e] flex items-center justify-center hover:bg-[#c9a96e]/10 hover:border-[#c9a96e]/70 transition-all duration-300"><ArrowLeft size={16} /></button>
-            <button onClick={handlenext} className="h-9 w-9 rounded-full border border-[#c9a96e]/40 text-[#c9a96e] flex items-center justify-center hover:bg-[#c9a96e]/10 hover:border-[#c9a96e]/70 transition-all duration-300"><ArrowRight size={16} /></button>
+            <button onClick={handleprev} className="h-9 w-9 rounded-full border border-[#a67c2e]/40 dark:border-[#c9a96e]/40 text-[#a67c2e] dark:text-[#c9a96e] flex items-center justify-center hover:bg-[#a67c2e]/10 dark:hover:bg-[#c9a96e]/10 hover:border-[#a67c2e]/70 dark:hover:border-[#c9a96e]/70 transition-all duration-300"><ArrowLeft size={16} /></button>
+            <button onClick={handlenext} className="h-9 w-9 rounded-full border border-[#a67c2e]/40 dark:border-[#c9a96e]/40 text-[#a67c2e] dark:text-[#c9a96e] flex items-center justify-center hover:bg-[#a67c2e]/10 dark:hover:bg-[#c9a96e]/10 hover:border-[#a67c2e]/70 dark:hover:border-[#c9a96e]/70 transition-all duration-300"><ArrowRight size={16} /></button>
           </div>
         </div>
       </div>

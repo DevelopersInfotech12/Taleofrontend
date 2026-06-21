@@ -76,7 +76,7 @@ export default function ProductCard({
 
   const cardContent = (
     <div
-      className="group relative w-full overflow-hidden rounded-2xl flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-15px_rgba(76,42,25,0.2)]"
+      className="group relative w-full overflow-hidden rounded-2xl flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-15px_rgba(76,42,25,0.2)] bg-white dark:bg-[#1a1a1a]"
       style={{ background: "var(--cream-dk)", border: "1px solid var(--border-color, #e8ddd0)" }}
     >
       {/* ── Image ── */}
@@ -193,7 +193,7 @@ export default function ProductCard({
               Price
             </p>
             <div className="flex items-baseline gap-1 flex-wrap">
-              <span style={{ fontFamily: BODY, fontSize: 15, fontWeight: 600, color: "var(--text)", lineHeight: 1.2 }}>
+              <span style={{ fontFamily: BODY, fontSize: 18, fontWeight: 600, color: "var(--text)", lineHeight: 1.2 }}>
                 ₹{price.toLocaleString("en-IN")}
               </span>
               {originalPrice && (

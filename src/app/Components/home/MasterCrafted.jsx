@@ -36,8 +36,10 @@ const TOTAL = col1Images.length * (IMG_HEIGHT + GAP);
 
 export default function MasterCrafted() {
     return (
-        <section style={{ backgroundColor: "#f5f0e8", fontFamily: BODY }}
-            className="relative w-full px-4 sm:px-8 py-5 sm:py-8 overflow-hidden">
+        <section
+            style={{ fontFamily: BODY }}
+            className="relative w-full px-4 sm:px-8 py-5 sm:py-8 overflow-hidden bg-[#faf7f2] transition-colors duration-300"
+        >
 
             <style>{`
         @keyframes scrollUp {
@@ -54,53 +56,57 @@ export default function MasterCrafted() {
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-stretch">
 
-                {/* LEFT — dark card */}
+                {/* LEFT — card, white in light mode / dark coffee in dark mode */}
                 <div className="flex h-auto">
                     <div
-                        className="w-full rounded-2xl flex flex-col p-5 sm:p-7 gap-4 "
-                        style={{ background: "#150f0a" }}
+                        className="w-full rounded-2xl flex flex-col p-5 sm:p-7 gap-4 bg-white dark:bg-[#150f0a] border border-[#e8d5b0]/40 dark:border-transparent transition-colors duration-300"
                     >
                         {/* Eyebrow */}
                         <div className="flex items-center gap-3 mt-8">
-                            <span style={{ display: "block", width: 24, height: 1, background: "#c9a96e", flexShrink: 0 }} />
-                            <span style={{ fontFamily: BODY, fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase", color: "#c9a96e" }}>
+                            <span style={{ display: "block", width: 24, height: 1, flexShrink: 0 }} className="bg-[#a67c2e] dark:bg-[#c9a96e]" />
+                            <span style={{ fontFamily: BODY, fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
                                 Heritage Craft
                             </span>
                         </div>
 
                         {/* Headline */}
                         <div>
-                            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 700, lineHeight: 0.92, color: "#e8d9c4", margin: 0, letterSpacing: "-0.02em" }}>
+                            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 700, lineHeight: 0.92, margin: 0, letterSpacing: "-0.02em" }} className="text-[#2c2c2c] dark:text-[#e8d9c4]">
                                 Masterfully
                             </h2>
-                            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 400, fontStyle: "italic", lineHeight: 1.08, color: "#c9a96e", margin: 0, letterSpacing: "-0.01em" }}>
+                            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 400, fontStyle: "italic", lineHeight: 1.08, margin: 0, letterSpacing: "-0.01em" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
                                 crafted in India.
                             </h2>
                         </div>
 
                         {/* Body */}
-                        <p className="text-justify sm:w-[92%]" style={{ fontFamily: BODY, color: "#b1a99f", fontSize: 13, lineHeight: 1.7, margin: 0, fontWeight: 300 }}>
+                        <p className="text-justify sm:w-[92%] text-[#636262] dark:text-[#b1a99f] font-poppins" style={{ fontSize: 13.2, lineHeight: 1.8, margin: 0, fontWeight: 600, letterSpacing: "0.01em" }}>
+
                             Thoughtfully handcrafted using premium 925 sterling silver, finished with refined 18kt and 22kt gold-plated details. Hypoallergenic and designed for lasting comfort. Enjoy secure payments, complimentary shipping across India, worldwide delivery, and Cash on Delivery on select styles.
 
-                            Each TALEO creation is crafted with meticulous attention to detail, blending timeless elegance with contemporary design. 
+                            Each TALEO creation is crafted with meticulous attention to detail, blending timeless elegance with contemporary design.
                         </p>
 
                         {/* Pills */}
                         <div className="flex flex-wrap gap-1.5">
                             {["925 Silver", "18k Gold Plated", "Hypoallergenic"].map((t) => (
-                                <span key={t} style={{ fontFamily: BODY, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", padding: "5px 10px", border: "1px solid #2e2318", color: "#8a7c6b", borderRadius: 4, fontWeight: 600 }}>
+                                <span key={t}
+                                    style={{ fontFamily: BODY, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", padding: "5px 10px", borderRadius: 4, fontWeight: 700 }}
+                                    className="border border-[#d8cdb8] dark:border-[#2e2318] text-[#5c5044] dark:text-[#8a7c6b]"
+                                >
                                     {t}
                                 </span>
                             ))}
                         </div>
 
                         {/* Divider */}
-                        <div style={{ height: 1, background: "#2e2318" }} />
+                        <div style={{ height: 1 }} className="bg-[#e8e0d0] dark:bg-[#2e2318]" />
 
                         {/* CTAs */}
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                             <button
-                                style={{ fontFamily: BODY, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 600, background: "#c9a96e", color: "#0f0804", borderRadius: 4, padding: "11px 22px", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10, transition: "opacity 0.2s" }}
+                                className="bg-[#1a0c06] dark:bg-[#c9a96e] text-[#fff]"
+                                style={{ fontFamily: BODY, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 600, borderRadius: 4, padding: "11px 22px", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10, transition: "opacity 0.2s" }}
                                 onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
                                 onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                             >
@@ -109,7 +115,7 @@ export default function MasterCrafted() {
                                     <path d="M5 12h14M12 5l7 7-7 7" />
                                 </svg>
                             </button>
-                            <span style={{ fontFamily: BODY, fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "#706150", cursor: "pointer" }}>
+                            <span style={{ fontFamily: BODY, fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer" }} className="text-[#8a7c6b] dark:text-[#706150]">
                                 Browse all →
                             </span>
                         </div>

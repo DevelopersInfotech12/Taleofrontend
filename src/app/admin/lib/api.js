@@ -2,11 +2,12 @@ export const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api
 
 export async function apiFetch(path, token, options = {}) {
   const isForm = options.body instanceof FormData;
+  const hasBody = options.body != null;
   const res = await fetch(`${API}${path}`, {
     ...options,
     credentials: "include",
     headers: {
-      ...(isForm ? {} : { "Content-Type": "application/json" }),
+      ...(!isForm && hasBody ? { "Content-Type": "application/json" } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {}),
     },

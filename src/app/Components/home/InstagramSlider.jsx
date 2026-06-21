@@ -1,16 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 
-/**
- * InstagramSlider — fetches real posts from your backend proxy.
- *
- * Backend reads INSTAGRAM_ACCESS_TOKEN from .env and calls the
- * Instagram Graph API. If token is missing it returns curated
- * fallback photos so the section always looks great.
- *
- * Set NEXT_PUBLIC_API_URL in your frontend .env (e.g. http://localhost:5000)
- */
-
 function HeartIcon({ filled }) {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill={filled ? "#e0445a" : "none"} stroke={filled ? "#e0445a" : "currentColor"} strokeWidth="2">
@@ -18,7 +8,6 @@ function HeartIcon({ filled }) {
     </svg>
   );
 }
-
 function CommentIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -26,7 +15,6 @@ function CommentIcon() {
     </svg>
   );
 }
-
 function ShareIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -34,7 +22,6 @@ function ShareIcon() {
     </svg>
   );
 }
-
 function BookmarkIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -64,11 +51,9 @@ function FeedCard({ photo, handle }) {
       href={photo.permalink || "https://instagram.com"}
       target="_blank"
       rel="noopener noreferrer"
-      className="shrink-0 rounded-2xl overflow-hidden flex flex-col no-underline"
+      className="shrink-0 rounded-2xl overflow-hidden flex flex-col no-underline bg-white dark:bg-[#1c1310] border border-[#efefef] dark:border-[#2e2318] transition-colors duration-300"
       style={{
         width: 300,
-        background: "#fff",
-        border: "1px solid #efefef",
         fontFamily: "'Inter', sans-serif",
         textDecoration: "none",
         color: "inherit",
@@ -81,16 +66,16 @@ function FeedCard({ photo, handle }) {
           className="w-8 h-8 rounded-full p-[2px]"
           style={{ background: "linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7)" }}
         >
-          <div className="w-full h-full rounded-full overflow-hidden bg-white p-[1.5px]">
+          <div className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-[#1c1310] p-[1.5px]">
             <div className="w-full h-full rounded-full" style={{ background: "linear-gradient(135deg, #c9a96e, #8b5e3c)" }} />
           </div>
         </div>
         <div className="flex flex-col leading-tight">
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#1e110a" }}>{handle || "taleo.jewellery"}</span>
-          <span style={{ fontSize: 10, color: "#8a8a8a" }}>New Delhi, India</span>
+          <span style={{ fontSize: 12, fontWeight: 700 }} className="text-[#1e110a] dark:text-[#e8d9c4]">{handle || "taleo.jewellery"}</span>
+          <span style={{ fontSize: 10 }} className="text-[#8a8a8a] dark:text-[#9c8f7f]">New Delhi, India</span>
         </div>
         <div className="ml-auto">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#1e110a" }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-[#1e110a] dark:text-[#e8d9c4]">
             <circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" />
           </svg>
         </div>
@@ -111,17 +96,16 @@ function FeedCard({ photo, handle }) {
       <div className="px-3 pt-2.5 pb-1 flex items-center gap-3" onClick={(e) => e.preventDefault()}>
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLiked((l) => !l); }}
-          className="transition-transform active:scale-90"
-          style={{ color: liked ? "#e0445a" : "#1e110a", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          className={`transition-transform active:scale-90 bg-transparent border-none cursor-pointer p-0 ${liked ? "text-[#e0445a]" : "text-[#1e110a] dark:text-[#e8d9c4]"}`}
         >
           <HeartIcon filled={liked} />
         </button>
-        <button style={{ color: "#1e110a", background: "none", border: "none", cursor: "pointer", padding: 0 }}><CommentIcon /></button>
-        <button style={{ color: "#1e110a", background: "none", border: "none", cursor: "pointer", padding: 0 }}><ShareIcon /></button>
+        <button className="bg-transparent border-none cursor-pointer p-0 text-[#1e110a] dark:text-[#e8d9c4]"><CommentIcon /></button>
+        <button className="bg-transparent border-none cursor-pointer p-0 text-[#1e110a] dark:text-[#e8d9c4]"><ShareIcon /></button>
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSaved((s) => !s); }}
-          className="ml-auto"
-          style={{ color: "#1e110a", background: "none", border: "none", cursor: "pointer", padding: 0, opacity: saved ? 1 : 0.75 }}
+          className="ml-auto bg-transparent border-none cursor-pointer p-0 text-[#1e110a] dark:text-[#e8d9c4]"
+          style={{ opacity: saved ? 1 : 0.75 }}
         >
           <BookmarkIcon />
         </button>
@@ -129,14 +113,14 @@ function FeedCard({ photo, handle }) {
 
       {/* Likes */}
       <div className="px-3 pb-1">
-        <span style={{ fontSize: 12, fontWeight: 700, color: "#1e110a" }}>
+        <span style={{ fontSize: 12, fontWeight: 700 }} className="text-[#1e110a] dark:text-[#e8d9c4]">
           {formatCount(liked ? (likes || 0) + 1 : likes)} likes
         </span>
       </div>
 
       {/* Caption */}
       <div className="px-3 pb-2">
-        <p style={{ fontSize: 12, color: "#1e110a", lineHeight: 1.5, margin: 0 }}>
+        <p style={{ fontSize: 12, lineHeight: 1.5, margin: 0 }} className="text-[#1e110a] dark:text-[#e8d9c4]">
           <span style={{ fontWeight: 700 }}>{handle || "luxeor.jewellery"} </span>
           {photo.caption
             ? photo.caption.length > 80
@@ -148,7 +132,7 @@ function FeedCard({ photo, handle }) {
 
       {/* Comments */}
       <div className="px-3 pb-3">
-        <span style={{ fontSize: 11, color: "#8a8a8a" }}>
+        <span style={{ fontSize: 11 }} className="text-[#8a8a8a] dark:text-[#9c8f7f]">
           {comments != null ? `View all ${formatCount(comments)} comments` : "View post on Instagram"}
         </span>
       </div>
@@ -159,15 +143,15 @@ function FeedCard({ photo, handle }) {
 function SkeletonCard() {
   return (
     <div
-      className="shrink-0 rounded-2xl overflow-hidden animate-pulse"
-      style={{ width: 300, background: "#2a1810", border: "1px solid #3a2015" }}
+      className="shrink-0 rounded-2xl overflow-hidden animate-pulse bg-[#ece4d6] dark:bg-[#2a1810] border border-[#e0d6c5] dark:border-[#3a2015]"
+      style={{ width: 300 }}
     >
-      <div style={{ height: 52, background: "#3a2015" }} />
-      <div style={{ aspectRatio: "1", background: "#3a2015" }} />
+      <div className="bg-[#e0d6c5] dark:bg-[#3a2015]" style={{ height: 52 }} />
+      <div className="bg-[#e0d6c5] dark:bg-[#3a2015]" style={{ aspectRatio: "1" }} />
       <div style={{ padding: "12px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ height: 12, width: "40%", background: "#4a2a1a", borderRadius: 6 }} />
-        <div style={{ height: 10, width: "80%", background: "#4a2a1a", borderRadius: 6 }} />
-        <div style={{ height: 10, width: "60%", background: "#4a2a1a", borderRadius: 6 }} />
+        <div className="bg-[#d8cdb8] dark:bg-[#4a2a1a]" style={{ height: 12, width: "40%", borderRadius: 6 }} />
+        <div className="bg-[#d8cdb8] dark:bg-[#4a2a1a]" style={{ height: 10, width: "80%", borderRadius: 6 }} />
+        <div className="bg-[#d8cdb8] dark:bg-[#4a2a1a]" style={{ height: 10, width: "60%", borderRadius: 6 }} />
       </div>
     </div>
   );
@@ -187,7 +171,6 @@ export default function InstagramSlider() {
   const visibleCount = 4;
   const maxIndex = Math.max(0, posts.length - visibleCount);
 
-  // Intersection observer for entrance animation
   useEffect(() => {
     const obs = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
@@ -197,15 +180,14 @@ export default function InstagramSlider() {
     return () => obs.disconnect();
   }, []);
 
-  // Fetch posts from backend
   useEffect(() => {
     const FALLBACK_POSTS = [
-      { id: "fb1", img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=80", alt: "Gold bangles",   caption: "Timeless bangles, handcrafted in 22K gold. ✨ #GoldJewellery #Handcrafted", likes: 1240, comments: 38, permalink: "https://instagram.com" },
-      { id: "fb2", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=80", alt: "Gold necklace",  caption: "Heirloom necklaces made to be worn and remembered. 💛 #GoldNecklace #Taleo",  likes: 987,  comments: 24, permalink: "https://instagram.com" },
-      { id: "fb3", img: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80", alt: "Gold earrings",  caption: "Drop earrings with temple-inspired motifs. 🌸 #Earrings #22KGold",            likes: 856,  comments: 19, permalink: "https://instagram.com" },
-      { id: "fb4", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80", alt: "Cocktail ring",  caption: "Bold Kundan rings for every celebration. 💍 #Ring #Kundan",                   likes: 1103, comments: 31, permalink: "https://instagram.com" },
-      { id: "fb5", img: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=600&q=80", alt: "Jewellery flat", caption: "Each piece tells a story. What's yours? 🌿 #FineJewellery #Artisan",          likes: 762,  comments: 14, permalink: "https://instagram.com" },
-      { id: "fb6", img: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80", alt: "Gold chain",    caption: "Sculpted in warmth. Worn like a secret. ✦ #TaleoJewellery #HeirloomGold",  likes: 934,  comments: 22, permalink: "https://instagram.com" },
+      { id: "fb1", img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=80", alt: "Gold bangles", caption: "Timeless bangles, handcrafted in 22K gold. ✨ #GoldJewellery #Handcrafted", likes: 1240, comments: 38, permalink: "https://instagram.com" },
+      { id: "fb2", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=80", alt: "Gold necklace", caption: "Heirloom necklaces made to be worn and remembered. 💛 #GoldNecklace #Taleo", likes: 987, comments: 24, permalink: "https://instagram.com" },
+      { id: "fb3", img: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80", alt: "Gold earrings", caption: "Drop earrings with temple-inspired motifs. 🌸 #Earrings #22KGold", likes: 856, comments: 19, permalink: "https://instagram.com" },
+      { id: "fb4", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80", alt: "Cocktail ring", caption: "Bold Kundan rings for every celebration. 💍 #Ring #Kundan", likes: 1103, comments: 31, permalink: "https://instagram.com" },
+      { id: "fb5", img: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=600&q=80", alt: "Jewellery flat", caption: "Each piece tells a story. What's yours? 🌿 #FineJewellery #Artisan", likes: 762, comments: 14, permalink: "https://instagram.com" },
+      { id: "fb6", img: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80", alt: "Gold chain", caption: "Sculpted in warmth. Worn like a secret. ✦ #TaleoJewellery #HeirloomGold", likes: 934, comments: 22, permalink: "https://instagram.com" },
     ];
 
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -224,7 +206,6 @@ export default function InstagramSlider() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Auto-advance
   useEffect(() => {
     if (posts.length === 0) return;
     const t = setInterval(() => setCurrent((c) => (c >= maxIndex ? 0 : c + 1)), 4000);
@@ -252,8 +233,8 @@ export default function InstagramSlider() {
   return (
     <section
       ref={ref}
-      className="w-full py-16 overflow-hidden"
-      style={{ background: "#1a0c06", fontFamily: "'Inter', sans-serif" }}
+      className="w-full py-16 overflow-hidden bg-[#faf7f2] dark:bg-[#1a0c06] transition-colors duration-300"
+      style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-8">
 
@@ -265,12 +246,12 @@ export default function InstagramSlider() {
           <div className="flex flex-col gap-2">
             {/* Eyebrow row: gold rule + label — Inter */}
             <div className="flex items-center gap-3 ">
-              <span style={{ display: "block", width: 24, height: 1, background: "#c9a96e" }} />
-              <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase", color: "#c9a96e" }}>
+              <span style={{ display: "block", width: 24, height: 1 }} className="bg-[#a67c2e] dark:bg-[#c9a96e]" />
+              <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
                 Connect With Us
               </span>
             </div>
-            {/* Heading with IG icon — Cormorant Garamond, on dark bg → light color */}
+            {/* Heading with IG icon — Cormorant Garamond */}
             <div className="flex items-center gap-3">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
                 <defs>
@@ -284,7 +265,7 @@ export default function InstagramSlider() {
                 <circle cx="12" cy="12" r="4" stroke="url(#ig2)" strokeWidth="2" />
                 <circle cx="17.5" cy="6.5" r="1" fill="url(#ig2)" />
               </svg>
-              <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.8rem, 2.8vw, 2.6rem)", fontWeight: 400, color: "#e8d9c4", margin: 0, letterSpacing: "-0.01em" }}>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.8rem, 2.8vw, 2.6rem)", fontWeight: 400, margin: 0, letterSpacing: "-0.01em" }} className="text-[#2c2317] dark:text-[#e8d9c4]">
                 @{handle}
               </h2>
             </div>
@@ -338,16 +319,14 @@ export default function InstagramSlider() {
               <button
                 onClick={prev}
                 disabled={current === 0}
-                className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center transition-all duration-300 hover:scale-110 disabled:opacity-20 disabled:cursor-not-allowed"
-                style={{ background: "#fff", border: "1px solid #e5e5e5", borderRadius: "50%", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", color: "#1e110a" }}
+                className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center transition-all duration-300 hover:scale-110 disabled:opacity-20 disabled:cursor-not-allowed rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.1)] bg-white dark:bg-[#1c1310] border border-[#e5e5e5] dark:border-[#2e2318] text-[#1e110a] dark:text-[#e8d9c4]"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 5l-7 7 7 7" /></svg>
               </button>
               <button
                 onClick={next}
                 disabled={current >= maxIndex}
-                className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center transition-all duration-300 hover:scale-110 disabled:opacity-20 disabled:cursor-not-allowed"
-                style={{ background: "#fff", border: "1px solid #e5e5e5", borderRadius: "50%", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", color: "#1e110a" }}
+                className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 flex items-center justify-center transition-all duration-300 hover:scale-110 disabled:opacity-20 disabled:cursor-not-allowed rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.1)] bg-white dark:bg-[#1c1310] border border-[#e5e5e5] dark:border-[#2e2318] text-[#1e110a] dark:text-[#e8d9c4]"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
               </button>
@@ -362,15 +341,11 @@ export default function InstagramSlider() {
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
+                className={`border-none cursor-pointer p-0 transition-all duration-300 ${current === i ? "bg-[#a67c2e] dark:bg-[#c9a96e]" : "bg-[#e5e5e5] dark:bg-[#3a2c1e]"}`}
                 style={{
                   width: current === i ? 24 : 6,
                   height: 4,
                   borderRadius: 2,
-                  background: current === i ? "#c9a96e" : "#e5e5e5",
-                  transition: "all 0.3s ease",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 0,
                 }}
               />
             ))}

@@ -93,9 +93,10 @@ export default function ProductsPage() {
     setDeleting(true);
     try {
       await apiFetch(`/products/${deleteTarget._id}`, token, { method: "DELETE" });
-      showToast("Product deleted (deactivated)");
+      showToast("Product permanently deleted");
+      setProducts((prev) => prev.filter((p) => p._id !== deleteTarget._id));
+      setTotal((prev) => Math.max(0, prev - 1));
       setDeleteTarget(null);
-      setStatus("active"); // ← FIX: filter to active-only so deleted product disappears
     } catch (err) {
       showToast(err.message, "error");
     } finally {
@@ -128,14 +129,14 @@ export default function ProductsPage() {
         </div>
         <div>
           <FilterLabel>Category</FilterLabel>
-          <select className={filterSelectCls + " min-w-[150px]"} value={category} onChange={e => { setCategory(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[150px] pr-8"} value={category} onChange={e => { setCategory(e.target.value); setPage(1); }}>
             <option value="">All Categories</option>
             {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
           </select>
         </div>
         <div>
           <FilterLabel>Status</FilterLabel>
-          <select className={filterSelectCls + " min-w-[130px]"} value={status} onChange={e => { setStatus(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[130px] pr-8"} value={status} onChange={e => { setStatus(e.target.value); setPage(1); }}>
             <option value="">All</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -143,7 +144,7 @@ export default function ProductsPage() {
         </div>
         <div>
           <FilterLabel>Tag / Stock</FilterLabel>
-          <select className={filterSelectCls + " min-w-[150px]"} value={flag} onChange={e => { setFlag(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[150px] pr-8"} value={flag} onChange={e => { setFlag(e.target.value); setPage(1); }}>
             <option value="">All</option>
             <option value="featured">Featured</option>
             <option value="new">New Arrival</option>
@@ -154,7 +155,7 @@ export default function ProductsPage() {
         </div>
         <div>
           <FilterLabel>Sort</FilterLabel>
-          <select className={filterSelectCls + " min-w-[160px]"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[160px] pr-8"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
             <option value="price-asc">Price: Low to High</option>
@@ -182,7 +183,7 @@ export default function ProductsPage() {
                       <div className="flex items-center gap-3">
                         {p.images?.[0] ? <img src={imgUrl(p.images[0])} alt="" className="w-10 h-10 rounded object-cover border border-[#ede4d8]" /> : <div className="w-10 h-10 rounded bg-[#f0e8dc]" />}
                         <div className="min-w-0">
-                          <p className="text-[#1a1008] font-semibold truncate max-w-[180px] text-[12.5px]">{p.name}</p>
+                          <p className="text-[#1a1008] font-[600] truncate max-w-[180px] text-[12.5px]">{p.name}</p>
                           <p className="text-[10px] text-[#9c8a78]">{p.sku || "—"}</p>
                         </div>
                       </div>
@@ -208,7 +209,7 @@ export default function ProductsPage() {
                     <td className="px-4 py-3">
                       <div className="flex gap-3">
                         <button onClick={() => openEdit(p)} className={editBtnCls}>Edit</button>
-                        <button onClick={() => setDeleteTarget(p)} className={delBtnCls}>Del</button>
+                        <button onClick={() => setDeleteTarget(p)} className={delBtnCls}>Delete</button>
                       </div>
                     </td>
                   </tr>
@@ -233,7 +234,7 @@ export default function ProductsPage() {
       <ConfirmDialog
         open={!!deleteTarget}
         title="Delete product?"
-        message={`"${deleteTarget?.name}" will be deactivated and hidden from the storefront.`}
+        message={`"${deleteTarget?.name}" will be permanently deleted. This cannot be undone.`}
         onConfirm={confirmDelete}
         onCancel={() => setDeleteTarget(null)}
         loading={deleting}
