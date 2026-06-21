@@ -111,7 +111,7 @@ export const AnimatedTestimonialsDemo = () => {
                 width: "95%",
                 // color:"#afa9a2"
               }}
-              className="text-[#3f3529] dark:text-[#3f3529]"
+              className="text-[#3f3529] dark:text-[#afa9a2]"
             >
               {active.quote.split(" ").map((word, index) => (
                 <motion.span

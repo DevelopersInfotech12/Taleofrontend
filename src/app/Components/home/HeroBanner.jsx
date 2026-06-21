@@ -69,7 +69,7 @@ function EyebrowRow({ visible }) {
 function Headline({ visible }) {
   return (
     <h1
-      className="text-white leading-[1.05] sm:mt-[80px] mt-[50px] text-[4.5rem] lg:text-[clamp(3.2rem,5.5vw,5.5rem)]"
+      className="text-white leading-[1.05] sm:mt-[80px] mt-[50px] text-[3.9rem] lg:text-[clamp(3.2rem,5.5vw,5.5rem)]"
       style={{
         fontFamily: "'Cormorant Garamond', Georgia, serif",
         fontWeight: 400,

@@ -80,7 +80,7 @@ export default function ProductCard({
       style={{ background: "var(--cream-dk)", border: "1px solid var(--border-color, #e8ddd0)" }}
     >
       {/* ── Image ── */}
-      <div className="relative h-36 sm:h-72 overflow-hidden flex-shrink-0">
+      <div className="relative h-72 sm:h-72 overflow-hidden flex-shrink-0">
         <Image
           src={image}
           alt={name}
