@@ -7,7 +7,7 @@ export async function generateMetadata({ params }) {
   const raw = await fetchProductBySlug(slug);
   if (!raw) return { title: "Product not found" };
   return {
-    title: `${raw.name} | Luxéor Fine Jewellery`,
+    title: `${raw.name} | Taleo Fine Jewellery`,
     description: raw.shortDesc ?? raw.description ?? "",
   };
 }
