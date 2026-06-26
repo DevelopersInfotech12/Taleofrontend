@@ -60,7 +60,7 @@ export default function AdminShell({ children }) {
           <span className="text-[#c9a96e] text-lg font-semibold" style={{ fontFamily: "Georgia, serif" }}>Taleo Admin</span>
           <div className="flex items-center gap-1">
             <NotificationBell />
-            <button onClick={() => setOpen(tsrue)} className="text-[#e8d5b0] text-xl">☰</button>
+            <button onClick={() => setOpen(true)} className="text-[#e8d5b0] text-xl">☰</button>
           </div>
         </header>
         <div className="hidden md:flex items-center justify-between px-6 py-2 border-b border-[#ede4d8] bg-white/90 sticky top-0 z-500">
