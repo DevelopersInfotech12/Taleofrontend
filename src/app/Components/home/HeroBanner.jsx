@@ -17,6 +17,7 @@ const CHAPTERS = [
     tagline: "Not every inheritance is gold.",
     body: "Some are motifs. Some are rituals. Some are objects quietly woven into everyday life.",
     image: "./virsa.png",
+    mobileImage: "./virsamob.jpeg",
     cta: { label: "Explore The Pieces", href: "/collections/virsa" },
   },
   {
@@ -25,6 +26,7 @@ const CHAPTERS = [
     tagline: "Before every harvest comes patience.",
     body: "Inspired by fields of wheat swaying beneath the Punjabi sun — a tribute to growth, resilience, and all the beautiful things that take time to become.",
     image: "./kanak.png",
+    mobileImage: "./kanakmob.jpeg",
     cta: { label: "Discover Kanak", href: "/collections/kanak" },
   },
   {
@@ -33,6 +35,7 @@ const CHAPTERS = [
     tagline: "A celebration of colour and movement.",
     body: "The energy of ordinary, memorable celebrations — pieces drawn from symbols and stories that continue to hold meaning today.",
     image: "./raunak.png",
+    mobileImage: "./raunakmob.jpeg",
     cta: { label: "Discover Raunak", href: "/collections/raunak" },
   },
   {
@@ -41,6 +44,7 @@ const CHAPTERS = [
     tagline: "Inspired by evenings that begin with conversation.",
     body: "And end with music, felt more in shimmer than sound — jewellery for the gatherings you remember.",
     image: "./mehfil.png",
+    mobileImage: "./mehfilmob.jpeg",
     cta: { label: "Discover Mehfil", href: "/collections/mehfil" },
   },
   {
@@ -49,6 +53,7 @@ const CHAPTERS = [
     tagline: "A reminder that peace often lives in stillness.",
     body: "Quiet pieces, made for the moments in between — where nothing needs to be proven.",
     image: "./sehaj.png",
+    mobileImage: "./sehajmob.jpeg",
     cta: { label: "Discover Sehaj", href: "/collections/sehaj" },
   },
 ];
@@ -87,7 +92,7 @@ export default function HeroBanner() {
 
   return (
     <section
-      className="relative w-full overflow-hidden h-[92vh] min-h-[560px] lg:h-[100vh] lg:min-h-[680px] lg:max-h-[880px]"
+      className="relative w-full overflow-hidden h-[91vh] min-h-[560px] lg:h-[100vh] lg:min-h-[680px] lg:max-h-[880px]"
       style={{ background: "#1a0c06" }}
     >
       {/* Background image stack — crossfades between chapters */}
@@ -98,10 +103,18 @@ export default function HeroBanner() {
           style={{ opacity: active === i ? 1 : 0, transition: "opacity 1.1s ease", zIndex: 0 }}
           aria-hidden={active !== i}
         >
+          {/* Desktop image */}
           <img
             src={c.image}
             alt={c.title}
-            className="w-full h-full object-cover"
+            className="hidden lg:block w-full h-full object-cover"
+            style={{ transform: active === i ? "scale(1.04)" : "scale(1)", transition: "transform 7s ease" }}
+          />
+          {/* Mobile image */}
+          <img
+            src={c.mobileImage}
+            alt={c.title}
+            className="block lg:hidden w-full h-full object-cover"
             style={{ transform: active === i ? "scale(1.04)" : "scale(1)", transition: "transform 7s ease" }}
           />
           {/* Warm editorial gradient, matching the moodboard's dark earthen tone */}
@@ -316,7 +329,6 @@ function ChapterCTA({ cta, visible }) {
             background: "linear-gradient(90deg, #c9a96e, #f2e8d5)",
             transform: "translateX(-100%)",
             transition: "transform 0.45s cubic-bezier(.22,1,.36,1)",
-
           }}
         />
         <span
@@ -324,7 +336,7 @@ function ChapterCTA({ cta, visible }) {
           style={{
             fontFamily: "'Inter', sans-serif",
             fontWeight: 600,
-            fontSize: 12, // was 10
+            fontSize: 12,
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             color: "#1a0c06",
