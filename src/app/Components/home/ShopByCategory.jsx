@@ -14,11 +14,11 @@ const BODY = "'Inter', sans-serif";
 // ────────────────────────────────────────────────────────────────────────────
 
 const categories = [
-  { name: "Rings", slug: "rings", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80&fit=crop" },
-  { name: "Necklaces", slug: "necklaces", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80&fit=crop" },
-  { name: "Earrings", slug: "earrings", img: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80&fit=crop" },
-  { name: "Bracelets", slug: "bracelets", img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80&fit=crop" },
-  { name: "Gifts", slug: "gifts", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&q=80&fit=crop" },
+ { name: "Sehaj", slug: "rings", img: "/sehajcateg.png" },
+  { name: "Kanak", slug: "necklaces", img: "/kanakcateg.png" },
+  { name: "Raunak", slug: "earrings", img: "/raunakcateg.png" },
+  { name: "Mehfil", slug: "bracelets", img: "/mehfilcateg.png" },
+  { name: "Virsa", slug: "gifts", img: "/virsa.png" },
 ];
 
 export default function ShopByCategory() {
@@ -72,7 +72,7 @@ export default function ShopByCategory() {
                 letterSpacing: "-0.02em",
               }}
             >
-              Shop by{" "}
+              New chapters {" "}
               <span
                 style={{
                   fontWeight: 400,
@@ -81,7 +81,7 @@ export default function ShopByCategory() {
                   letterSpacing: "-0.01em",
                 }}
               >
-                Category
+                to explore
               </span>
             </h2>
           </div>
@@ -113,7 +113,7 @@ export default function ShopByCategory() {
                     <div className="w-[5px] h-[5px] border-[0.5px] border-[#c9a96e]/50 rotate-45 mt-1.5 group-hover:bg-[#c9a96e]/50 transition-colors duration-400" />
                   </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 px-[8px] pb-[12px] pt-[12px] md:px-[14px] md:pb-[18px] md:pt-[18px] text-center">
+                  <div className="absolute bottom-0 left-0 right-0 px-[8px] pb-[12px] pt-[12px] md:px-[14px]  md:pt-[4px] text-center">
                     <div className="w-5 md:w-6 group-hover:w-9 h-px bg-[#c9a96e]/50 group-hover:bg-[#c9a96e]/80 mx-auto mb-1.5 md:mb-2.5 transition-all duration-400" />
                     <span
                       className="text-[9px] md:text-[11px] tracking-[0.16em] md:tracking-[0.28em]"
@@ -122,12 +122,6 @@ export default function ShopByCategory() {
                       {name}
                     </span>
                     <div className="relative min-h-[18px] md:min-h-[28px] flex items-center justify-center">
-                      <span
-                        className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-300 text-[9px] md:text-[11px] tracking-[0.02em] md:tracking-[0.06em]"
-                        style={{ fontFamily: DISPLAY, fontWeight: 300, fontStyle: "italic", color: "rgba(201,169,110,0.7)" }}
-                      >
-                        {subtitles[i]}
-                      </span>
                       <div className="inline-flex items-center gap-1.5 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                         <span style={{ fontFamily: BODY, fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "#c9a96e" }}>Explore</span>
                         <div className="w-4 group-hover:w-6 h-px bg-[#c9a96e] transition-all duration-300" />

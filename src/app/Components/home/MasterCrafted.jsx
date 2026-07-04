@@ -3,8 +3,6 @@
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
 
-// dinamond, floral, gold
-
 const col1Images = [
     { src: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80", alt: "Diamond pendant" },
     { src: "https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=600&q=80", alt: "Gemstone necklace" },
@@ -27,12 +25,37 @@ const col2Images = [
     { src: "https://images.unsplash.com/photo-1598560917807-1bae44bd2be8?w=600&q=80", alt: "Vintage brooch" },
 ];
 
+const col3Images = [
+    { src: "https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=600&q=80", alt: "Gold chain" },
+    { src: "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80", alt: "Diamond studs" },
+    { src: "https://images.unsplash.com/photo-1608042314453-ae338d80c427?w=600&q=80", alt: "Ruby ring" },
+    { src: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80", alt: "Gold bangles" },
+    { src: "https://images.unsplash.com/photo-1620656798579-1984d9e87df7?w=600&q=80", alt: "Necklace set" },
+    { src: "https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?w=600&q=80", alt: "Statement earrings" },
+    { src: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=80", alt: "Bridal set" },
+    { src: "https://images.unsplash.com/photo-1584302179602-e4c3d3fd629d?w=600&q=80", alt: "Pendant close up" },
+];
+
+const col4Images = [
+    { src: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=80", alt: "Bridal set" },
+    { src: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&q=80", alt: "Gold bangles" },
+    { src: "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&q=80", alt: "Diamond studs" },
+    { src: "https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?w=600&q=80", alt: "Statement earrings" },
+    { src: "https://images.unsplash.com/photo-1620656798579-1984d9e87df7?w=600&q=80", alt: "Necklace set" },
+    { src: "https://images.unsplash.com/photo-1608042314453-ae338d80c427?w=600&q=80", alt: "Ruby ring" },
+    { src: "https://images.unsplash.com/photo-1584302179602-e4c3d3fd629d?w=600&q=80", alt: "Pendant close up" },
+    { src: "https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=600&q=80", alt: "Gemstone necklace" },
+];
+
 const track1 = [...col1Images, ...col1Images];
 const track2 = [...col2Images, ...col2Images];
+const track3 = [...col3Images, ...col3Images];
+const track4 = [...col4Images, ...col4Images];
 
 const IMG_HEIGHT = 280;
 const GAP = 12;
-const TOTAL = col1Images.length * (IMG_HEIGHT + GAP);
+const TOTAL1 = col1Images.length * (IMG_HEIGHT + GAP);
+const TOTAL3 = col3Images.length * (IMG_HEIGHT + GAP);
 
 export default function MasterCrafted() {
     return (
@@ -40,90 +63,53 @@ export default function MasterCrafted() {
             style={{ fontFamily: BODY }}
             className="relative w-full px-4 sm:px-8 py-5 sm:py-8 overflow-hidden bg-[#faf7f2] transition-colors duration-300"
         >
-
             <style>{`
         @keyframes scrollUp {
           0%   { transform: translateY(0); }
-          100% { transform: translateY(-${TOTAL}px); }
+          100% { transform: translateY(-${TOTAL1}px); }
         }
         @keyframes scrollDown {
-          0%   { transform: translateY(-${TOTAL}px); }
+          0%   { transform: translateY(-${TOTAL1}px); }
           100% { transform: translateY(0); }
+        }
+        @keyframes scrollUp3 {
+          0%   { transform: translateY(0); }
+          100% { transform: translateY(-${TOTAL3}px); }
         }
         .col-up   { animation: scrollUp   ${col1Images.length * 3}s linear infinite; }
         .col-down { animation: scrollDown ${col2Images.length * 3}s linear infinite; }
+        .col-up3  { animation: scrollUp3  ${col3Images.length * 3}s linear infinite; }
+        .col-down4 { animation: scrollDown ${col4Images.length * 3}s linear infinite; }
       `}</style>
 
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-stretch">
+            <div className="max-w-7xl mx-auto">
 
-                {/* LEFT — card, white in light mode / dark coffee in dark mode */}
-                <div className="flex h-auto">
-                    <div
-                        className="w-full rounded-2xl flex flex-col p-5 sm:p-7 gap-4 bg-white dark:bg-[#150f0a] border border-[#e8d5b0]/40 dark:border-transparent transition-colors duration-300"
-                    >
-                        {/* Eyebrow */}
-                        <div className="flex items-center gap-3 mt-8">
-                            <span style={{ display: "block", width: 24, height: 1, flexShrink: 0 }} className="bg-[#a67c2e] dark:bg-[#c9a96e]" />
+                {/* Small eyebrow + headline, no repeated category cards */}
+                <div className="flex items-end justify-between flex-wrap gap-3 mb-4 sm:mb-6">
+                    <div>
+                        <div className="flex items-center gap-3 mb-2">
+                            <span style={{ display: "block", width: 24, height: 1 }} className="bg-[#a67c2e] dark:bg-[#c9a96e]" />
                             <span style={{ fontFamily: BODY, fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
                                 Heritage Craft
                             </span>
                         </div>
-
-                        {/* Headline */}
-                        <div>
-                            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 700, lineHeight: 0.92, margin: 0, letterSpacing: "-0.02em" }} className="text-[#2c2c2c] dark:text-[#e8d9c4]">
-                                Masterfully
-                            </h2>
-                            <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2.2rem, 4vw, 3.4rem)", fontWeight: 400, fontStyle: "italic", lineHeight: 1.08, margin: 0, letterSpacing: "-0.01em" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
-                                crafted in India.
-                            </h2>
-                        </div>
-
-                        {/* Body */}
-                        <p className="text-justify sm:w-[92%] text-[#636262] dark:text-[#b1a99f] font-poppins" style={{ fontSize: 13.2, lineHeight: 1.8, margin: 0, fontWeight: 600, letterSpacing: "0.01em" }}>
-
-                            Thoughtfully handcrafted using premium 925 sterling silver, finished with refined 18kt and 22kt gold-plated details. Hypoallergenic and designed for lasting comfort. Enjoy secure payments, complimentary shipping across India, worldwide delivery, and Cash on Delivery on select styles.
-
-                            Each TALEO creation is crafted with meticulous attention to detail, blending timeless elegance with contemporary design.
-                        </p>
-
-                        {/* Pills */}
-                        <div className="flex flex-wrap gap-1.5">
-                            {["925 Silver", "18k Gold Plated", "Hypoallergenic"].map((t) => (
-                                <span key={t}
-                                    style={{ fontFamily: BODY, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", padding: "5px 10px", borderRadius: 4, fontWeight: 700 }}
-                                    className="border border-[#d8cdb8] dark:border-[#2e2318] text-[#5c5044] dark:text-[#8a7c6b]"
-                                >
-                                    {t}
-                                </span>
-                            ))}
-                        </div>
-
-                        {/* Divider */}
-                        <div style={{ height: 1 }} className="bg-[#e8e0d0] dark:bg-[#2e2318]" />
-
-                        {/* CTAs */}
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                            <button
-                                className="bg-[#1a0c06] dark:bg-[#c9a96e] text-[#fff]"
-                                style={{ fontFamily: BODY, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 600, borderRadius: 4, padding: "11px 22px", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10, transition: "opacity 0.2s" }}
-                                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-                                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-                            >
-                                Explore Now
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                    <path d="M5 12h14M12 5l7 7-7 7" />
-                                </svg>
-                            </button>
-                            <span style={{ fontFamily: BODY, fontSize: 11, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer" }} className="text-[#8a7c6b] dark:text-[#706150]">
-                                Browse all →
-                            </span>
-                        </div>
+                        <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, lineHeight: 1, margin: 0, letterSpacing: "-0.02em" }} className="text-[#2c2c2c] dark:text-[#e8d9c4]">
+                            Masterfully <span style={{ fontWeight: 400, fontStyle: "italic", color: "#a67c2e" }}>crafted in India.</span>
+                        </h2>
                     </div>
+                    <button
+                        className="bg-[#1a0c06] dark:bg-[#c9a96e] text-[#fff]"
+                        style={{ fontFamily: BODY, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 600, borderRadius: 4, padding: "11px 22px", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}
+                    >
+                        Explore Now
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
 
-                {/* RIGHT — two auto-scrolling columns */}
-                <div className="flex gap-3" style={{ height: "85vh", overflow: "hidden" }}>
+                {/* Full-width gallery — four auto-scrolling columns, no category labels */}
+                <div className="flex gap-3" style={{ height: "80vh", overflow: "hidden" }}>
 
                     <div className="flex-1 overflow-hidden">
                         <div className="col-up flex flex-col" style={{ gap: `${GAP}px` }}>
@@ -142,6 +128,34 @@ export default function MasterCrafted() {
                     <div className="flex-1 overflow-hidden">
                         <div className="col-down flex flex-col" style={{ gap: `${GAP}px` }}>
                             {track2.map((img, i) => (
+                                <div key={i} style={{ width: "100%", height: `${IMG_HEIGHT}px`, flexShrink: 0, borderRadius: 6, overflow: "hidden" }}>
+                                    <img src={img.src} alt={img.alt}
+                                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.5s ease" }}
+                                        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.06)")}
+                                        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="flex-1 overflow-hidden hidden sm:block">
+                        <div className="col-up3 flex flex-col" style={{ gap: `${GAP}px` }}>
+                            {track3.map((img, i) => (
+                                <div key={i} style={{ width: "100%", height: `${IMG_HEIGHT}px`, flexShrink: 0, borderRadius: 6, overflow: "hidden" }}>
+                                    <img src={img.src} alt={img.alt}
+                                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.5s ease" }}
+                                        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.06)")}
+                                        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="flex-1 overflow-hidden hidden lg:block">
+                        <div className="col-down4 flex flex-col" style={{ gap: `${GAP}px` }}>
+                            {track4.map((img, i) => (
                                 <div key={i} style={{ width: "100%", height: `${IMG_HEIGHT}px`, flexShrink: 0, borderRadius: 6, overflow: "hidden" }}>
                                     <img src={img.src} alt={img.alt}
                                         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.5s ease" }}

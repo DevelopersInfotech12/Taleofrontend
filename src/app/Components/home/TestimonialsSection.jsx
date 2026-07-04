@@ -105,11 +105,11 @@ export const AnimatedTestimonialsDemo = () => {
                 fontSize: 15,
                 lineHeight: 1.75,
                 marginTop: -16,
-                fontWeight: 300,
+                fontWeight: 700,
                 textAlign: "justify",
                 textAlignLast: "left",
                 width: "95%",
-                // color:"#afa9a2"
+                color:"#2c261f96"
               }}
               className="text-[#3f3529] dark:text-[#afa9a2]"
             >
@@ -132,7 +132,7 @@ export const AnimatedTestimonialsDemo = () => {
                     delay: 0.02 * index,
                   }}
                   style={{
-                    display: "inline",
+                    display: "inline fontWeight: 800",
                   }}
                 >
                   {word}{" "}
