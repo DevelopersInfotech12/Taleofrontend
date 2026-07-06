@@ -21,7 +21,7 @@ export default function HomeScreen() {
       <HeroBanner />
 
       {/* 2 — Trust badges strip */}
-      <TrustBar />
+      {/* <TrustBar /> */}
 
       {/* 3 — Shop by Category 5-col grid */}
       <ShopByCategory />

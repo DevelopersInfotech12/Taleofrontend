@@ -32,7 +32,7 @@ export default function LoginScreen() {
     <main className="min-h-screen bg-[#f5efe8] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-[#1a1008]" style={{ fontFamily: "Georgia, serif" }}>Luxéor</h1>
+          <h1 className="text-3xl font-semibold text-[#1a1008]" style={{ fontFamily: "Georgia, serif" }}>Taleo</h1>
           <p className="text-[11px] tracking-widest uppercase text-[#8b6914] mt-1">Admin Portal</p>
         </div>
         <div className="bg-white rounded-2xl shadow-md border border-[#ede4d8] p-8">
