@@ -38,8 +38,8 @@ const contactItems = [
         <polyline points="22,6 12,13 2,6" />
       </svg>
     ),
-    text: "contact@taleo.com",
-    href: "mailto:contact@taleo.com",
+    text: "taleojewels@gmail.com",
+    href: "mailto:taleojewels@gmail.com",
   },
   {
     icon: (
@@ -48,7 +48,7 @@ const contactItems = [
         <circle cx="12" cy="10" r="3" />
       </svg>
     ),
-    text: "125 Fifth Avenue, New York, NY 10011",
+    text: "NEW DELHI 110085",
     href: "https://maps.google.com",
   },
 ];

@@ -127,7 +127,7 @@ export default function BlogSection() {
                 </h3>
 
                 {/* Excerpt — Inter */}
-                <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.8, margin: 0, fontWeight: 300 }} className="text-[#8a7560] dark:text-[#c9a96e]">
+                <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.8, margin: 0, fontWeight: 600, textAlign: "justify" }} className="text-[#8a7560] dark:text-[#c9a96e]">
                   {post.excerpt}
                 </p>
 

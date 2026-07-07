@@ -2,25 +2,24 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 
-/**
- * VIRSA — full-bleed "chapter" hero slider.
- * Layout/behaviour borrowed from House of June's full-bleed rotating hero
- * (full-height bg, centered fading headline stack, single CTA, autoplay),
- * but each slide is a numbered "Chapter" per Taleo's moodboard deck
- * (VIRSA, KANAK, RAUNAK, MEHFIL, SEHAJ, CHARKHA) instead of a plain slide.
- */
+const CATEGORY = "VIRSA";
+const INSTAGRAM_URL = "https://instagram.com/taleo"; // update to real handle
 
 const CHAPTERS = [
   {
+    isIntro: true,
+    category: CATEGORY,
     chapter: "Chapter 01",
     title: "Virsa",
-    tagline: "Not every inheritance is gold.",
-    body: "Some are motifs. Some are rituals. Some are objects quietly woven into everyday life.",
+    tagline: "Every Detail Had To Earn Its Place.",
+    body: "Nothing here exists by chance. Taleo creates jewellery inspired by heritage, nostalgia, and the objects that have quietly shaped who we are. Every piece begins with an idea and takes form through intention. We'd rather make a few pieces worth remembering than thousands you'll forget.",
+    footnote: "Each design is produced in a limited run of just 10 pieces. Once a chapter is sold through, it closes. We move forward to the next story.",
     image: "./virsa.png",
     mobileImage: "./virsamob.jpeg",
-    cta: { label: "Explore The Pieces", href: "/collections/virsa" },
+    cta: { label: "Explore Chapter 01", href: "/collections/virsa" },
   },
   {
+    category: CATEGORY,
     chapter: "Chapter 01 — I",
     title: "Kanak",
     tagline: "Before every harvest comes patience.",
@@ -30,6 +29,7 @@ const CHAPTERS = [
     cta: { label: "Discover Kanak", href: "/collections/kanak" },
   },
   {
+    category: CATEGORY,
     chapter: "Chapter 01 — II",
     title: "Raunak",
     tagline: "A celebration of colour and movement.",
@@ -39,6 +39,7 @@ const CHAPTERS = [
     cta: { label: "Discover Raunak", href: "/collections/raunak" },
   },
   {
+    category: CATEGORY,
     chapter: "Chapter 01 — III",
     title: "Mehfil",
     tagline: "Inspired by evenings that begin with conversation.",
@@ -48,6 +49,7 @@ const CHAPTERS = [
     cta: { label: "Discover Mehfil", href: "/collections/mehfil" },
   },
   {
+    category: CATEGORY,
     chapter: "Chapter 01 — IV",
     title: "Sehaj",
     tagline: "A reminder that peace often lives in stillness.",
@@ -84,7 +86,7 @@ export default function HeroBanner() {
 
   const goTo = (index) => {
     setActive(index);
-    startAutoplay(); // reset timer on manual interaction
+    startAutoplay();
   };
 
   const goPrev = () => goTo((active - 1 + CHAPTERS.length) % CHAPTERS.length);
@@ -95,7 +97,6 @@ export default function HeroBanner() {
       className="relative w-full overflow-hidden h-[91vh] min-h-[560px] lg:h-[100vh] lg:min-h-[680px] lg:max-h-[880px]"
       style={{ background: "#1a0c06" }}
     >
-      {/* Background image stack — crossfades between chapters */}
       {CHAPTERS.map((c, i) => (
         <div
           key={c.title}
@@ -103,21 +104,18 @@ export default function HeroBanner() {
           style={{ opacity: active === i ? 1 : 0, transition: "opacity 1.1s ease", zIndex: 0 }}
           aria-hidden={active !== i}
         >
-          {/* Desktop image */}
           <img
             src={c.image}
             alt={c.title}
             className="hidden lg:block w-full h-full object-cover"
             style={{ transform: active === i ? "scale(1.04)" : "scale(1)", transition: "transform 7s ease" }}
           />
-          {/* Mobile image */}
           <img
             src={c.mobileImage}
             alt={c.title}
             className="block lg:hidden w-full h-full object-cover"
             style={{ transform: active === i ? "scale(1.04)" : "scale(1)", transition: "transform 7s ease" }}
           />
-          {/* Warm editorial gradient, matching the moodboard's dark earthen tone */}
           <div
             className="absolute inset-0"
             style={{
@@ -128,38 +126,46 @@ export default function HeroBanner() {
         </div>
       ))}
 
-      {/* Content */}
       <div className="relative z-10 h-full max-w-[1320px] mx-auto px-6 lg:px-16 lg:mt-6 flex items-center">
-        <div className="max-w-[560px] w-full">
+        <div className="max-w-[550px] w-full">
           {CHAPTERS.map((c, i) => (
-            <div key={c.title} style={{ display: active === i ? "block" : "none" }}>
-              <ChapterEyebrow label={c.chapter} visible={visible} />
-              <ChapterTitle title={c.title} visible={visible} />
+            <div
+              key={c.title}
+              style={{
+                display: active === i ? "block" : "none",
+                paddingLeft: c.isIntro ? 22 : 0,
+                borderLeft: c.isIntro ? "1px solid rgba(201,169,110,0.4)" : "none",
+              }}
+            >
+              {!c.isIntro && <CategoryLabel label={c.category} visible={visible} />}
+              {!c.isIntro && <ChapterEyebrow label={c.chapter} visible={visible} />}
+              <ChapterTitle title={c.title} big={c.isIntro} visible={visible} />
               <ChapterTagline text={c.tagline} visible={visible} />
-              <ChapterBody text={c.body} visible={visible} />
-              <ChapterCTA cta={c.cta} visible={visible} />
+              <ChapterBody text={c.body} wide={c.isIntro} visible={visible} />
+              {c.footnote && <ChapterFootnote text={c.footnote} visible={visible} />}
+              <ChapterCTA cta={c.cta} outline={c.isIntro} visible={visible} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Arrows */}
       <button
         onClick={goPrev}
         aria-label="Previous chapter"
-        className="hidden md:flex absolute left-5 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-10 h-10 rounded-full border border-white/30 text-white/80 hover:border-[#c9a96e] hover:text-[#c9a96e] transition-colors duration-300"
+        className="hidden md:flex absolute left-12 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-7 h-7 rounded-full border border-white/30 text-white/80 hover:border-[#c9a96e] hover:text-[#c9a96e] transition-colors duration-300"
       >
         ‹
       </button>
       <button
         onClick={goNext}
         aria-label="Next chapter"
-        className="hidden md:flex absolute right-5 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-10 h-10 rounded-full border border-white/30 text-white/80 hover:border-[#c9a96e] hover:text-[#c9a96e] transition-colors duration-300"
+        className="hidden md:flex absolute right-5 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-8 h-8 rounded-full border border-white/30 text-white/80 hover:border-[#c9a96e] hover:text-[#c9a96e] transition-colors duration-300"
       >
         ›
       </button>
 
-      {/* Chapter index / dots */}
+      <InstagramSideTab />
+
       <div className="absolute bottom-7 left-0 right-0 z-20 flex items-center justify-center gap-3">
         {CHAPTERS.map((c, i) => (
           <button key={c.title} onClick={() => goTo(i)} aria-label={`Go to ${c.title}`} className="group flex items-center gap-2">
@@ -192,10 +198,32 @@ export default function HeroBanner() {
   );
 }
 
+/** Small parent-category tag, shown above the chapter eyebrow on sub-chapter slides only */
+function CategoryLabel({ label, visible }) {
+  return (
+    <div
+      style={{
+        fontFamily: "'Inter', sans-serif",
+        fontSize: 9,
+        fontWeight: 600,
+        letterSpacing: "0.24em",
+        textTransform: "uppercase",
+        color: "rgba(230,211,179,0.55)",
+        marginBottom: 6,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(10px)",
+        transition: "opacity 0.5s ease, transform 0.5s ease",
+      }}
+    >
+      {label} <span style={{ opacity: 0.5 }}>/</span>
+    </div>
+  );
+}
+
 function ChapterEyebrow({ label, visible }) {
   return (
     <div
-      className="inline-flex items-center gap-2.5 mb-5 px-3 py-1.5 rounded-full backdrop-blur-md"
+      className="flex w-fit items-center gap-2.5 mb-5 px-3 py-1.5 rounded-full backdrop-blur-md"
       style={{
         background: "rgba(255,255,255,0.06)",
         border: "1px solid rgba(201,169,110,0.35)",
@@ -230,14 +258,14 @@ function ChapterEyebrow({ label, visible }) {
   );
 }
 
-function ChapterTitle({ title, visible }) {
+function ChapterTitle({ title, big, visible }) {
   return (
     <h1
-      className="leading-[1.02] text-[3.6rem] lg:text-[clamp(3.6rem,6.5vw,6.5rem)]"
+      className={big ? "leading-[1.0] text-[4.2rem] lg:text-[clamp(4.6rem,8vw,8rem)]" : "leading-[1.02] text-[3.6rem] lg:text-[clamp(3.6rem,6.5vw,6.5rem)]"}
       style={{
         fontFamily: "'Cormorant Garamond', Georgia, serif",
         fontWeight: 500,
-        letterSpacing: "0.02em",
+        letterSpacing: big ? "0.06em" : "0.02em",
         backgroundImage: "linear-gradient(135deg, #ffffff 30%, #e6d3b3 70%, #c9a96e 100%)",
         WebkitBackgroundClip: "text",
         backgroundClip: "text",
@@ -281,10 +309,10 @@ function ChapterTagline({ text, visible }) {
   );
 }
 
-function ChapterBody({ text, visible }) {
+function ChapterBody({ text, wide, visible }) {
   return (
     <p
-      className="text-white/55 text-[14.5px] leading-[1.85] max-w-sm mt-5 mb-9"
+      className={wide ? "text-white/55 text-[14.5px] leading-[1.85] max-w-2xl mt-5 mb-5" : "text-white/55 text-[14.5px] leading-[1.85] max-w-sm mt-5 mb-5"}
       style={{
         fontFamily: "'Inter', sans-serif",
         fontWeight: 700,
@@ -299,7 +327,24 @@ function ChapterBody({ text, visible }) {
   );
 }
 
-function ChapterCTA({ cta, visible }) {
+/** Italic closing line, used on the Virsa intro slide only */
+function ChapterFootnote({ text, visible }) {
+  return (
+    <p
+      className="text-[#c9a96e]/80 text-[13px] italic mb-9"
+      style={{
+        fontFamily: "'Cormorant Garamond', Georgia, serif",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(14px)",
+        transition: "opacity 0.8s ease 0.55s, transform 0.8s ease 0.55s",
+      }}
+    >
+      {text}
+    </p>
+  );
+}
+
+function ChapterCTA({ cta, outline, visible }) {
   return (
     <div
       style={{
@@ -317,20 +362,19 @@ function ChapterCTA({ cta, visible }) {
           fontSize: 10,
           letterSpacing: "0.18em",
           textTransform: "uppercase",
-          color: "#1a0c06",
-          background: "#f2e8d5",
-          padding: "15px 24px",
+          color: outline ? "#f2e8d5" : "#1a0c06",
+          background: outline ? "transparent" : "#f2e8d5",
+          border: outline ? "1px solid #c9a96e" : "none",
+          padding: outline ? "14px 24px" : "15px 24px",
           borderRadius: 2,
         }}
       >
-        <span
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(90deg, #c9a96e, #f2e8d5)",
-            transform: "translateX(-100%)",
-            transition: "transform 0.45s cubic-bezier(.22,1,.36,1)",
-          }}
-        />
+        {!outline && (
+          <span
+            className="absolute inset-0 -translate-x-full transition-transform duration-450 group-hover:translate-x-0"
+            style={{ background: "linear-gradient(90deg, #c9a96e, #f2e8d5)" }}
+          />
+        )}
         <span
           className="relative font-bold"
           style={{
@@ -339,27 +383,70 @@ function ChapterCTA({ cta, visible }) {
             fontSize: 12,
             letterSpacing: "0.18em",
             textTransform: "uppercase",
-            color: "#1a0c06",
-            background: "#f2e8d5",
+            color: outline ? "#f2e8d5" : "#1a0c06",
             padding: "1px 2px",
             borderRadius: 2,
           }}
-          onMouseEnter={(e) => (e.currentTarget.parentElement.style.color = "#1a0c06")}
         >
           {cta.label}
         </span>
-        <span
-          className="relative transition-transform duration-300 group-hover:translate-x-1"
-          aria-hidden="true"
-        >
+        <span className="relative transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
           →
         </span>
-        <style jsx>{`
-          a:hover > span:first-child {
-            transform: translateX(0);
-          }
-        `}</style>
       </Link>
     </div>
+  );
+}
+
+/** Fixed vertical Instagram tab, docked to the left edge of the hero */
+function InstagramSideTab() {
+  return (
+    <a
+      href={INSTAGRAM_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Follow us on Instagram"
+      className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 flex-col items-center gap-1.5 group"
+      style={{
+        background: "rgba(26,12,6,0.55)",
+        border: "1px solid rgba(242,232,213,0.25)",
+        borderLeft: "none",
+        padding: "18px 10px",
+        borderRadius: "0 6px 6px 0",
+        backdropFilter: "blur(6px)",
+        transition: "border-color 0.3s ease",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#c9a96e")}
+      onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(242,232,213,0.25)")}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#f2e8d5"
+        strokeWidth="1.8"
+        className="group-hover:stroke-[#c9a96e] transition-colors"
+      >
+        <rect x="2" y="2" width="20" height="20" rx="5" />
+        <circle cx="12" cy="12" r="4.2" />
+        <circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none" />
+      </svg>
+      <span
+        style={{
+          writingMode: "vertical-rl",
+          transform: "rotate(180deg)",
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 700,
+          fontSize: 10,
+          letterSpacing: "0.22em",
+          textTransform: "uppercase",
+          color: "#f2e8d5",
+        }}
+        className="group-hover:text-[#c9a96e] transition-colors"
+      >
+        Instagram
+      </span>
+    </a>
   );
 }

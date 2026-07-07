@@ -67,7 +67,7 @@ export default function TermsScreen() {
             <p className="font-[family-name:var(--font-jost)] text-[#c9a96e]/80 mb-5" style={{ fontSize: "13.5px" }}>
               Contact our legal team directly
             </p>
-            <a href="mailto:legal@taleo.com" className="inline-block font-[family-name:var(--font-jost)] text-[#1a0e07] bg-[#b08850] hover:bg-[#c9a96e] transition-colors px-8 py-3 rounded-sm" style={{ fontSize: "13px", fontWeight: 600, letterSpacing: "0.08em" }}>
+            <a href="mailto:taleojewels@gmail.com" className="inline-block font-[family-name:var(--font-jost)] text-[#1a0e07] bg-[#b08850] hover:bg-[#c9a96e] transition-colors px-8 py-3 rounded-sm" style={{ fontSize: "13px", fontWeight: 600, letterSpacing: "0.08em" }}>
               LEGAL@LUXEOR.COM
             </a>
           </div>

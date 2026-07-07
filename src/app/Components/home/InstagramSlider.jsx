@@ -39,12 +39,26 @@ function formatCount(n) {
     : String(num);
 }
 
-function FeedCard({ photo, handle }) {
+// Path to your local logo file — drop the file in /public and update this path.
+const DEFAULT_LOGO = "/logonew.png";
+
+// Real Instagram web app font stack (not Inter)
+const IG_FONT =
+  '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+
+function FeedCard({ photo, handle, logoUrl }) {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const videoRef = useRef(null);
 
   const likes = typeof photo.like_count !== "undefined" ? photo.like_count : photo.likes;
   const comments = photo.comments_count ?? photo.comments;
+
+  const postImageSrc = photo.cover_url || photo.media_url || photo.img;
+  const avatarSrc = photo.profile_pic_url || logoUrl || DEFAULT_LOGO;
 
   return (
     <a
@@ -54,7 +68,7 @@ function FeedCard({ photo, handle }) {
       className="shrink-0 rounded-2xl overflow-hidden flex flex-col no-underline bg-white dark:bg-[#1c1310] border border-[#efefef] dark:border-[#2e2318] transition-colors duration-300"
       style={{
         width: 300,
-        fontFamily: "'Inter', sans-serif",
+        fontFamily: IG_FONT,
         textDecoration: "none",
         color: "inherit",
       }}
@@ -67,11 +81,24 @@ function FeedCard({ photo, handle }) {
           style={{ background: "linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7)" }}
         >
           <div className="w-full h-full rounded-full overflow-hidden bg-white dark:bg-[#1c1310] p-[1.5px]">
-            <div className="w-full h-full rounded-full" style={{ background: "linear-gradient(135deg, #c9a96e, #8b5e3c)" }} />
+            {avatarError ? (
+              <div
+                className="w-full h-full rounded-full"
+                style={{ background: "linear-gradient(135deg, #c9a96e, #8b5e3c)" }}
+              />
+            ) : (
+              <img
+                src={avatarSrc}
+                alt={handle || "profile"}
+                className="w-full h-full object-cover rounded-full"
+                draggable={false}
+                onError={() => setAvatarError(true)}
+              />
+            )}
           </div>
         </div>
         <div className="flex flex-col leading-tight">
-          <span style={{ fontSize: 12, fontWeight: 700 }} className="text-[#1e110a] dark:text-[#e8d9c4]">{handle || "taleo.jewellery"}</span>
+          <span style={{ fontSize: 12, fontWeight: 700 }} className="text-[#1e110a] dark:text-[#e8d9c4]">{handle || "taleojewels"}</span>
           <span style={{ fontSize: 10 }} className="text-[#8a8a8a] dark:text-[#9c8f7f]">New Delhi, India</span>
         </div>
         <div className="ml-auto">
@@ -81,15 +108,59 @@ function FeedCard({ photo, handle }) {
         </div>
       </div>
 
-      {/* Image */}
-      <div style={{ aspectRatio: "1", overflow: "hidden" }}>
-        <img
-          src={photo.media_url || photo.img}
-          alt={photo.caption || photo.alt || "Instagram post"}
-          className="w-full h-full object-cover"
-          draggable={false}
-          loading="lazy"
-        />
+      {/* Media: video for Reels, image otherwise */}
+      <div style={{ aspectRatio: "1", overflow: "hidden", position: "relative" }} className="bg-[#ece4d6] dark:bg-[#2a1810]">
+        {photo.media_type === "VIDEO" && photo.video_url ? (
+          <>
+            <video
+              ref={videoRef}
+              src={photo.video_url}
+              poster={photo.cover_url || photo.thumbnail_url}
+              className="w-full h-full object-cover"
+              muted={muted}
+              loop
+              playsInline
+              autoPlay
+              preload="metadata"
+              // NOTE: no "controls" attribute — that's what was drawing the
+              // native play/time/volume/fullscreen/menu bar you saw before.
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setMuted((m) => !m);
+              }}
+            />
+            {/* Small IG-style mute toggle only — nothing else visible */}
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMuted((m) => !m); }}
+              className="absolute bottom-2 right-2 w-6 h-6 rounded-full flex items-center justify-center bg-black/40 border-none cursor-pointer"
+              style={{ backdropFilter: "blur(2px)" }}
+            >
+              {muted ? (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                  <path d="M11 5 6 9H2v6h4l5 4z" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+                </svg>
+              ) : (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                  <path d="M11 5 6 9H2v6h4l5 4z" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                </svg>
+              )}
+            </button>
+          </>
+        ) : imgError || !postImageSrc ? (
+          <div className="w-full h-full flex items-center justify-center text-[11px] text-[#8a8a8a] dark:text-[#9c8f7f]">
+            Image unavailable
+          </div>
+        ) : (
+          <img
+            src={postImageSrc}
+            alt={photo.caption || photo.alt || "Instagram post"}
+            className="w-full h-full object-cover"
+            draggable={false}
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
+        )}
       </div>
 
       {/* Actions */}
@@ -111,16 +182,16 @@ function FeedCard({ photo, handle }) {
         </button>
       </div>
 
-      {/* Likes */}
+      {/* Likes — inherits real IG font from card, no override */}
       <div className="px-3 pb-1">
         <span style={{ fontSize: 12, fontWeight: 700 }} className="text-[#1e110a] dark:text-[#e8d9c4]">
           {formatCount(liked ? (likes || 0) + 1 : likes)} likes
         </span>
       </div>
 
-      {/* Caption */}
+      {/* Caption — inherits real IG font from card, no override */}
       <div className="px-3 pb-2">
-        <p style={{ fontSize: 12, lineHeight: 1.5, margin: 0 }} className="text-[#1e110a] dark:text-[#e8d9c4]">
+        <p style={{ fontSize: 12.5, lineHeight: 1.5, margin: 0 }} className="text-[#1e110a] dark:text-[#e8d9c4]">
           <span style={{ fontWeight: 700 }}>{handle || "luxeor.jewellery"} </span>
           {photo.caption
             ? photo.caption.length > 80
@@ -132,7 +203,7 @@ function FeedCard({ photo, handle }) {
 
       {/* Comments */}
       <div className="px-3 pb-3">
-        <span style={{ fontSize: 11 }} className="text-[#8a8a8a] dark:text-[#9c8f7f]">
+        <span style={{ fontSize: 11, fontWeight: 700 }} className="text-[#8a8a8a] dark:text-[#9c8f7f]">
           {comments != null ? `View all ${formatCount(comments)} comments` : "View post on Instagram"}
         </span>
       </div>
@@ -162,7 +233,7 @@ export default function InstagramSlider() {
   const [visible, setVisible] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [handle, setHandle] = useState("Taleo.jewellery");
+  const [handle, setHandle] = useState("Taleojewels");
   const [current, setCurrent] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef(null);
@@ -190,8 +261,8 @@ export default function InstagramSlider() {
       { id: "fb6", img: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80", alt: "Gold chain", caption: "Sculpted in warmth. Worn like a secret. ✦ #TaleoJewellery #HeirloomGold", likes: 934, comments: 22, permalink: "https://instagram.com" },
     ];
 
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-    fetch(`${apiBase}/api/v1/instagram/posts?limit=12`)
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+    fetch(`${apiBase}/instagram/posts?limit=12`)
       .then((r) => r.json())
       .then((json) => {
         if (json.success && json.data?.posts?.length) {
@@ -279,6 +350,11 @@ export default function InstagramSlider() {
             className="self-start sm:self-auto inline-flex items-center gap-2 transition-all duration-300 hover:opacity-80"
             style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", background: "linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7)", color: "#fff", borderRadius: 6, textDecoration: "none", padding: "10px 20px" }}
           >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none" />
+            </svg>
             Follow Us
           </a>
         </div>
@@ -307,7 +383,7 @@ export default function InstagramSlider() {
                 post._skeleton ? (
                   <SkeletonCard key={post.id} />
                 ) : (
-                  <FeedCard key={post.id} photo={post} handle={handle} />
+                  <FeedCard key={post.id} photo={post} handle={handle} logoUrl={DEFAULT_LOGO} />
                 )
               )}
             </div>

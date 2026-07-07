@@ -109,9 +109,9 @@ export const AnimatedTestimonialsDemo = () => {
                 textAlign: "justify",
                 textAlignLast: "left",
                 width: "95%",
-                color:"#2c261f96"
+                text: "#837d77"
               }}
-              className="text-[#3f3529] dark:text-[#afa9a2]"
+              className="text-[#837d77] dark:text-[#afa9a2]"
             >
               {active.quote.split(" ").map((word, index) => (
                 <motion.span
