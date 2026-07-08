@@ -136,6 +136,7 @@ export default function HeroBanner() {
                 paddingLeft: c.isIntro ? 22 : 0,
                 borderLeft: c.isIntro ? "1px solid rgba(201,169,110,0.4)" : "none",
               }}
+              className={c.isIntro ? "scale-[0.85] sm:scale-100 origin-left" : ""}
             >
               {!c.isIntro && <CategoryLabel label={c.category} visible={visible} />}
               {!c.isIntro && <ChapterEyebrow label={c.chapter} visible={visible} />}
