@@ -157,7 +157,7 @@ export default function Navbar() {
         className={`bg-[#faf7f2] dark:bg-[#1a0c06] transition-all duration-500 ${scrolled ? "shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_2px_24px_rgba(0,0,0,0.4)]" : ""
           }`}
       >
-        <div className="max-w-[1320px] mx-auto px-8 h-[80px] flex items-center justify-between">
+        <div className="max-w-[1320px] mx-auto px-8 h-[70px] flex items-center justify-between">
 
           {/* Logo */}
           <Link href="/" className="flex items-center">
