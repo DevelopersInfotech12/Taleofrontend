@@ -46,6 +46,11 @@ const DEFAULT_LOGO = "/logonew.png";
 const IG_FONT =
   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
 
+// Card width used by the slider transform math. Kept here so FeedCard/Skeleton
+// and the slider drag math always agree, even on small phone screens.
+const CARD_WIDTH = 300;
+const CARD_GAP = 16;
+
 function FeedCard({ photo, handle, logoUrl }) {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -67,7 +72,7 @@ function FeedCard({ photo, handle, logoUrl }) {
       rel="noopener noreferrer"
       className="shrink-0 rounded-2xl overflow-hidden flex flex-col no-underline bg-white dark:bg-[#1c1310] border border-[#efefef] dark:border-[#2e2318] transition-colors duration-300"
       style={{
-        width: 300,
+        width: `min(${CARD_WIDTH}px, 80vw)`,
         fontFamily: IG_FONT,
         textDecoration: "none",
         color: "inherit",
@@ -215,7 +220,7 @@ function SkeletonCard() {
   return (
     <div
       className="shrink-0 rounded-2xl overflow-hidden animate-pulse bg-[#ece4d6] dark:bg-[#2a1810] border border-[#e0d6c5] dark:border-[#3a2015]"
-      style={{ width: 300 }}
+      style={{ width: `min(${CARD_WIDTH}px, 80vw)` }}
     >
       <div className="bg-[#e0d6c5] dark:bg-[#3a2015]" style={{ height: 52 }} />
       <div className="bg-[#e0d6c5] dark:bg-[#3a2015]" style={{ aspectRatio: "1" }} />
@@ -239,8 +244,29 @@ export default function InstagramSlider() {
   const dragStart = useRef(null);
   const dragDelta = useRef(0);
 
-  const visibleCount = 4;
+  // How many cards fit per "page" — recalculated on resize so mobile
+  // (1 card visible) and desktop (4 cards visible) both work correctly.
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  useEffect(() => {
+    const calc = () => {
+      const w = window.innerWidth;
+      const cardW = Math.min(CARD_WIDTH, w * 0.8) + CARD_GAP;
+      const count = Math.max(1, Math.floor((w - 32) / cardW));
+      setVisibleCount(count);
+    };
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+
   const maxIndex = Math.max(0, posts.length - visibleCount);
+
+  // Clamp current index whenever visibleCount/posts change (e.g. rotating
+  // phone, or resizing) so we never end up stuck past the new maxIndex.
+  useEffect(() => {
+    setCurrent((c) => Math.min(c, maxIndex));
+  }, [maxIndex]);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -366,16 +392,18 @@ export default function InstagramSlider() {
         >
           <div
             className="overflow-hidden cursor-grab active:cursor-grabbing"
+            style={{ touchAction: "pan-y" }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
+            onPointerCancel={handlePointerUp}
           >
             <div
               className="flex"
               style={{
-                gap: 16,
-                transform: `translateX(calc(-${current * (300 + 16)}px))`,
+                gap: CARD_GAP,
+                transform: `translateX(calc(-${current} * (min(${CARD_WIDTH}px, 80vw) + ${CARD_GAP}px)))`,
                 transition: isDragging ? "none" : "transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94)",
               }}
             >
