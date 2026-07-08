@@ -331,12 +331,13 @@ function ChapterBody({ text, wide, visible }) {
 function ChapterFootnote({ text, visible }) {
   return (
     <p
-      className="text-[#c9a96e]/80 text-[13px] italic mb-9"
+      className="text-[#c9a96e]/60 text-[13px] italic mb-9"
       style={{
         fontFamily: "'Cormorant Garamond', Georgia, serif",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(14px)",
         transition: "opacity 0.8s ease 0.55s, transform 0.8s ease 0.55s",
+        fontWeight: 700,
       }}
     >
       {text}
