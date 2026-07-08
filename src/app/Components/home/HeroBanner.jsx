@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 
 const CATEGORY = "VIRSA";
-const INSTAGRAM_URL = "https://instagram.com/taleo"; // update to real handle
+const INSTAGRAM_URL = "https://www.instagram.com/taleojewels/"; // update to real handle
 
 const CHAPTERS = [
   {
@@ -126,7 +126,7 @@ export default function HeroBanner() {
         </div>
       ))}
 
-      <div className="relative z-10 h-full max-w-[1320px] mx-auto px-6 lg:px-16 lg:mt-6 flex items-center">
+      <div className="relative z-10 h-full max-w-[1320px] mx-auto pl-14 pr-6 lg:px-16 lg:mt-6 flex items-center">
         <div className="max-w-[550px] w-full">
           {CHAPTERS.map((c, i) => (
             <div
@@ -398,7 +398,8 @@ function ChapterCTA({ cta, outline, visible }) {
   );
 }
 
-/** Fixed vertical Instagram tab, docked to the left edge of the hero */
+/** Fixed vertical Instagram tab, docked to the left edge of the hero.
+ *  Visible on all breakpoints (mobile + desktop). */
 function InstagramSideTab() {
   return (
     <a
@@ -406,7 +407,7 @@ function InstagramSideTab() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Follow us on Instagram"
-      className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 flex-col items-center gap-1.5 group"
+      className="flex absolute left-0 top-1/2 -translate-y-1/2 z-20 flex-col items-center gap-1.5 group"
       style={{
         background: "rgba(26,12,6,0.55)",
         border: "1px solid rgba(242,232,213,0.25)",
