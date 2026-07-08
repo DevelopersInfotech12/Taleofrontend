@@ -183,7 +183,7 @@ export default function ProductsPage() {
                       <div className="flex items-center gap-3">
                         {p.images?.[0] ? <img src={imgUrl(p.images[0])} alt="" className="w-10 h-10 rounded object-cover border border-[#ede4d8]" /> : <div className="w-10 h-10 rounded bg-[#f0e8dc]" />}
                         <div className="min-w-0">
-                          <p className="text-[#1a1008] font-[600] truncate max-w-[180px] text-[12.5px]">{p.name}</p>
+                          <p className="text-[#706152] font-[650] max-w-[180px] text-[12.5px]">{p.name}</p>
                           <p className="text-[10px] text-[#9c8a78]">{p.sku || "—"}</p>
                         </div>
                       </div>

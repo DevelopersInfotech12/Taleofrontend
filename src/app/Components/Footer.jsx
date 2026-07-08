@@ -128,7 +128,7 @@ export default function Footer() {
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-2 min-w-0">
             <Link href="/">
               <Image
-                src="/logo.png"
+                src="/footerlogo.png"
                 alt="Taleo Fine Jewellery"
                 width={520}
                 height={800}

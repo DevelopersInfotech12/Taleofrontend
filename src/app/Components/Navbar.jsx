@@ -34,6 +34,21 @@ export default function Navbar() {
   const searchInputRef = useRef(null);
   const debounceRef = useRef(null);
   const abortRef = useRef(null);
+  const [offers, setOffers] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API}/announcements`);
+        const json = await res.json();
+        if (!cancelled) setOffers((json.data || []).map((o) => o.text).filter(Boolean));
+      } catch {
+        if (!cancelled) setOffers([]);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -119,40 +134,48 @@ export default function Navbar() {
             Offers
           </Link>
         </div>
-        <div className="w-full overflow-hidden pl-[110px]">
-          <div className="flex whitespace-nowrap animate-marquee">
-            {[...Array(5)].map((_, i) => (
-              <span key={i} className="mx-10 text-[11px] tracking-[0.22em] uppercase font-semibold">
-                ✦ Complimentary Worldwide Shipping
-                &nbsp;&nbsp;&nbsp;
-                ✦ New Arrivals: Summer Collection
-                &nbsp;&nbsp;&nbsp;
-                ✦ Free Gift Wrapping on Orders Above ₹5000
-                &nbsp;&nbsp;&nbsp;
-                ✦ Use Code TALOE10 for 10% Off First Order
-              </span>
-            ))}
+        {offers.length > 0 && (
+          <div className="w-full overflow-hidden pl-[110px]">
+            <div className="flex whitespace-nowrap animate-marquee">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="mx-10 text-[11px] tracking-[0.22em] uppercase font-semibold">
+                  {offers.map((text, j) => (
+                    <span key={j}>
+                      ✦ {text}
+                      {j < offers.length - 1 && <>&nbsp;&nbsp;&nbsp;</>}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Main nav */}
       <nav
-        className={`bg-[#faf7f2] dark:bg-[#1a0c06] transition-all duration-500 ${
-          scrolled ? "shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_2px_24px_rgba(0,0,0,0.4)]" : ""
-        }`}
+        className={`bg-[#faf7f2] dark:bg-[#1a0c06] transition-all duration-500 ${scrolled ? "shadow-[0_2px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_2px_24px_rgba(0,0,0,0.4)]" : ""
+          }`}
       >
         <div className="max-w-[1320px] mx-auto px-8 h-[80px] flex items-center justify-between">
 
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/logonew.png"
+              src="/taleologo.png"
               alt="Taleo Fine Jewellery"
               width={520}
               height={1000}
               priority
-              className="h-16 md:h-20 lg:h-24 w-auto"
+              className="h-16 md:h-20 lg:h-24 w-auto dark:hidden"
+            />
+            <Image
+              src="/footerlogo.png"
+              alt="Taleo Fine Jewellery"
+              width={520}
+              height={1000}
+              priority
+              className="hidden h-16 md:h-20 lg:h-24 w-auto dark:block"
             />
           </Link>
 
@@ -164,9 +187,8 @@ export default function Navbar() {
                 <div key={href} className="relative group">
                   <Link
                     href={href}
-                    className={`flex items-center gap-1 text-[11.5px] tracking-[0.14em] font-sans font-[700] uppercase transition-colors duration-200 pb-1 ${
-                      active ? "text-[#c9a96e]" : "text-[#3d1f10]/85 dark:text-[#e8d5b0]/85 hover:text-[#c9a96e]"
-                    }`}
+                    className={`flex items-center gap-1 text-[11.5px] tracking-[0.14em] font-sans font-[700] uppercase transition-colors duration-200 pb-1 ${active ? "text-[#c9a96e]" : "text-[#3d1f10]/85 dark:text-[#e8d5b0]/85 hover:text-[#c9a96e]"
+                      }`}
                   >
                     {label}
                     {hasDropdown && (
@@ -305,9 +327,8 @@ export default function Navbar() {
               <Link
                 href="/account"
                 onClick={() => setMenuOpen(false)}
-                className={`flex items-center gap-2 text-[11px] tracking-[0.14em] uppercase font-[700] transition-colors duration-200 ${
-                  user ? "text-[#c9a96e]" : "text-[#3d1f10]/80 dark:text-[#e8d5b0]/80 hover:text-[#c9a96e]"
-                }`}
+                className={`flex items-center gap-2 text-[11px] tracking-[0.14em] uppercase font-[700] transition-colors duration-200 ${user ? "text-[#c9a96e]" : "text-[#3d1f10]/80 dark:text-[#e8d5b0]/80 hover:text-[#c9a96e]"
+                  }`}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
