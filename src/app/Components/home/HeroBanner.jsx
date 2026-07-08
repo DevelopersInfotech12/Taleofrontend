@@ -312,7 +312,7 @@ function ChapterTagline({ text, visible }) {
 function ChapterBody({ text, wide, visible }) {
   return (
     <p
-      className={wide ? "text-white text-[14.5px] leading-[1.85] max-w-2xl mt-5 mb-5" : "text-white/55 text-[14.5px] leading-[1.85] max-w-sm mt-5 mb-5"}
+      className={wide ? "text-white/55 text-[14.5px] leading-[1.85] max-w-2xl mt-5 mb-5" : "text-white/55 text-[14.5px] leading-[1.85] max-w-sm mt-5 mb-5"}
       style={{
         fontFamily: "'Inter', sans-serif",
         fontWeight: 700,
@@ -331,7 +331,7 @@ function ChapterBody({ text, wide, visible }) {
 function ChapterFootnote({ text, visible }) {
   return (
     <p
-      className="text-[#c9a96e]/60 text-[13px] italic mb-9"
+      className="text-[#c9a96e]/90 text-[13px] italic mb-9"
       style={{
         fontFamily: "'Cormorant Garamond', Georgia, serif",
         opacity: visible ? 1 : 0,
