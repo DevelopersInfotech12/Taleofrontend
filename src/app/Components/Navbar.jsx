@@ -16,6 +16,7 @@ const navLinks = [
   { href: "/earrings", label: "Earrings", hasDropdown: false },
   { href: "/necklaces", label: "Necklaces", hasDropdown: false },
   { href: "/bracelets", label: "Bracelets", hasDropdown: false },
+  { href: "/ai-recommendation", label: "✨ AI Stylist", hasDropdown: false },
   { href: "/blog", label: "Journal", hasDropdown: false },
 ];
 

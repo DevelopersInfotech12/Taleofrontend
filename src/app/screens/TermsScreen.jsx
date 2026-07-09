@@ -2,6 +2,7 @@
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import PageHeader from "../Components/PageHeader";
+import { Reveal, Stagger, StaggerItem } from "../Components/motion/Reveal";
 
 const sections = [
   { title: "Acceptance of Terms", content: "By accessing or using the Luxéor website, mobile application, or purchasing any product, you agree to be bound by these Terms & Conditions. If you do not agree, please discontinue use of our services immediately." },
@@ -28,7 +29,7 @@ export default function TermsScreen() {
 
       <section className="bg-[#f5efe8] py-20">
         <div className="max-w-[820px] mx-auto px-6">
-          <div className="text-center mb-14">
+          <Reveal className="text-center mb-14">
             <p className="font-[family-name:var(--font-jost)] uppercase text-[#b08850] mb-3" style={{ fontSize: "11px", letterSpacing: "0.35em", fontWeight: 600 }}>
               Effective: January 2025
             </p>
@@ -38,11 +39,11 @@ export default function TermsScreen() {
             <p className="font-[family-name:var(--font-jost)] text-[#2a1a0e]/55 max-w-lg mx-auto" style={{ fontSize: "14.5px", lineHeight: 1.8 }}>
               Please read these terms carefully before using our website or placing an order.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="flex flex-col gap-6 mb-10">
+          <Stagger className="flex flex-col gap-6 mb-10" stagger={0.06}>
             {sections.map((s, i) => (
-              <div key={s.title} className="bg-white rounded-xl border border-[#b08850]/10 p-8">
+              <StaggerItem key={s.title} y={16} className="bg-white rounded-xl border border-[#b08850]/10 p-8">
                 <div className="flex items-start gap-5">
                   <span className="font-[family-name:var(--font-playfair)] text-[#b08850]/25 shrink-0" style={{ fontSize: "28px", fontWeight: 700, lineHeight: 1 }}>
                     {String(i + 1).padStart(2, "0")}
@@ -56,11 +57,11 @@ export default function TermsScreen() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
 
-          <div className="rounded-xl p-8 text-center" style={{ background: "linear-gradient(135deg,#3d1f10,#1a0e07)", border: "1px solid rgba(176,136,80,0.2)" }}>
+          <Reveal className="rounded-xl p-8 text-center" style={{ background: "linear-gradient(135deg,#3d1f10,#1a0e07)", border: "1px solid rgba(176,136,80,0.2)" }}>
             <p className="font-[family-name:var(--font-playfair)] text-white mb-2" style={{ fontSize: "20px", fontWeight: 600 }}>
               Have a legal inquiry?
             </p>
@@ -70,7 +71,7 @@ export default function TermsScreen() {
             <a href="mailto:taleojewels@gmail.com" className="inline-block font-[family-name:var(--font-jost)] text-[#1a0e07] bg-[#b08850] hover:bg-[#c9a96e] transition-colors px-8 py-3 rounded-sm" style={{ fontSize: "13px", fontWeight: 600, letterSpacing: "0.08em" }}>
               LEGAL@LUXEOR.COM
             </a>
-          </div>
+          </Reveal>
         </div>
       </section>
 

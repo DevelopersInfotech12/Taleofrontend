@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Reveal } from "../motion/Reveal";
 
 const desktopBanners = [
   { id: "d1", src: "./banneraddnew.png", alt: "Banner 1" },
@@ -38,8 +40,14 @@ function Slider({ banners, height }) {
       <div style={{ overflow: "hidden", width: "100%", height: "100%", borderRadius: 16 }}>
         <div style={{ display: "flex", height: "100%", transform: `translateX(-${idx * 100}%)`, transition: "transform 0.6s cubic-bezier(0.4,0,0.2,1)" }}>
           {banners.map((b) => (
-            <div key={b.id} style={{ minWidth: "100%", height: "100%" , borderRadius: 16 }}>
-              <img src={b.src} alt={b.alt} style={{ width: "100%", height: "85%", objectFit: "cover",borderRadius: 16 , display: "block" }} />
+            <div key={b.id} style={{ minWidth: "100%", height: "100%" , borderRadius: 16, overflow: "hidden" }}>
+              <motion.img
+                src={b.src}
+                alt={b.alt}
+                style={{ width: "100%", height: "85%", objectFit: "cover",borderRadius: 16 , display: "block" }}
+                whileHover={{ scale: 1.04 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              />
             </div>
           ))}
         </div>
@@ -69,12 +77,12 @@ function Slider({ banners, height }) {
 export default function BannerAdd() {
   return (
     <section style={{ backgroundColor: "#f5f0e8" }} className="w-full px-4 sm:px-8 py-5 sm:py-8">
-      <div className="hidden md:block">
+      <Reveal as="div" className="hidden md:block">
         <Slider banners={desktopBanners} height="520px" />
-      </div>
-      <div className="block md:hidden">
+      </Reveal>
+      <Reveal as="div" delay={0.1} className="block md:hidden">
         <Slider banners={mobileBanners} height="780px" />
-      </div>
+      </Reveal>
     </section>
   );
 }

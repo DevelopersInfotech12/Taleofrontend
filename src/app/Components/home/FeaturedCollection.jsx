@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { fetchFeaturedProducts, normaliseProduct } from "../../lib/api";
 import ProductCard from "../shop/ProductCard";
+import { Reveal, RevealSide, Stagger, StaggerItem } from "../motion/Reveal";
 
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
@@ -80,7 +81,7 @@ export default function FeaturedCollection() {
 
         {/* ── Header ── */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
-          <div>
+          <RevealSide from="left">
             <div className="flex items-center gap-3 mb-1">
               <span style={{ display: "block", width: 24, height: 1 }} className="bg-[#a67c2e] dark:bg-[#c9a96e]" />
               <span style={{ fontFamily: BODY, fontSize: 12, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
@@ -96,9 +97,9 @@ export default function FeaturedCollection() {
             <p style={{ fontFamily: BODY, fontSize: 13, lineHeight: 1.7, marginTop: 12, maxWidth: 360, fontWeight: 400 }} className="text-[#6b5d44] dark:text-[#7e6c4d]">
               Heirloom-grade pieces, each made by hand in small batches.
             </p>
-          </div>
+          </RevealSide>
 
-          <div className="self-start sm:self-auto flex flex-col items-start sm:items-end gap-5 shrink-0">
+          <RevealSide from="right" delay={0.1} className="self-start sm:self-auto flex flex-col items-start sm:items-end gap-5 shrink-0">
             <div className="flex items-center gap-6">
               {[{ value: "22k", label: "Gold Standard" }, { value: "40+", label: "Artisans" }, { value: "100%", label: "Handcrafted" }].map((s) => (
                 <div key={s.label} className="flex flex-col items-center gap-0.5">
@@ -116,31 +117,32 @@ export default function FeaturedCollection() {
               View full collection
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
-          </div>
+          </RevealSide>
         </div>
 
         {/* ── Grid ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
+        <Stagger className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
           {products.map((p) => (
-            <ProductCard
-              key={p.id}
-              id={p.id}
-              slug={p.slug}
-              name={p.name}
-              category={p.category}
-              description={p.description}
-              price={p.price}
-              originalPrice={p.originalPrice}
-              rating={p.rating}
-              reviews={p.reviews}
-              badge={p.badge}
-              badgeColor={p.badgeColor}
-              image={p.image}
-              images={p.images}
-              variants={p.variants}
-            />
+            <StaggerItem key={p.id}>
+              <ProductCard
+                id={p.id}
+                slug={p.slug}
+                name={p.name}
+                category={p.category}
+                description={p.description}
+                price={p.price}
+                originalPrice={p.originalPrice}
+                rating={p.rating}
+                reviews={p.reviews}
+                badge={p.badge}
+                badgeColor={p.badgeColor}
+                image={p.image}
+                images={p.images}
+                variants={p.variants}
+              />
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
       </div>
     </section>

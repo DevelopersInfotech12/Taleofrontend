@@ -3,6 +3,7 @@ import { useState } from "react";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import PageHeader from "../Components/PageHeader";
+import { Reveal, Stagger, StaggerItem } from "../Components/motion/Reveal";
 
 const faqData = [
   {
@@ -77,35 +78,37 @@ export default function FAQScreen() {
 
       <section className="bg-[#f5efe8] py-20">
         <div className="max-w-[860px] mx-auto px-6">
-          <div className="text-center mb-14">
+          <Reveal className="text-center mb-14">
             <p className="font-[family-name:var(--font-jost)] uppercase text-[#b08850] mb-3" style={{ fontSize: "11px", letterSpacing: "0.35em", fontWeight: 600 }}>Frequently Asked Questions</p>
             <h2 className="font-[family-name:var(--font-playfair)] text-[#2a1a0e]" style={{ fontSize: "clamp(28px,4vw,40px)", fontWeight: 700 }}>
               We've got answers
             </h2>
-          </div>
+          </Reveal>
 
           <div className="flex flex-col gap-12">
-            {faqData.map((section) => (
-              <div key={section.category}>
+            {faqData.map((section, si) => (
+              <Reveal key={section.category} delay={si * 0.05}>
                 <h3 className="font-[family-name:var(--font-jost)] uppercase text-[#b08850] mb-5" style={{ fontSize: "11px", letterSpacing: "0.3em", fontWeight: 600 }}>
                   {section.category}
                 </h3>
-                <div className="flex flex-col gap-3">
+                <Stagger className="flex flex-col gap-3" stagger={0.06}>
                   {section.items.map((item) => (
-                    <FAQItem key={item.q} q={item.q} a={item.a} />
+                    <StaggerItem key={item.q} y={16}>
+                      <FAQItem q={item.q} a={item.a} />
+                    </StaggerItem>
                   ))}
-                </div>
-              </div>
+                </Stagger>
+              </Reveal>
             ))}
           </div>
 
-          <div className="mt-16 rounded-xl p-8 text-center" style={{ background: "linear-gradient(135deg,#3d1f10,#1a0e07)", border: "1px solid rgba(176,136,80,0.2)" }}>
+          <Reveal className="mt-16 rounded-xl p-8 text-center" style={{ background: "linear-gradient(135deg,#3d1f10,#1a0e07)", border: "1px solid rgba(176,136,80,0.2)" }}>
             <p className="font-[family-name:var(--font-playfair)] text-white mb-2" style={{ fontSize: "22px", fontWeight: 600 }}>Still have questions?</p>
             <p className="font-[family-name:var(--font-jost)] text-[#c9a96e]/80 mb-6" style={{ fontSize: "13.5px" }}>Our team responds within 2 business hours</p>
             <a href="mailto:hello@luxeor.com" className="inline-block font-[family-name:var(--font-jost)] text-[#1a0e07] bg-[#b08850] hover:bg-[#c9a96e] transition-colors px-8 py-3 rounded-sm" style={{ fontSize: "13px", fontWeight: 600, letterSpacing: "0.08em" }}>
               CONTACT SUPPORT
             </a>
-          </div>
+          </Reveal>
         </div>
       </section>
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { Reveal, RevealSide } from "../motion/Reveal";
+
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
 
@@ -86,7 +88,7 @@ export default function MasterCrafted() {
 
                 {/* Small eyebrow + headline, no repeated category cards */}
                 <div className="flex items-end justify-between flex-wrap gap-3 mb-4 sm:mb-6">
-                    <div>
+                    <RevealSide from="left">
                         <div className="flex items-center gap-3 mb-2">
                             <span style={{ display: "block", width: 24, height: 1 }} className="bg-[#a67c2e] dark:bg-[#c9a96e]" />
                             <span style={{ fontFamily: BODY, fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase" }} className="text-[#a67c2e] dark:text-[#c9a96e]">
@@ -96,16 +98,18 @@ export default function MasterCrafted() {
                         <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, lineHeight: 1, margin: 0, letterSpacing: "-0.02em" }} className="text-[#2c2c2c] dark:text-[#e8d9c4]">
                             Masterfully <span style={{ fontWeight: 400, fontStyle: "italic", color: "#a67c2e" }}>crafted in India.</span>
                         </h2>
-                    </div>
-                    <button
+                    </RevealSide>
+                    <Reveal as="button" delay={0.15}
                         className="bg-[#1a0c06] dark:bg-[#c9a96e] text-[#fff]"
                         style={{ fontFamily: BODY, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 600, borderRadius: 4, padding: "11px 22px", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.97 }}
                     >
                         Explore Now
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
-                    </button>
+                    </Reveal>
                 </div>
 
                 {/* Full-width gallery — four auto-scrolling columns, no category labels */}

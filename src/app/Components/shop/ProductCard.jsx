@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useCart } from "../../lib/CartContext";
 import { useAuth, authFetch } from "../../lib/AuthContext";
@@ -75,7 +76,11 @@ export default function ProductCard({
   };
 
   const cardContent = (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="group relative w-full overflow-hidden rounded-2xl flex flex-col h-full transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_30px_60px_-15px_rgba(76,42,25,0.2)] bg-white dark:bg-[#1a1a1a]"
       style={{ background: "var(--cream-dk)", border: "1px solid var(--border-color, #e8ddd0)" }}
     >
@@ -245,7 +250,7 @@ export default function ProductCard({
           VIEW DETAILS →
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 
   if (slug) {

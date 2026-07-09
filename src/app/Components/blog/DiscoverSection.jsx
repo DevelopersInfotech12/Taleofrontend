@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { Reveal, RevealScale, Stagger, StaggerItem } from "../motion/Reveal";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
@@ -14,9 +15,9 @@ const STATIC_BLOGS = [
 
 function Card({ item, big = false }) {
   return (
-    <Link href={`/blog/${item.slug}`} style={{ textDecoration: "none", display: "block" }}>  {/* ← WRAP IN LINK */}
-      <div
-        className="reveal-scale card-hover"
+    <Link href={`/blog/${item.slug}`} style={{ textDecoration: "none", display: "block" }}>
+      <RevealScale
+        className="card-hover"
         style={{
           position: "relative", overflow: "hidden", cursor: "pointer",
           minHeight: big ? "clamp(360px, 45vw, 380px)" : "clamp(168px, 22vw, 180px)",
@@ -35,7 +36,7 @@ function Card({ item, big = false }) {
           <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: big ? "clamp(20px, 5vw, 28px)" : "clamp(15px, 4vw, 18px)", fontWeight: 600, color: "#F5E6C8", margin: "0 0 5px", lineHeight: 1.2 }}>{item.title}</h3>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#ccc", margin: 0, lineHeight: 1.5 }}>{item.subtitle}</p>
         </div>
-      </div>
+      </RevealScale>
     </Link>
   );
 }
@@ -64,19 +65,19 @@ export default function DiscoverSection() {
 
   return (
     <section style={{ backgroundColor: "var(--cream)", padding: "0 24px 60px" }}>
-      <div className="reveal" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "10px 24px", marginBottom: "20px", paddingTop: "40px" }}>
+      <Reveal style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "10px 24px", marginBottom: "20px", paddingTop: "40px" }}>
         <div>
           <p style={{ fontSize: "12px", fontFamily: "Inter, sans-serif", letterSpacing: "0.14em", textTransform: "uppercase", color: "#B8942A", fontWeight: 600, margin: "0 0 6px" }}>For You</p>
           <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(24px, 6vw, 32px)", fontWeight: 600, color: "var(--text)", margin: 0, lineHeight: 1.1 }}>Discover Our Jewellery Universe</h2>
         </div>
         <a href="/blog" style={{ fontSize: "11px", fontFamily: "Inter, sans-serif", letterSpacing: "0.1em", textTransform: "uppercase", color: "#B8942A", textDecoration: "none", borderBottom: "1px solid #B8942A", paddingBottom: "2px", whiteSpace: "nowrap" }}>View All</a>
-      </div>
+      </Reveal>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "12px" }}>
-        <Card item={main} big />
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: "12px" }}>
-          {rest.map(item => <Card key={item.id} item={item} />)}
-        </div>
+        <Reveal><Card item={main} big /></Reveal>
+        <Stagger style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: "12px" }}>
+          {rest.map(item => <StaggerItem key={item.id}><Card item={item} /></StaggerItem>)}
+        </Stagger>
       </div>
     </section>
   );

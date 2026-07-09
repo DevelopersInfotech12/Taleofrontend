@@ -1,14 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Reveal, RevealScale, Stagger, StaggerItem } from "../motion/Reveal";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 function DynamicCard({ article }) {
   return (
     <Link href={`/blog/${article.slug}`} style={{ textDecoration: 'none', flexShrink: 0, width: 220 }}>
-      <div
-        className="reveal-scale card-hover"
+      <RevealScale
+        className="card-hover"
         style={{ overflow: 'hidden', cursor: 'pointer', position: 'relative', height: 260, border: '1px solid var(--border-color)', transition: 'border-color 0.3s, box-shadow 0.3s' }}
         onMouseEnter={e => { e.currentTarget.style.borderColor = '#B8942A'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(184,148,42,0.14)'; }}
         onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.boxShadow = 'none'; }}
@@ -29,7 +30,7 @@ function DynamicCard({ article }) {
             {article.readTime && <><span style={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: '#666', display: 'inline-block' }} /><span style={{ fontSize: '10px', color: '#aaa', fontFamily: 'Inter, sans-serif' }}>{article.readTime}</span></>}
           </div>
         </div>
-      </div>
+      </RevealScale>
     </Link>
   );
 }
@@ -51,10 +52,10 @@ export default function PopularArticles() {
   return (
     <section style={{ backgroundColor: 'var(--cream)', padding: '40px 24px 0' }}>
       {/* Header */}
-      <div className="reveal" style={{ marginBottom: '20px' }}>
+      <Reveal style={{ marginBottom: '20px' }}>
         <p style={{ fontSize: '10px', fontFamily: 'Inter, sans-serif', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#B8942A', fontWeight: 600, margin: '0 0 6px' }}>From the Archive</p>
         <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '32px', fontWeight: 600, color: 'var(--text)', margin: 0, lineHeight: 1.1 }}>Stories Worth Keeping</h2>
-      </div>
+      </Reveal>
 
       {loading ? (
         <div style={{ display: 'flex', gap: 12 }}>
@@ -65,10 +66,10 @@ export default function PopularArticles() {
         </div>
       ) : (
         /* horizontal scroll row */
-        <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 8, scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <Stagger style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 8, scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           <style>{`.no-scrollbar::-webkit-scrollbar{display:none}`}</style>
-          {articles.map(a => <DynamicCard key={a._id} article={a} />)}
-        </div>
+          {articles.map(a => <StaggerItem key={a._id}><DynamicCard article={a} /></StaggerItem>)}
+        </Stagger>
       )}
     </section>
   );

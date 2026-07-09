@@ -4,6 +4,7 @@ import Link from "next/link";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import OtherHero from "../Components/OtherHero";
+import { Reveal, RevealImage, Stagger, StaggerItem } from "../Components/motion/Reveal";
 
 const categories = ["All", "Jewellery Care", "Style Guide", "Behind the Craft", "Gifting", "Stories"];
 
@@ -47,7 +48,7 @@ export default function JournalScreen() {
         <div className="max-w-[1200px] mx-auto px-6">
 
           {/* Category Filter */}
-          <div className="flex flex-wrap gap-3 justify-center mb-14">
+          <Reveal className="flex flex-wrap gap-3 justify-center mb-14">
             {categories.map(c => (
               <button
                 key={c}
@@ -62,13 +63,15 @@ export default function JournalScreen() {
                 {c}
               </button>
             ))}
-          </div>
+          </Reveal>
 
           {/* Featured Article */}
           {featured && (
-            <div className="mb-12 bg-white rounded-2xl overflow-hidden border border-[#b08850]/10 hover-lift">
+            <Reveal className="mb-12 bg-white rounded-2xl overflow-hidden border border-[#b08850]/10 hover-lift">
               <div className="grid md:grid-cols-2">
-                <img src={featured.img} alt={featured.title} className="w-full object-cover" style={{ height: "420px" }} />
+                <RevealImage>
+                  <img src={featured.img} alt={featured.title} className="w-full object-cover" style={{ height: "420px" }} />
+                </RevealImage>
                 <div className="p-10 flex flex-col justify-center">
                   <div className="flex items-center gap-3 mb-4">
                     <span className="font-[family-name:var(--font-jost)] text-[#b08850] uppercase" style={{ fontSize: "10px", letterSpacing: "0.3em", fontWeight: 600 }}>{featured.cat}</span>
@@ -86,14 +89,16 @@ export default function JournalScreen() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           )}
 
           {/* Article Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {rest.map(a => (
-              <div key={a.id} className="bg-white rounded-xl overflow-hidden border border-[#b08850]/10 hover-lift flex flex-col">
-                <img src={a.img} alt={a.title} className="w-full object-cover" style={{ height: "220px" }} />
+              <StaggerItem key={a.id} className="bg-white rounded-xl overflow-hidden border border-[#b08850]/10 hover-lift flex flex-col">
+                <RevealImage>
+                  <img src={a.img} alt={a.title} className="w-full object-cover" style={{ height: "220px" }} />
+                </RevealImage>
                 <div className="p-6 flex flex-col flex-1">
                   <span className="font-[family-name:var(--font-jost)] text-[#b08850] uppercase mb-3 inline-block" style={{ fontSize: "10px", letterSpacing: "0.3em", fontWeight: 600 }}>
                     {a.cat}
@@ -108,9 +113,9 @@ export default function JournalScreen() {
                     {a.date} · {a.readTime}
                   </p>
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
 
         </div>
       </section>

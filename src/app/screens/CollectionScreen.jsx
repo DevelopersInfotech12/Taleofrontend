@@ -3,6 +3,7 @@ import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import OtherHero from "../Components/OtherHero";
 import ShopPage from "../Components/shop/ShopPage";
+import { Reveal } from "../Components/motion/Reveal";
 
 const collectionData = {
   "signature-collection": {
@@ -87,11 +88,11 @@ export default function CollectionScreen({ collectionSlug }) {
 
       {/* Collection description banner */}
       <div style={{ background: "linear-gradient(135deg,#1a0e07,#3d1f10)", borderBottom: "1px solid rgba(176,136,80,0.12)" }}>
-        <div className="max-w-[700px] mx-auto px-6 py-10 text-center">
+        <Reveal className="max-w-[700px] mx-auto px-6 py-10 text-center">
           <p className="font-[family-name:var(--font-jost)] text-[#e8d5b0]/60 leading-[1.85]" style={{ fontSize: "14.5px" }}>
             {data.desc}
           </p>
-        </div>
+        </Reveal>
       </div>
 
       <ShopPage collectionSlug={data.slug} />

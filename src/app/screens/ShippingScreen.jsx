@@ -2,6 +2,7 @@
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import PageHeader from "../Components/PageHeader";
+import { Reveal } from "../Components/motion/Reveal";
 
 const sections = [
   {
@@ -44,7 +45,7 @@ const sections = [
 ];
 
 const TableSection = ({ title, rows }) => (
-  <div className="mb-10">
+  <Reveal className="mb-10">
     <h3
       className="font-[family-name:var(--font-playfair)] text-[#2a1a0e] mb-4"
       style={{ fontSize: "20px", fontWeight: 600 }}
@@ -71,7 +72,7 @@ const TableSection = ({ title, rows }) => (
         </tbody>
       </table>
     </div>
-  </div>
+  </Reveal>
 );
 
 export default function ShippingScreen() {
@@ -87,7 +88,7 @@ export default function ShippingScreen() {
 
       <section className="bg-[#f5efe8] py-20">
         <div className="max-w-[860px] mx-auto px-6">
-          <div className="mb-12 text-center">
+          <Reveal className="mb-12 text-center">
             <p
               className="font-[family-name:var(--font-jost)] uppercase text-[#b08850] mb-3"
               style={{ fontSize: "11px", letterSpacing: "0.35em", fontWeight: 600 }}
@@ -100,13 +101,13 @@ export default function ShippingScreen() {
             >
               Delivered with care
             </h2>
-          </div>
+          </Reveal>
 
           {sections.map((s) =>
             s.rows ? (
               <TableSection key={s.title} title={s.title} rows={s.rows} />
             ) : (
-              <div key={s.title} className="mb-10">
+              <Reveal key={s.title} className="mb-10">
                 <h3
                   className="font-[family-name:var(--font-playfair)] text-[#2a1a0e] mb-3"
                   style={{ fontSize: "20px", fontWeight: 600 }}
@@ -119,11 +120,11 @@ export default function ShippingScreen() {
                 >
                   {s.content}
                 </p>
-              </div>
+              </Reveal>
             )
           )}
 
-          <div
+          <Reveal
             className="mt-14 rounded-xl p-8 text-center"
             style={{ background: "linear-gradient(135deg,#3d1f10,#1a0e07)", border: "1px solid rgba(176,136,80,0.2)" }}
           >
@@ -143,7 +144,7 @@ export default function ShippingScreen() {
             >
               CONTACT US
             </a>
-          </div>
+          </Reveal>
         </div>
       </section>
 

@@ -2,6 +2,7 @@
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import PageHeader from "../Components/PageHeader";
+import { Reveal, Stagger, StaggerItem } from "../Components/motion/Reveal";
 
 const steps = [
   { num: "01", title: "Initiate Return", desc: "Log in to your Luxéor account, go to 'My Orders', select the item and click 'Request Return'. Alternatively, email us at returns@luxeor.com within 15 days of delivery." },
@@ -34,7 +35,7 @@ export default function ReturnsScreen() {
         <div className="max-w-[960px] mx-auto px-6">
 
           {/* Header */}
-          <div className="text-center mb-16">
+          <Reveal className="text-center mb-16">
             <p className="font-[family-name:var(--font-jost)] uppercase text-[#b08850] mb-3" style={{ fontSize: "11px", letterSpacing: "0.35em", fontWeight: 600 }}>
               Returns Policy
             </p>
@@ -44,12 +45,12 @@ export default function ReturnsScreen() {
             <p className="font-[family-name:var(--font-jost)] text-[#2a1a0e]/55 max-w-lg mx-auto" style={{ fontSize: "14.5px", lineHeight: 1.8 }}>
               We want you to love every piece. If something isn't right, we make it simple to return.
             </p>
-          </div>
+          </Reveal>
 
           {/* Steps */}
-          <div className="grid md:grid-cols-2 gap-6 mb-20">
+          <Stagger className="grid md:grid-cols-2 gap-6 mb-20">
             {steps.map((s) => (
-              <div key={s.num} className="bg-white rounded-xl p-8 border border-[#b08850]/10 hover-lift">
+              <StaggerItem key={s.num} className="bg-white rounded-xl p-8 border border-[#b08850]/10 hover-lift">
                 <div className="font-[family-name:var(--font-playfair)] text-[#b08850]/30 mb-3" style={{ fontSize: "36px", fontWeight: 700 }}>
                   {s.num}
                 </div>
@@ -59,18 +60,18 @@ export default function ReturnsScreen() {
                 <p className="font-[family-name:var(--font-jost)] text-[#2a1a0e]/60 leading-[1.8]" style={{ fontSize: "13.5px" }}>
                   {s.desc}
                 </p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
 
           {/* FAQ */}
           <div className="mb-16">
-            <h2 className="font-[family-name:var(--font-playfair)] text-[#2a1a0e] text-center mb-10" style={{ fontSize: "28px", fontWeight: 700 }}>
+            <Reveal as="h2" className="font-[family-name:var(--font-playfair)] text-[#2a1a0e] text-center mb-10" style={{ fontSize: "28px", fontWeight: 700 }}>
               Policy Details
-            </h2>
-            <div className="flex flex-col gap-4">
+            </Reveal>
+            <Stagger className="flex flex-col gap-4" stagger={0.08}>
               {policy.map((item) => (
-                <div key={item.q} className="bg-white rounded-lg border border-[#b08850]/10 overflow-hidden">
+                <StaggerItem key={item.q} y={16} className="bg-white rounded-lg border border-[#b08850]/10 overflow-hidden">
                   <div className="px-6 py-4 border-b border-[#b08850]/8">
                     <p className="font-[family-name:var(--font-playfair)] text-[#2a1a0e]" style={{ fontSize: "15.5px", fontWeight: 600 }}>
                       {item.q}
@@ -81,13 +82,13 @@ export default function ReturnsScreen() {
                       {item.a}
                     </p>
                   </div>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
           </div>
 
           {/* CTA */}
-          <div className="rounded-xl p-8 text-center" style={{ background: "linear-gradient(135deg,#3d1f10,#1a0e07)", border: "1px solid rgba(176,136,80,0.2)" }}>
+          <Reveal className="rounded-xl p-8 text-center" style={{ background: "linear-gradient(135deg,#3d1f10,#1a0e07)", border: "1px solid rgba(176,136,80,0.2)" }}>
             <p className="font-[family-name:var(--font-jost)] text-[#c9a96e] uppercase mb-2" style={{ fontSize: "11px", letterSpacing: "0.3em", fontWeight: 600 }}>
               Start a Return
             </p>
@@ -97,7 +98,7 @@ export default function ReturnsScreen() {
             <a href="mailto:returns@luxeor.com" className="inline-block font-[family-name:var(--font-jost)] text-[#1a0e07] bg-[#b08850] hover:bg-[#c9a96e] transition-colors px-8 py-3 rounded-sm" style={{ fontSize: "13px", fontWeight: 600, letterSpacing: "0.08em" }}>
               EMAIL US
             </a>
-          </div>
+          </Reveal>
         </div>
       </section>
 
