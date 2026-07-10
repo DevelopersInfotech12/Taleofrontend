@@ -6,6 +6,7 @@ import { AuthProvider } from './lib/AuthContext';
 import { ThemeProvider } from './lib/ThemeContext';
 import CartDrawer from './Components/CartDrawer';
 import WhatsAppWidget from './Components/WhatsAppWidget';
+import AIStylistWidget from './Components/AIStylistWidget';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -48,6 +49,7 @@ export default function RootLayout({ children }) {
             <CartProvider>
               {children}
               <WhatsAppWidget />
+              <AIStylistWidget />
 
               <CartDrawer />
             </CartProvider>
