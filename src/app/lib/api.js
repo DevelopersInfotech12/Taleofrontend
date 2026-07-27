@@ -106,6 +106,11 @@ export function normaliseProduct(p) {
     images: (p.images ?? []).map(imgUrl),
     variants: (p.variants ?? []).map((v) => v.label ?? v),
     material: p.material ?? "",
+    weight: p.weight ?? "",
+    dimensions: p.dimensions ?? "",
+    specifications: (p.specifications ?? [])
+      .filter((s) => s?.label)
+      .map((s) => ({ label: s.label, value: s.value ?? "" })),
     sku: p.sku ?? "",
     stock: p.stock ?? 0,
     tags: p.tags ?? [],
