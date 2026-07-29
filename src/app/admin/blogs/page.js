@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { apiFetch, fmtDate } from "../lib/api";
 import { useAuth } from "../lib/AdminAuthContext";
 import { Spinner, ErrorBanner, EmptyState, Toast, ConfirmDialog } from "../components/ui";
-import BlogFormModal from "../components/BlogFormModal";
+import BlogEditor from "../components/BlogEditor";
 
 const TAGS = ["General", "Jewellery Care", "Style Guide", "Behind the Brand"];
 
@@ -22,7 +22,7 @@ export default function BlogsPage() {
   const [status, setStatus] = useState("");
   const [tag, setTag] = useState("");
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [mode, setMode] = useState("list"); // "list" | "editor"
   const [editing, setEditing] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
@@ -56,8 +56,10 @@ export default function BlogsPage() {
 
   useEffect(() => { fetchBlogs(); }, [fetchBlogs]);
 
-  const openCreate = () => { setEditing(null); setModalOpen(true); };
-  const openEdit = (b) => { setEditing(b); setModalOpen(true); };
+  const openCreate = () => { setEditing(null); setMode("editor"); };
+  const openEdit = (b) => { setEditing(b); setMode("editor"); };
+  const closeEditor = () => { setMode("list"); setEditing(null); };
+  const savedEditor = () => { setMode("list"); setEditing(null); fetchBlogs(); showToast(editing ? "Post updated" : "Post created"); };
 
   const confirmDelete = async () => {
     setDeleting(true);
@@ -84,6 +86,15 @@ export default function BlogsPage() {
     { label: "Drafts", value: drafts },
     { label: "This Page", value: blogs.length },
   ];
+
+  if (mode === "editor") {
+    return (
+      <div style={{ fontFamily: "'Inter', sans-serif" }}>
+        <BlogEditor blog={editing} onSaved={savedEditor} onCancel={closeEditor} />
+        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      </div>
+    );
+  }
 
   return (
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -379,14 +390,6 @@ export default function BlogsPage() {
           </div>
         </div>
       </div>
-
-      <BlogFormModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        blog={editing}
-        onSaved={fetchBlogs}
-        showToast={showToast}
-      />
 
       <ConfirmDialog
         open={!!deleteTarget}

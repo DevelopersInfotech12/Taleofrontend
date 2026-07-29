@@ -4,16 +4,31 @@ import Link from "next/link";
 
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
-const posts = [
+// Local fallback — shown only until the API responds, or if it fails/returns empty.
+const FALLBACK_POSTS = [
   { id: 1, category: "Jewellery Care", title: "How to Keep Your Fine Jewellery Radiant for Generations", excerpt: "Discover the rituals behind preserving the brilliance of your most cherished pieces — from diamond rings to delicate chains.", date: "June 2, 2025", readTime: "4 min read", img: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=700&q=80&fit=crop", slug: "keep-jewellery-radiant" },
   { id: 2, category: "Behind the Craft", title: "The Art of Stone Setting: Where Precision Meets Poetry", excerpt: "Our master craftsmen share the patience and precision behind every prong, bezel, and pavé setting that holds your stone in place.", date: "May 18, 2025", readTime: "6 min read", img: "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=700&q=80&fit=crop", slug: "art-of-stone-setting" },
   { id: 3, category: "Gift Guide", title: "Beyond the Ring: Jewellery Gifts That Tell a Story", excerpt: "Whether marking a milestone or simply celebrating someone you love, the right piece speaks when words fall short.", date: "May 5, 2025", readTime: "5 min read", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=700&q=80&fit=crop", slug: "jewellery-gifts-guide" },
 ];
 
+// Map a raw API blog doc → the shape this card grid renders.
+const mapPost = (b, i) => ({
+  id: b._id || b.slug || i,
+  category: b.tag || "Journal",
+  title: b.title,
+  excerpt: b.excerpt,
+  date: b.date,
+  readTime: b.readTime || "5 min read",
+  img: b.heroImg || b.img,
+  slug: b.slug,
+});
+
 export default function BlogSection() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
+  const [posts, setPosts] = useState(FALLBACK_POSTS);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -22,6 +37,19 @@ export default function BlogSection() {
     );
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API}/blogs/published`, { cache: "no-store" });
+        const data = await res.json();
+        const list = data?.data || [];
+        if (list.length) setPosts(list.slice(0, 3).map(mapPost));
+      } catch {
+        // keep local fallback content
+      }
+    })();
   }, []);
 
   const fade = (delay = 0) => ({
@@ -75,7 +103,7 @@ export default function BlogSection() {
 
           {/* CTA — Inter */}
           <Link
-            href="/journal"
+            href="/blog"
             className="group inline-flex items-center gap-2.5 self-start sm:self-auto shrink-0 transition-all duration-300 text-[#8a7560] dark:text-[#bdab8a] border-b border-[#2e2318] dark:border-[#c9a96e]/40"
             style={{ fontFamily: BODY, fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.22em", textDecoration: "none", paddingBottom: 3 }}
           >
@@ -91,7 +119,7 @@ export default function BlogSection() {
           {posts.map((post, i) => (
             <Link
               key={post.id}
-              href={`/journal/${post.slug}`}
+              href={`/blog/${post.slug}`}
               className="group flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-[#1e1510] border border-[#e8d5b0]/40 dark:border-[#2e2318] transition-colors duration-300"
               style={{ ...fade(0.12 + i * 0.12), textDecoration: "none" }}
             >

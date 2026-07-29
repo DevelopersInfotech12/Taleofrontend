@@ -115,41 +115,6 @@ const SAMPLE_REVIEWS = [
 const RATING_DIST = [{ stars: 5, pct: 68 }, { stars: 4, pct: 22 }, { stars: 3, pct: 7 }, { stars: 2, pct: 2 }, { stars: 1, pct: 1 }];
 const TABS = ["Description", "Specifications", "Shipping & Returns", "Reviews"];
 
-/**
- * Rows shown in the Specifications tab, in order:
- *   1. auto-derived from core product fields
- *   2. admin-defined rows from the product's `specifications` array
- *   3. house defaults, only if the admin hasn't already supplied that label
- * Blank values are dropped, and duplicate labels keep their first occurrence.
- */
-const SPEC_FALLBACKS = [
-  ["Hallmark", "BIS 916 Hallmarked"],
-  ["Country", "India"],
-];
-
-const normLabel = (l) => String(l || "").trim().toLowerCase();
-
-function buildSpecRows(p) {
-  const auto = [
-    ["Material", p.material],
-    ["SKU", p.sku],
-    ["Weight", p.weight],
-    ["Dimensions", p.dimensions],
-    ["Category", p.category],
-  ];
-  const admin = (p.specifications || []).map((s) => [s.label, s.value]);
-
-  const rows = [];
-  const seen = new Set();
-  for (const [label, value] of [...auto, ...admin, ...SPEC_FALLBACKS]) {
-    const key = normLabel(label);
-    if (!key || !value || seen.has(key)) continue;
-    seen.add(key);
-    rows.push([label, value]);
-  }
-  return rows;
-}
-
 /* ═══════════════════════════════════════════
    MAIN EXPORT
    ═══════════════════════════════════════════ */
@@ -456,7 +421,7 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
               )}
               {tab === "Specifications" && (
                 <div className="max-w-2xl rounded-2xl overflow-hidden" style={{ border: `1px solid ${BD}` }}>
-                  {buildSpecRows(p).map(([k, v], i) => (
+                  {[["Material", p.material], ["SKU", p.sku], ["Weight", p.weight], ["Dimensions", p.dimensions], ["Category", p.category], ["Hallmark", "BIS 916 Hallmarked"], ["Country", "India"]].filter(([, v]) => v).map(([k, v], i) => (
                     <div key={k} className="flex" style={{ background: i % 2 === 0 ? "#fff" : "#faf6f0" }}>
                       <div className="w-1/3 px-5 py-3 font-semibold" style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: TX, borderRight: `1px solid ${BD}` }}>{k}</div>
                       <div className="flex-1 px-5 py-3" style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#5c4f42" }}>{v}</div>
@@ -468,7 +433,7 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
                 <div className="max-w-2xl flex flex-col gap-6">
                   {[
                     { title: "Free Shipping", body: "All orders ship free via insured courier. Estimated 3–7 business days domestically." },
-                    // { title: "30-Day Returns", body: "Return unworn in original packaging within 30 days for a full refund or exchange." },
+                    { title: "30-Day Returns", body: "Return unworn in original packaging within 30 days for a full refund or exchange." },
                     { title: "Complimentary Resizing", body: "Rings resized once free within 60 days of purchase, subject to design constraints." },
                     { title: "Secure Packaging", body: "Every order arrives in a signature Luxéor box with certificate of authenticity." },
                   ].map((s) => (

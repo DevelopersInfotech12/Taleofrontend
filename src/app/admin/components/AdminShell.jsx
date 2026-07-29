@@ -7,7 +7,6 @@ import NotificationBell from "./NotificationBell";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
-  { href: "/admin/hero", label: "Hero Section", icon: "🖼️" },
   { href: "/admin/products", label: "Products", icon: "💎" },
   { href: "/admin/categories", label: "Categories", icon: "🗂️" },
   { href: "/admin/collections", label: "Collections", icon: "🏷️" },

@@ -8,28 +8,9 @@ const GEMSTONES    = ["Diamond","Ruby","Emerald","Sapphire","Pearl","Amethyst","
 const METALS       = ["Yellow Gold","White Gold","Rose Gold","Platinum","Silver 925","Two-Tone"];
 const STONE_COLORS = ["White","Yellow","Pink","Blue","Green","Red","Purple","Black"];
 
-// Suggested rows offered as one-click chips in the Specifications editor
-const SPEC_PRESETS = [
-  "Purity", "Plating", "Finish", "Stone Weight", "Stone Type",
-  "Closure Type", "Chain Length", "Occasion", "Warranty",
-  "Care Instructions", "Packaging", "Certification",
-];
-
-// Rows pre-filled on a brand-new product so every listing starts with a full table
-const DEFAULT_SPECS = [
-  { label: "Purity",        value: "BIS 916 Hallmarked" },
-  { label: "Plating",       value: "" },
-  { label: "Finish",        value: "" },
-  { label: "Closure Type",  value: "" },
-  { label: "Occasion",      value: "" },
-  { label: "Warranty",      value: "6 Months" },
-];
-
 const emptyForm = {
   name: "", slug: "", shortDesc: "", description: "",
   price: "", comparePrice: "", stock: "", sku: "", material: "",
-  weight: "", dimensions: "",
-  specifications: DEFAULT_SPECS.map(sp => ({ ...sp })),
   category: "", collections: [], tags: "",
   gemstone: "", metal: "", stoneColor: "",
   isFeatured: false, isNewArrival: false, isBestseller: false, isActive: true,
@@ -56,11 +37,6 @@ export default function ProductFormModal({ open, onClose, product, categories, c
         stock: product.stock ?? "",
         sku: product.sku || "",
         material: product.material || "",
-        weight: product.weight || "",
-        dimensions: product.dimensions || "",
-        specifications: (product.specifications || []).map(sp => ({
-          _id: sp._id, label: sp.label || "", value: sp.value || "",
-        })),
         category: product.category?._id || product.category || "",
         collections: (product.collections || []).map(c => c?._id || c),
         tags: (product.tags || []).filter(t => !GEMSTONES.includes(t) && !METALS.includes(t) && !STONE_COLORS.includes(t)).join(", "),
@@ -97,24 +73,6 @@ export default function ProductFormModal({ open, onClose, product, categories, c
     ...f, variants: f.variants.map((v, i) => i === idx ? { ...v, [key]: val } : v),
   }));
 
-  const addSpec = (label = "") =>
-    setForm(f => ({ ...f, specifications: [...f.specifications, { label, value: "" }] }));
-  const removeSpec = (idx) =>
-    setForm(f => ({ ...f, specifications: f.specifications.filter((_, i) => i !== idx) }));
-  const updateSpec = (idx, key, val) =>
-    setForm(f => ({
-      ...f,
-      specifications: f.specifications.map((sp, i) => (i === idx ? { ...sp, [key]: val } : sp)),
-    }));
-  const moveSpec = (idx, dir) =>
-    setForm(f => {
-      const target = idx + dir;
-      if (target < 0 || target >= f.specifications.length) return f;
-      const next = [...f.specifications];
-      [next[idx], next[target]] = [next[target], next[idx]];
-      return { ...f, specifications: next };
-    });
-
   const removeExistingImage = (img) => setExistingImages(imgs => imgs.filter(i => i !== img));
 
   const submit = async (e) => {
@@ -132,8 +90,6 @@ export default function ProductFormModal({ open, onClose, product, categories, c
       fd.append("stock", form.stock || 0);
       fd.append("sku", form.sku);
       fd.append("material", form.material);
-      fd.append("weight", form.weight);
-      fd.append("dimensions", form.dimensions);
       if (form.category) fd.append("category", form.category);
       fd.append("isFeatured", form.isFeatured);
       fd.append("isNewArrival", form.isNewArrival);
@@ -153,15 +109,6 @@ export default function ProductFormModal({ open, onClose, product, categories, c
         .filter(v => v.label)
         .map(v => ({ ...(v._id ? { _id: v._id } : {}), label: v.label, price: Number(v.price) || 0, stock: Number(v.stock) || 0 }));
       fd.append("variants", JSON.stringify(variantsArr));
-
-      const specsArr = form.specifications
-        .filter(sp => sp.label?.trim())
-        .map(sp => ({
-          ...(sp._id ? { _id: sp._id } : {}),
-          label: sp.label.trim(),
-          value: (sp.value || "").trim(),
-        }));
-      fd.append("specifications", JSON.stringify(specsArr));
 
       if (product) fd.append("existingImages", JSON.stringify(existingImages));
       newFiles.forEach(f => fd.append("images", f));
@@ -207,12 +154,6 @@ export default function ProductFormModal({ open, onClose, product, categories, c
           </Field>
           <Field label="Material">
             <input className={inputCls} value={form.material} onChange={e => update("material", e.target.value)} placeholder="e.g. 18k Gold" />
-          </Field>
-          <Field label="Weight">
-            <input className={inputCls} value={form.weight} onChange={e => update("weight", e.target.value)} placeholder="e.g. 12.4 g" />
-          </Field>
-          <Field label="Dimensions">
-            <input className={inputCls} value={form.dimensions} onChange={e => update("dimensions", e.target.value)} placeholder="e.g. 24mm x 18mm" />
           </Field>
           <Field label="Gemstone">
             <select className={selectCls} value={form.gemstone} onChange={e => update("gemstone", e.target.value)}>
@@ -271,66 +212,6 @@ export default function ProductFormModal({ open, onClose, product, categories, c
               {label}
             </label>
           ))}
-        </div>
-
-        {/* Specifications */}
-        <div className="rounded-xl border border-[#ede4d8] bg-[#fdfaf6] p-4">
-          <div className="flex items-center justify-between mb-1">
-            <label className="block text-[11px] uppercase tracking-widest text-[#9c8a78]">Specifications</label>
-            <button type="button" onClick={() => addSpec()} className="text-[11px] text-[#c9a84c] hover:text-[#8b6914] font-semibold">
-              + Add row
-            </button>
-          </div>
-          <p className="text-[10px] text-[#b0a090] mb-3 leading-relaxed">
-            These rows render in the “Specifications” tab on the product page, after Material / SKU / Category,
-            which are filled automatically from the fields above. Leave a value blank to hide that row on the site.
-          </p>
-
-          {/* Quick-add chips */}
-          <div className="flex flex-wrap gap-1.5 mb-3">
-            {SPEC_PRESETS
-              .filter(preset => !form.specifications.some(sp => sp.label?.toLowerCase() === preset.toLowerCase()))
-              .map(preset => (
-                <button
-                  type="button"
-                  key={preset}
-                  onClick={() => addSpec(preset)}
-                  className="text-[10px] px-2.5 py-1 rounded-full border border-[#e0d4c4] text-[#5c4f42] hover:border-[#c9a84c] hover:text-[#8b6914] bg-white transition-colors"
-                >
-                  + {preset}
-                </button>
-              ))}
-          </div>
-
-          {form.specifications.length === 0 && (
-            <p className="text-[11px] text-[#b0a090]">No custom specifications — only the auto-filled rows will show.</p>
-          )}
-
-          <div className="space-y-2">
-            {form.specifications.map((sp, idx) => (
-              <div key={sp._id || idx} className="flex gap-2 items-center">
-                <div className="flex flex-col gap-0.5 shrink-0">
-                  <button type="button" onClick={() => moveSpec(idx, -1)} disabled={idx === 0}
-                    className="text-[9px] leading-none text-[#c9a84c] hover:text-[#8b6914] disabled:opacity-25" title="Move up">▲</button>
-                  <button type="button" onClick={() => moveSpec(idx, 1)} disabled={idx === form.specifications.length - 1}
-                    className="text-[9px] leading-none text-[#c9a84c] hover:text-[#8b6914] disabled:opacity-25" title="Move down">▼</button>
-                </div>
-                <input
-                  className={inputCls + " w-[36%]"}
-                  placeholder="Label (e.g. Gross Weight)"
-                  value={sp.label}
-                  onChange={e => updateSpec(idx, "label", e.target.value)}
-                />
-                <input
-                  className={inputCls}
-                  placeholder="Value (e.g. 12.4 g)"
-                  value={sp.value}
-                  onChange={e => updateSpec(idx, "value", e.target.value)}
-                />
-                <button type="button" onClick={() => removeSpec(idx)} className="text-red-500 hover:text-red-700 text-[16px] px-1 shrink-0">✕</button>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Variants */}

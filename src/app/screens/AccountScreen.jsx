@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
-import AuthPanel from "../Components/auth/AuthPanel";
+import GoogleSignInButton from "../Components/auth/GoogleSignInButton";
 import { useAuth, authFetch } from "../lib/AuthContext";
 import { useCart } from "../lib/CartContext";
 import { fmtPrice, fmtDate, imgUrl } from "../lib/api";
@@ -21,6 +21,161 @@ const C = {
   text: "#2a1a0e",
   white: "#ffffff",
 };
+
+function Field({ label, name, type = "text", value, onChange, required, autoComplete }) {
+  return (
+    <div>
+      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5"
+        style={{ fontFamily: "var(--font-jost)", color: C.muted }}>
+        {label}{required && <span style={{ color: C.gold }}> *</span>}
+      </label>
+      <input
+        type={type} name={name} value={value} onChange={onChange}
+        required={required} autoComplete={autoComplete}
+        style={{
+          fontFamily: "var(--font-jost)", fontSize: 14, color: C.text,
+          background: C.white, border: `1.5px solid ${C.border}`,
+          borderRadius: 12, padding: "13px 16px", width: "100%", outline: "none",
+          transition: "border-color 0.2s, box-shadow 0.2s",
+        }}
+        onFocus={(e) => { e.target.style.borderColor = C.gold; e.target.style.boxShadow = `0 0 0 3px ${C.gold}22`; }}
+        onBlur={(e) => { e.target.style.borderColor = C.border; e.target.style.boxShadow = "none"; }}
+      />
+    </div>
+  );
+}
+
+function Divider() {
+  return (
+    <div className="flex items-center gap-3 my-5">
+      <div className="flex-1 h-px" style={{ background: C.border }} />
+      <span style={{ fontFamily: "var(--font-jost)", fontSize: 11, color: C.muted, letterSpacing: "0.1em" }}>OR</span>
+      <div className="flex-1 h-px" style={{ background: C.border }} />
+    </div>
+  );
+}
+
+function LoginForm({ onSwitch }) {
+  const { login, loginWithGoogle } = useAuth();
+  const router = useRouter();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setBusy(true);
+    try {
+      await login(form);
+      router.push("/account");
+    } catch (err) {
+      setError(err.message || "Login failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleGoogle = async (credential) => {
+    setError("");
+    setBusy(true);
+    try {
+      await loginWithGoogle(credential);
+      router.push("/account");
+    } catch (err) {
+      setError(err.message || "Google sign-in failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <>
+      <h1 className="mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.1rem,2.1vw,1rem)", fontWeight: 600, color: C.text }}>
+        Sign In to Your Account
+      </h1>
+      <div className="mb-2">
+        <GoogleSignInButton onCredential={handleGoogle} />
+      </div>
+      <Divider />
+      {error && <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b", marginBottom: 16 }}>{error}</p>}
+      <form onSubmit={submit} className="flex flex-col gap-4">
+        <Field label="Email" name="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
+        <Field label="Password" name="password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="current-password" />
+        <button type="submit" disabled={busy} className="w-full rounded-full py-3.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-opacity mt-2 text-[#fff] font-poppins"
+          style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, boxShadow: "0 4px 20px rgba(26,12,6,0.25)", opacity: busy ? 0.6 : 1 }}>
+          {busy ? "Signing in…" : "Sign In"}
+        </button>
+      </form>
+      <p style={{ fontFamily: "var(--font-jost)", fontSize: 14, color: C.muted, marginTop: 24, textAlign: "center" }}>
+        New here?{" "}
+        <button onClick={onSwitch} style={{ color: C.gold, fontWeight: 600, textDecoration: "underline" }}>Create an account</button>
+      </p>
+    </>
+  );
+}
+
+function RegisterForm({ onSwitch }) {
+  const { register, loginWithGoogle } = useAuth();
+  const router = useRouter();
+  const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setBusy(true);
+    try {
+      await register(form);
+      router.push("/account");
+    } catch (err) {
+      setError(err.message || "Registration failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleGoogle = async (credential) => {
+    setError("");
+    setBusy(true);
+    try {
+      await loginWithGoogle(credential);
+      router.push("/account");
+    } catch (err) {
+      setError(err.message || "Google sign-in failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <>
+      <h1 className="mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.1rem,2.1vw,1rem)", fontWeight: 600, color: C.text }}>
+        Register Your Account
+      </h1>
+      <div className="mb-2">
+        <GoogleSignInButton onCredential={handleGoogle} text="signup_with" />
+      </div>
+      <Divider />
+      {error && <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b", marginBottom: 16 }}>{error}</p>}
+      <form onSubmit={submit} className="flex flex-col gap-4">
+        <Field label="Full Name" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required autoComplete="name" />
+        <Field label="Email" name="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
+        <Field label="Phone" name="phone" type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} autoComplete="tel" />
+        <Field label="Password" name="password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="new-password" />
+        <button type="submit" disabled={busy} className="w-full rounded-full py-3.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-opacity mt-2 text-[#fff] font-poppins"
+          style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, boxShadow: "0 4px 20px rgba(26,12,6,0.25)", opacity: busy ? 0.6 : 1 }}>
+          {busy ? "Creating account…" : "Create Account"}
+        </button>
+      </form>
+      <p style={{ fontFamily: "var(--font-jost)", fontSize: 14, color: C.muted, marginTop: 24, textAlign: "center" }}>
+        Already have an account?{" "}
+        <button onClick={onSwitch} style={{ color: C.gold, fontWeight: 600, textDecoration: "underline" }}>Sign in</button>
+      </p>
+    </>
+  );
+}
 
 /* ─── Icons ──────────────────────────────────────── */
 const Icon = {
@@ -481,13 +636,14 @@ function Dashboard() {
 /* ─── Main export ──────────────────────────────────────── */
 export default function AccountScreen() {
   const { user, loading } = useAuth();
+  const [mode, setMode] = useState("login");
 
   return (
     <>
       <Navbar />
       <main className="min-h-screen" style={{ background: C.cream }}>
         <div style={{ background: C.brown, paddingTop: 114 }}>
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-24 sm:pb-28 text-center">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-16 text-center">
             <h1 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(2rem,4vw,3rem)", fontWeight: 600, color: C.goldLt, marginTop: 8 }}>
               {user ? "My Account" : "Welcome to Taleo"}
             </h1>
@@ -499,12 +655,17 @@ export default function AccountScreen() {
             <p style={{ fontFamily: "var(--font-jost)", fontSize: 14, color: C.muted, textAlign: "center" }}>Loading…</p>
           </div>
         ) : user ? (
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-16" style={{ marginTop: -48 }}>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-16" style={{ marginTop: -32 }}>
             <Dashboard />
           </div>
         ) : (
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-16" style={{ marginTop: -48 }}>
-            <AuthPanel />
+          <div className="max-w-md mx-auto px-4 sm:px-6 pb-16" style={{ marginTop: -90 }}>
+            <div className="rounded-3xl p-6 sm:p-10"
+              style={{ background: C.white, border: `1.5px solid ${C.border}`, boxShadow: "0 8px 40px rgba(26,12,6,0.05)" }}>
+              {mode === "login"
+                ? <LoginForm onSwitch={() => setMode("register")} />
+                : <RegisterForm onSwitch={() => setMode("login")} />}
+            </div>
           </div>
         )}
       </main>
