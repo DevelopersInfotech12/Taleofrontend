@@ -82,7 +82,7 @@ function Gallery({ images, name }) {
       </div>
       {/* Trust badges */}
       <div className="grid grid-cols-3 gap-3 mt-5">
-        {[{ icon: "✦", label: "BIS Hallmarked" }, { icon: "↺", label: "30-Day Returns" }, { icon: "⛨", label: "Lifetime Warranty" }].map((b) => (
+        {[{ icon: "✦", label: "BIS Hallmarked" }, { icon: "↺", label: "7-Day Exchange" }, { icon: "⛨", label: "Lifetime Warranty" }].map((b) => (
           <div key={b.label} className="flex flex-col items-center gap-2 py-4 rounded-2xl"
             style={{ border: `1.5px solid ${BD}`, background: "#fff" }}>
             <span style={{ color: G, fontSize: 18 }}>{b.icon}</span>
@@ -432,16 +432,16 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
               {tab === "Shipping & Returns" && (
                 <div className="max-w-2xl flex flex-col gap-6">
                   {[
-                    { title: "Free Shipping", body: "All orders ship free via insured courier. Estimated 3–7 business days domestically." },
-                    { title: "30-Day Returns", body: "Return unworn in original packaging within 30 days for a full refund or exchange." },
-                    { title: "Complimentary Resizing", body: "Rings resized once free within 60 days of purchase, subject to design constraints." },
-                    { title: "Secure Packaging", body: "Every order arrives in a signature Luxéor box with certificate of authenticity." },
+                    { title: "Returns", body: "We do not offer returns or refunds once an order has been delivered. Each piece is crafted and finished in limited quantities, so all sales are final." },
+                    { title: "Exchanges", body: "We offer a 7-day exchange from the date of delivery. The product must be unused and unworn, in its original packaging with all tags and accessories, and accompanied by the original invoice." },
+                    { title: "Damaged or Incorrect Orders", body: "If you receive a damaged, defective, or incorrect item, contact us within 48 hours of delivery with your order number, clear photos, and an unboxing video. Once verified, we'll arrange a replacement at no additional cost." },
+                    { title: "Exchange Conditions", body: "Exchanges are allowed only once per order. If the exchanged item costs more, you'll pay the difference; if it costs less, the remaining amount is issued as store credit." },
                   ].map((s) => (
                     <div key={s.title} className="flex gap-4">
                       <span style={{ color: G, fontSize: 18, lineHeight: 1, marginTop: 2 }}>✦</span>
                       <div>
                         <p style={{ fontSize: 17, fontWeight: 600, color: TX, marginBottom: 4 }}>{s.title}</p>
-                        <p style={{ fontSize: 13.5, lineHeight: 1.8, color: "#5c4f42" }}>{s.body}</p>
+                        <p style={{ fontSize: 13.5, lineHeight: 1.8, color: "#5c4f42", textAlign: "justify" }}>{s.body}</p>
                       </div>
                     </div>
                   ))}
@@ -501,7 +501,7 @@ export default function ProductDetailClient({ product, relatedProducts = [] }) {
           </div>
 
           {/* ── Related ── */}
- {/* ── Related ── */}
+          {/* ── Related ── */}
           {relatedProducts?.length > 0 && (
             <div className="mt-16 pt-12" style={{ borderTop: `1px solid ${BD}` }}>
               <div className="flex items-end justify-between mb-8">
