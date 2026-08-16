@@ -70,7 +70,7 @@ export default function NewCollectionBanner() {
             </div>
 
             {/* Body — full text on mobile, no clamp */}
-            <p className="text-justify sm:w-[92%] text-[#636262] dark:text-[#b1a99f] font-poppins" style={{ fontSize: 13.2, lineHeight: 1.8, margin: 0, fontWeight: 600, letterSpacing: "0.01em"}}>
+            <p className="text-justify sm:w-[92%] dark:text-[#b1a99f]" style={{ fontSize: 14.5, lineHeight: 1.8, margin: 0, fontWeight: 700, letterSpacing: "0.01em", color: "#575656" }}>
               Each piece cast in 22k chocolate gold, stone-set by hand in batches of forty.
               Created in limited numbers to preserve exclusivity and craftsmanship.
               Every detail is meticulously finished by skilled artisans, ensuring exceptional quality.

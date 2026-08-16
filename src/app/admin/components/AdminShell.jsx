@@ -4,13 +4,18 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../lib/AdminAuthContext";
 import NotificationBell from "./NotificationBell";
+import Image from "next/image";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
   { href: "/admin/products", label: "Products", icon: "💎" },
+  { href: "/admin/low-stock", label: "Low Stock", icon: "⚠️" },
+  { href: "/admin/out-of-stock", label: "Out of Stock", icon: "🚫" },
+  { href: "/admin/best-sellers", label: "Best Sellers", icon: "🔥" },
   { href: "/admin/categories", label: "Categories", icon: "🗂️" },
   { href: "/admin/collections", label: "Collections", icon: "🏷️" },
   { href: "/admin/orders", label: "Orders", icon: "📦" },
+  { href: "/admin/refunds", label: "Refunds", icon: "↩️" },
   { href: "/admin/customers", label: "Customers", icon: "🧾" },
   { href: "/admin/coupons", label: "Coupons", icon: "🎟️" },
   { href: "/admin/announcements", label: "Offer Strip", icon: "📢" },
@@ -37,8 +42,8 @@ export default function AdminShell({ children }) {
         <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto min-h-0 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/90 hover:[&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/50">
           {NAV.map(item => (
             <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2 font-poppins font-semibold rounded-lg text-[12px] uppercase tracking-normal transition-colors ${isActive(item.href) ? "bg-[#3d2a1a] text-[#e8d5b0]" : "text-[#e8d5b0]/80 hover:bg-[#1a1008] hover:text-[#f5e6c8]"}`}>
-              <span className="text-[21px]">{item.icon}</span>{item.label}
+              className={`flex items-center gap-3 px-3 py-[8px] font-bold rounded-lg text-[11.5px] uppercase tracking-normal transition-colors ${isActive(item.href) ? "bg-[#3d2a1a] text-[#e8d5b0]" : "text-[#e8d5b0]/80 hover:bg-[#1a1008] hover:text-[#f5e6c8]"}`}>
+              <span className="text-[15px]">{item.icon}</span>{item.label}
             </Link>
           ))}
         </nav>
@@ -64,13 +69,21 @@ export default function AdminShell({ children }) {
             <button onClick={() => setOpen(true)} className="text-[#e8d5b0] text-xl">☰</button>
           </div>
         </header>
-        <div className="hidden md:flex items-center justify-between px-6 py-2 border-b border-[#ede4d8] bg-white/90 sticky top-0 z-500">
-          <span className="text-[#1a0c06] text-[20px] font-bold tracking-[0.18em] uppercase">
+        <div className="hidden md:flex items-center justify-between px-6 border-b border-[#ede4d8] bg-white/90 sticky top-0 z-500">
+          {/* <span className="text-[#1a0c06] text-[20px] font-bold tracking-[0.18em] uppercase">
             TALEO
-          </span>
+          </span> */}
+          <Image
+            src="/logonew.png"
+            alt="Taleo Fine Jewellery"
+            width={520}
+            height={1000}
+            priority
+            className="h-16 md:h-20 lg:h-16 w-auto dark:hidden"
+          />
           <div className="flex items-center gap-3">
             <span className="text-[12px] text-[#9c8a78] italic font-bold">
-            🛍️ Divya, wake up! Another order just arrived.
+              🛍️ Divya, wake up! Another order just arrived.
             </span>
             <NotificationBell />
           </div>

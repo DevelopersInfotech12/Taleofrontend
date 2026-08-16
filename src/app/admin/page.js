@@ -6,9 +6,9 @@ import { useAuth } from "./lib/AdminAuthContext";
 import { Spinner, ErrorBanner, Badge, EmptyState, PageHeader, TableShell, Thead, rowCls, AccentCell } from "./components/ui";
 import Chart from "chart.js/auto";
 
-function StatCard({ label, value, sub, icon, accent }) {
-  return (
-    <div className="bg-white rounded-xl p-5 border border-[#ede4d8] flex items-start gap-4">
+function StatCard({ label, value, sub, icon, accent, href }) {
+  const content = (
+    <div className={`bg-white rounded-xl p-5 border border-[#ede4d8] flex items-start gap-4 h-full ${href ? "hover:border-[#c9a84c] transition-colors" : ""}`}>
       <div className={`w-11 h-11 rounded-lg flex items-center justify-center text-xl shrink-0 ${accent}`}>{icon}</div>
       <div className="min-w-0">
         <p className="text-[10px] uppercase tracking-widest text-[#9c8a78] font-bold">{label}</p>
@@ -17,6 +17,7 @@ function StatCard({ label, value, sub, icon, accent }) {
       </div>
     </div>
   );
+  return href ? <Link href={href}>{content}</Link> : content;
 }
 
 function MiniChart({ data }) {
@@ -192,11 +193,18 @@ export default function DashboardPage() {
     <>
       <PageHeader eyebrow={`Welcome back, ${user?.name}`} title="Dashboard" />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
         <StatCard label="Total Revenue" value={fmtCurrency(data.stats.totalRevenue)} sub={fmtCurrency(data.stats.monthRevenue) + " this month"} icon="₹" accent="bg-amber-50 text-amber-700" />
         <StatCard label="Orders" value={data.stats.totalOrders} sub={pct(data.stats.monthOrders, data.stats.lastMonthOrders)} icon="📦" accent="bg-blue-50 text-blue-700" />
         <StatCard label="Customers" value={data.stats.totalCustomers} sub={`+${data.stats.newCustomers} this month`} icon="👤" accent="bg-purple-50 text-purple-700" />
         <StatCard label="Products" value={data.stats.totalProducts} sub={`${data.stats.lowStockProducts} low stock`} icon="💎" accent="bg-rose-50 text-rose-700" />
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <StatCard href="/admin/low-stock" label="Low Stock" value={data.stats.lowStockProducts} sub="Below 10 units" icon="⚠️" accent="bg-amber-50 text-amber-700" />
+        <StatCard href="/admin/out-of-stock" label="Out of Stock" value={data.stats.outOfStockProducts} sub="Needs urgent restock" icon="🚫" accent="bg-red-50 text-red-700" />
+        <StatCard href="/admin/best-sellers" label="Top Seller" value={data.topProducts[0] ? `${data.topProducts[0].soldCount || 0} sold` : "—"} sub={data.topProducts[0]?.name || "No sales yet"} icon="🔥" accent="bg-orange-50 text-orange-700" />
+        <StatCard href="/admin/refunds" label="Refunds" value={data.stats.refundsCount} sub={fmtCurrency(data.stats.refundedAmount) + " refunded"} icon="↩️" accent="bg-gray-100 text-gray-700" />
       </div>
 
       <div className="grid md:grid-cols-3 gap-4 mb-8">
@@ -205,7 +213,10 @@ export default function DashboardPage() {
           <MiniChart data={data.monthlySales} />
         </div>
         <div className="bg-white rounded-xl p-5 border border-[#ede4d8]">
-          <h2 className="text-[14px] font-bold text-[#1a1008] mb-4" style={{ color: "#47382a" }}>Top Products</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[14px] font-bold text-[#1a1008]" style={{ color: "#47382a" }}>Top Products</h2>
+            <Link href="/admin/best-sellers" className="text-[10.5px] font-bold uppercase tracking-widest text-[#c9a84c] hover:text-[#8b6914]">View all →</Link>
+          </div>
           {data.topProducts.length === 0 && <EmptyState message="No products yet" />}
           <div className="space-y-3">
             {data.topProducts.map((p, i) => (

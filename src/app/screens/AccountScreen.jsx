@@ -6,9 +6,10 @@ import Link from "next/link";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import GoogleSignInButton from "../Components/auth/GoogleSignInButton";
+import AuthPanel from "../Components/auth/AuthPanel";
 import { useAuth, authFetch } from "../lib/AuthContext";
 import { useCart } from "../lib/CartContext";
-import { fmtPrice, fmtDate, imgUrl } from "../lib/api";
+import { fmtPrice, fmtDate, imgUrl, downloadInvoice } from "../lib/api";
 
 const C = {
   dark: "#1a0c06",
@@ -22,183 +23,29 @@ const C = {
   white: "#ffffff",
 };
 
-function Field({ label, name, type = "text", value, onChange, required, autoComplete }) {
-  return (
-    <div>
-      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5"
-        style={{ fontFamily: "var(--font-jost)", color: C.muted }}>
-        {label}{required && <span style={{ color: C.gold }}> *</span>}
-      </label>
-      <input
-        type={type} name={name} value={value} onChange={onChange}
-        required={required} autoComplete={autoComplete}
-        style={{
-          fontFamily: "var(--font-jost)", fontSize: 14, color: C.text,
-          background: C.white, border: `1.5px solid ${C.border}`,
-          borderRadius: 12, padding: "13px 16px", width: "100%", outline: "none",
-          transition: "border-color 0.2s, box-shadow 0.2s",
-        }}
-        onFocus={(e) => { e.target.style.borderColor = C.gold; e.target.style.boxShadow = `0 0 0 3px ${C.gold}22`; }}
-        onBlur={(e) => { e.target.style.borderColor = C.border; e.target.style.boxShadow = "none"; }}
-      />
-    </div>
-  );
-}
-
-function Divider() {
-  return (
-    <div className="flex items-center gap-3 my-5">
-      <div className="flex-1 h-px" style={{ background: C.border }} />
-      <span style={{ fontFamily: "var(--font-jost)", fontSize: 11, color: C.muted, letterSpacing: "0.1em" }}>OR</span>
-      <div className="flex-1 h-px" style={{ background: C.border }} />
-    </div>
-  );
-}
-
-function LoginForm({ onSwitch }) {
-  const { login, loginWithGoogle } = useAuth();
-  const router = useRouter();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  const submit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setBusy(true);
-    try {
-      await login(form);
-      router.push("/account");
-    } catch (err) {
-      setError(err.message || "Login failed");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleGoogle = async (credential) => {
-    setError("");
-    setBusy(true);
-    try {
-      await loginWithGoogle(credential);
-      router.push("/account");
-    } catch (err) {
-      setError(err.message || "Google sign-in failed");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  return (
-    <>
-      <h1 className="mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.1rem,2.1vw,1rem)", fontWeight: 600, color: C.text }}>
-        Sign In to Your Account
-      </h1>
-      <div className="mb-2">
-        <GoogleSignInButton onCredential={handleGoogle} />
-      </div>
-      <Divider />
-      {error && <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b", marginBottom: 16 }}>{error}</p>}
-      <form onSubmit={submit} className="flex flex-col gap-4">
-        <Field label="Email" name="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
-        <Field label="Password" name="password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="current-password" />
-        <button type="submit" disabled={busy} className="w-full rounded-full py-3.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-opacity mt-2 text-[#fff] font-poppins"
-          style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, boxShadow: "0 4px 20px rgba(26,12,6,0.25)", opacity: busy ? 0.6 : 1 }}>
-          {busy ? "Signing in…" : "Sign In"}
-        </button>
-      </form>
-      <p style={{ fontFamily: "var(--font-jost)", fontSize: 14, color: C.muted, marginTop: 24, textAlign: "center" }}>
-        New here?{" "}
-        <button onClick={onSwitch} style={{ color: C.gold, fontWeight: 600, textDecoration: "underline" }}>Create an account</button>
-      </p>
-    </>
-  );
-}
-
-function RegisterForm({ onSwitch }) {
-  const { register, loginWithGoogle } = useAuth();
-  const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
-  const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  const submit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setBusy(true);
-    try {
-      await register(form);
-      router.push("/account");
-    } catch (err) {
-      setError(err.message || "Registration failed");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleGoogle = async (credential) => {
-    setError("");
-    setBusy(true);
-    try {
-      await loginWithGoogle(credential);
-      router.push("/account");
-    } catch (err) {
-      setError(err.message || "Google sign-in failed");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  return (
-    <>
-      <h1 className="mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.1rem,2.1vw,1rem)", fontWeight: 600, color: C.text }}>
-        Register Your Account
-      </h1>
-      <div className="mb-2">
-        <GoogleSignInButton onCredential={handleGoogle} text="signup_with" />
-      </div>
-      <Divider />
-      {error && <p style={{ fontFamily: "var(--font-jost)", fontSize: 13, color: "#c0392b", marginBottom: 16 }}>{error}</p>}
-      <form onSubmit={submit} className="flex flex-col gap-4">
-        <Field label="Full Name" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required autoComplete="name" />
-        <Field label="Email" name="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
-        <Field label="Phone" name="phone" type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} autoComplete="tel" />
-        <Field label="Password" name="password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="new-password" />
-        <button type="submit" disabled={busy} className="w-full rounded-full py-3.5 text-[13px] font-bold uppercase tracking-[0.15em] transition-opacity mt-2 text-[#fff] font-poppins"
-          style={{ background: `linear-gradient(135deg, ${C.brown} 0%, #5a2e16 100%)`, boxShadow: "0 4px 20px rgba(26,12,6,0.25)", opacity: busy ? 0.6 : 1 }}>
-          {busy ? "Creating account…" : "Create Account"}
-        </button>
-      </form>
-      <p style={{ fontFamily: "var(--font-jost)", fontSize: 14, color: C.muted, marginTop: 24, textAlign: "center" }}>
-        Already have an account?{" "}
-        <button onClick={onSwitch} style={{ color: C.gold, fontWeight: 600, textDecoration: "underline" }}>Sign in</button>
-      </p>
-    </>
-  );
-}
-
 /* ─── Icons ──────────────────────────────────────── */
 const Icon = {
-  user:    (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>),
-  bag:     (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>),
-  box:     (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>),
-  heart:   (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>),
-  logout:  (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5" /><path d="M21 12H9" /></svg>),
+  user: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>),
+  bag: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>),
+  box: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>),
+  heart: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>),
+  logout: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5" /><path d="M21 12H9" /></svg>),
   chevron: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>),
-  trash:   (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>),
+  trash: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>),
+  download: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><path d="M12 15V3" /></svg>),
 };
 
 /* ─── Status badge ──────────────────────────────────────── */
 function StatusBadge({ status }) {
   const s = (status || "pending").toLowerCase();
   const map = {
-    pending:    { bg: "#fdf3e3", fg: "#a9762f" },
+    pending: { bg: "#fdf3e3", fg: "#a9762f" },
     processing: { bg: "#fdf3e3", fg: "#a9762f" },
-    confirmed:  { bg: "#eef3ee", fg: "#5c8a6a" },
-    shipped:    { bg: "#eaf1f7", fg: "#3f6f9c" },
-    delivered:  { bg: "#eef6ee", fg: "#4a8a4a" },
-    cancelled:  { bg: "#fbeceb", fg: "#c0392b" },
-    refunded:   { bg: "#f1eef6", fg: "#7d5fa6" },
+    confirmed: { bg: "#eef3ee", fg: "#5c8a6a" },
+    shipped: { bg: "#eaf1f7", fg: "#3f6f9c" },
+    delivered: { bg: "#eef6ee", fg: "#4a8a4a" },
+    cancelled: { bg: "#fbeceb", fg: "#c0392b" },
+    refunded: { bg: "#f1eef6", fg: "#7d5fa6" },
   };
   const c = map[s] || map.pending;
   return (
@@ -214,6 +61,22 @@ function OrderCard({ order, expanded, onToggle }) {
   const items = order.items || order.orderItems || [];
   const total = order.total ?? order.totalPrice ?? order.totalAmount ?? 0;
   const orderId = order.orderNumber || order._id?.slice(-8)?.toUpperCase();
+  const isPaid = order.paymentStatus === "paid";
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
+
+  const handleDownloadInvoice = async (e) => {
+    e.stopPropagation();
+    setDownloadError("");
+    setDownloading(true);
+    try {
+      await downloadInvoice(order._id, order.orderNumber);
+    } catch (err) {
+      setDownloadError(err.message || "Failed to download invoice");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <div className="rounded-2xl overflow-hidden" style={{ background: C.white, border: `1.5px solid ${C.border}` }}>
@@ -258,7 +121,7 @@ function OrderCard({ order, expanded, onToggle }) {
               <p style={{ fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Delivery Address</p>
               <p style={{ fontSize: 13, color: C.text, lineHeight: 1.6 }}>
                 {[order.shippingAddress.fullName, order.shippingAddress.address, order.shippingAddress.city,
-                  order.shippingAddress.state, order.shippingAddress.postalCode, order.shippingAddress.country].filter(Boolean).join(", ")}
+                order.shippingAddress.state, order.shippingAddress.postalCode, order.shippingAddress.country].filter(Boolean).join(", ")}
               </p>
             </div>
           )}
@@ -268,6 +131,29 @@ function OrderCard({ order, expanded, onToggle }) {
             {order.discount > 0 && <Row label="Discount" value={`− ${fmtPrice(order.discount)}`} />}
             <Row label="Total" value={fmtPrice(total)} bold />
             {order.paymentMethod && <Row label="Payment Method" value={String(order.paymentMethod).toUpperCase()} />}
+          </div>
+
+          <div className="mt-4 pt-4" style={{ borderTop: `1px solid ${C.border}` }}>
+            {isPaid ? (
+              <button
+                onClick={handleDownloadInvoice}
+                disabled={downloading}
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-poppins text-xs font-bold uppercase tracking-wider transition-all active:scale-95 disabled:opacity-60"
+                style={{ background: C.brown, color: C.goldLt, letterSpacing: "0.12em" }}
+              >
+                <Icon.download style={{ width: 14, height: 14 }} />
+                {downloading ? "Preparing…" : "Download Invoice"}
+              </button>
+            ) : (
+              <p style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: C.muted }}>
+                Invoice will be available once payment is completed.
+              </p>
+            )}
+            {downloadError && (
+              <p style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: "#c0392b", marginTop: 6 }}>
+                {downloadError}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -352,7 +238,7 @@ function WishlistTab() {
     try {
       await authFetch(`/wishlist/${productId}`, { method: "POST" }); // toggle = remove
       setItems((prev) => prev.filter((p) => p._id !== productId));
-    } catch {}
+    } catch { }
   };
 
   const handleAddToCart = (p) => {
@@ -533,10 +419,10 @@ function ProfileTab() {
 /* ─── Sidebar nav ──────────────────────────────────────── */
 function SideNav({ tab, setTab, user, onLogout, cartCount, ordersCount, wishlistCount }) {
   const items = [
-    { id: "profile",  label: "Profile",  icon: Icon.user },
-    { id: "orders",   label: "Orders",   icon: Icon.box,   count: ordersCount },
+    { id: "profile", label: "Profile", icon: Icon.user },
+    { id: "orders", label: "Orders", icon: Icon.box, count: ordersCount },
     { id: "wishlist", label: "Wishlist", icon: Icon.heart, count: wishlistCount },
-    { id: "cart",     label: "My Cart",  icon: Icon.bag,   count: cartCount },
+    { id: "cart", label: "My Cart", icon: Icon.bag, count: cartCount },
   ];
 
   return (
@@ -547,9 +433,9 @@ function SideNav({ tab, setTab, user, onLogout, cartCount, ordersCount, wishlist
           {user.avatar
             ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             : <span className="w-full h-full flex items-center justify-center text-lg font-semibold"
-                style={{ color: C.goldLt, fontFamily: "var(--font-playfair)" }}>
-                {user.name?.[0]?.toUpperCase()}
-              </span>
+              style={{ color: C.goldLt, fontFamily: "var(--font-playfair)" }}>
+              {user.name?.[0]?.toUpperCase()}
+            </span>
           }
         </div>
         <div className="min-w-0 font-poppins">
@@ -605,7 +491,7 @@ function Dashboard() {
         const orders = ordRes.data?.orders ?? ordRes.data ?? [];
         setOrdersCount(Array.isArray(orders) ? orders.length : 0);
         setWishlistCount(Array.isArray(wishRes.data) ? wishRes.data.length : 0);
-      } catch {}
+      } catch { }
     })();
   }, []);
 
@@ -624,10 +510,10 @@ function Dashboard() {
         <h1 className="mb-6 mt-16" style={{ fontSize: "clamp(1.6rem,2.8vw,2.2rem)", fontWeight: 600, color: C.text }}>
           {tabLabels[tab]}
         </h1>
-        {tab === "profile"  && <ProfileTab />}
-        {tab === "orders"   && <OrdersTab />}
+        {tab === "profile" && <ProfileTab />}
+        {tab === "orders" && <OrdersTab />}
         {tab === "wishlist" && <WishlistTab />}
-        {tab === "cart"     && <CartTab />}
+        {tab === "cart" && <CartTab />}
       </div>
     </div>
   );
@@ -636,16 +522,15 @@ function Dashboard() {
 /* ─── Main export ──────────────────────────────────────── */
 export default function AccountScreen() {
   const { user, loading } = useAuth();
-  const [mode, setMode] = useState("login");
 
   return (
     <>
       <Navbar />
       <main className="min-h-screen" style={{ background: C.cream }}>
         <div style={{ background: C.brown, paddingTop: 114 }}>
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-16 text-center">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-24 text-center">
             <h1 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(2rem,4vw,3rem)", fontWeight: 600, color: C.goldLt, marginTop: 8 }}>
-              {user ? "My Account" : "Welcome to Taleo"}
+              {user ? "My Account" : ""}
             </h1>
           </div>
         </div>
@@ -659,13 +544,8 @@ export default function AccountScreen() {
             <Dashboard />
           </div>
         ) : (
-          <div className="max-w-md mx-auto px-4 sm:px-6 pb-16" style={{ marginTop: -90 }}>
-            <div className="rounded-3xl p-6 sm:p-10"
-              style={{ background: C.white, border: `1.5px solid ${C.border}`, boxShadow: "0 8px 40px rgba(26,12,6,0.05)" }}>
-              {mode === "login"
-                ? <LoginForm onSwitch={() => setMode("register")} />
-                : <RegisterForm onSwitch={() => setMode("login")} />}
-            </div>
+          <div className="px-4 sm:px-6 pb-16" style={{ marginTop: -90 }}>
+            <AuthPanel />
           </div>
         )}
       </main>

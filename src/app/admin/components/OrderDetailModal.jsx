@@ -16,6 +16,11 @@ export default function OrderDetailModal({ open, onClose, orderId, onSaved, show
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+  const [refundAmount, setRefundAmount] = useState("");
+  const [refundReason, setRefundReason] = useState("");
+  const [refunding, setRefunding] = useState(false);
+  const [refundError, setRefundError] = useState("");
+
   useEffect(() => {
     if (!open || !orderId) return;
     setLoading(true);
@@ -27,6 +32,9 @@ export default function OrderDetailModal({ open, onClose, orderId, onSaved, show
         setStatus(res.data.status);
         setTracking(res.data.trackingNumber || "");
         setNotes(res.data.notes || "");
+        setRefundAmount(res.data.total != null ? String(res.data.total) : "");
+        setRefundReason("");
+        setRefundError("");
       } catch (err) {
         setError(err.message);
       } finally {
@@ -34,6 +42,26 @@ export default function OrderDetailModal({ open, onClose, orderId, onSaved, show
       }
     })();
   }, [open, orderId, token]);
+
+  const submitRefund = async (e) => {
+    e.preventDefault();
+    setRefunding(true);
+    setRefundError("");
+    try {
+      const res = await apiFetch(`/orders/${orderId}/refund`, token, {
+        method: "POST",
+        body: JSON.stringify({ amount: refundAmount, reason: refundReason }),
+      });
+      setOrder(res.data);
+      setStatus(res.data.status);
+      showToast("Refund processed");
+      onSaved();
+    } catch (err) {
+      setRefundError(err.message);
+    } finally {
+      setRefunding(false);
+    }
+  };
 
   const submit = async (e) => {
     e.preventDefault();
@@ -109,6 +137,36 @@ export default function OrderDetailModal({ open, onClose, orderId, onSaved, show
             <div className="flex justify-between text-[#5c4f42]"><span>Shipping</span><span>{order.shippingCharge ? fmtCurrency(order.shippingCharge) : "Free"}</span></div>
             <div className="flex justify-between text-[#1a1008] font-semibold pt-1 border-t border-[#ede4d8]"><span>Total</span><span>{fmtCurrency(order.total)}</span></div>
           </div>
+
+          {/* Refund */}
+          {order.paymentStatus === "refunded" ? (
+            <div className="bg-[#fdfaf6] rounded-lg p-3 border border-[#ede4d8] text-[12px]">
+              <p className="text-[10px] uppercase tracking-widest text-[#9c8a78] mb-1">Refund</p>
+              <p className="text-[#1a1008] font-medium font-poppins">{fmtCurrency(order.refundAmount ?? order.total)} refunded</p>
+              {order.refundReason && <p className="text-[#5c4f42] mt-1">Reason: {order.refundReason}</p>}
+              {order.refundedAt && <p className="text-[#9c8a78] mt-1">On {fmtDateTime(order.refundedAt)}</p>}
+            </div>
+          ) : (
+            <form onSubmit={submitRefund} className="space-y-3 pt-2 border-t border-[#ede4d8]">
+              <p className="text-[10px] uppercase tracking-widest text-[#9c8a78]">Process Refund</p>
+              {refundError && <div className="px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-[12px] text-red-700">{refundError}</div>}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] uppercase tracking-widest text-[#9c8a78] mb-1.5">Refund Amount</label>
+                  <input type="number" min="0" max={order.total} step="0.01" className={inputCls} value={refundAmount} onChange={e => setRefundAmount(e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-[11px] uppercase tracking-widest text-[#9c8a78] mb-1.5">Reason (optional)</label>
+                  <input className={inputCls} placeholder="e.g. Damaged item" value={refundReason} onChange={e => setRefundReason(e.target.value)} />
+                </div>
+              </div>
+              <div className="flex justify-end">
+                <button type="submit" disabled={refunding} className="text-[12px] px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 font-bold disabled:opacity-60">
+                  {refunding ? "Processing…" : "Process Refund"}
+                </button>
+              </div>
+            </form>
+          )}
 
           {/* Update form */}
           <form onSubmit={submit} className="space-y-4 pt-2 border-t border-[#ede4d8]">

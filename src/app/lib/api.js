@@ -119,6 +119,35 @@ export function normaliseProduct(p) {
   };
 }
 
+// ── Invoice download ─────────────────────────────────────────────────────────
+// Fetches the invoice PDF (auth required) and triggers a browser download.
+export async function downloadInvoice(orderId, orderNumber) {
+  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+  const res = await fetch(`${API}/orders/my/${orderId}/invoice`, {
+    credentials: "include",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+
+  if (!res.ok) {
+    let message = `Failed to download invoice (${res.status})`;
+    try {
+      const json = await res.json();
+      message = json?.message || message;
+    } catch {}
+    throw new Error(message);
+  }
+
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `Invoice-${orderNumber || orderId}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+}
+
 export function fmtDate(d) {
   if (!d) return "";
   return new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });

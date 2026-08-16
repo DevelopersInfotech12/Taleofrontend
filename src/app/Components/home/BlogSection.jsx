@@ -81,7 +81,7 @@ export default function BlogSection() {
                   fontWeight: 700,
                   lineHeight: 1.08,
                   margin: 0,
-                   color: "#3d1f10",
+                  color: "#3d1f10",
                   letterSpacing: "-0.02em",
                 }}
                 className=""
@@ -155,7 +155,7 @@ export default function BlogSection() {
                 </h3>
 
                 {/* Excerpt — Inter */}
-                <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.8, margin: 0, fontWeight: 600, textAlign: "justify" }} className="text-[#8a7560] dark:text-[#c9a96e]">
+                <p className="text-justify sm:w-[92%] dark:text-[#b1a99f]" style={{ fontSize: 14.5, lineHeight: 1.8, margin: 0, fontWeight: 700, letterSpacing: "0.01em", color: "#646363" }}>
                   {post.excerpt}
                 </p>
 

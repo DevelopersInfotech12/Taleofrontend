@@ -202,10 +202,12 @@ function SignUpForm({ onSwitch }) {
       <form onSubmit={submit} className="flex flex-col gap-2.5">
         <Field label="Full Name" name="name" value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })} required autoComplete="name" />
-        <Field label="Email" name="reg-email" type="email" value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
-        <Field label="Phone" name="phone" type="tel" value={form.phone}
-          onChange={(e) => setForm({ ...form, phone: e.target.value })} autoComplete="tel" />
+        <div className="tl-auth__row2">
+          <Field label="Email" name="reg-email" type="email" value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })} required autoComplete="email" />
+          <Field label="Phone" name="phone" type="tel" value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })} autoComplete="tel" />
+        </div>
         <Field label="Password" name="reg-password" type="password" value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="new-password" />
         <button type="submit" disabled={busy}
@@ -326,14 +328,12 @@ const CSS = `
   --tl-white:  ${C.white};
   --tl-ease:   500ms cubic-bezier(0.65, 0, 0.35, 1);
 
-  /* Contains the z-index:100 overlay so it can't paint over the
-     fixed navbar (z-50) or the offer strip above it. */
   isolation: isolate;
 
   position: relative;
   width: 100%;
   max-width: 960px;
-  min-height: 520px;
+  min-height: 460px;
   margin: 0 auto;
   overflow: hidden;
   background: var(--tl-white);
@@ -342,9 +342,6 @@ const CSS = `
   box-shadow: 0 18px 60px rgba(26,12,6,0.10);
 }
 
-/* ── Inputs ──
-   14px on desktop for a compact form; bumped to 16px on touch because
-   iOS auto-zooms the viewport on focus for anything smaller. */
 .tl-auth__input {
   font-size: 14px;
   min-height: 40px;
@@ -355,7 +352,16 @@ const CSS = `
   .tl-auth__input { font-size: 16px; min-height: 44px; padding: 11px 14px; }
 }
 
-/* ── Form panes ── */
+/* ── 3-row signup: email + phone share a row ── */
+.tl-auth__row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 380px) {
+  .tl-auth__row2 { grid-template-columns: 1fr; }
+}
+
 .tl-auth__pane {
   position: absolute;
   top: 0;
@@ -393,7 +399,6 @@ const CSS = `
   transition: transform var(--tl-ease), opacity var(--tl-ease), visibility 0s;
 }
 
-/* ── Sliding brown panel ── */
 .tl-auth__overlay-box {
   position: absolute;
   top: 0;
@@ -476,12 +481,10 @@ const CSS = `
   outline-offset: 2px;
 }
 
-/* Desktop uses the panel button, so hide the inline text switch */
 @media (min-width: 768px) {
   .tl-auth__switch-inline { display: none; }
 }
 
-/* ── Mobile: no room to slide — stack and swap ── */
 @media (max-width: 767px) {
   .tl-auth {
     min-height: 0;
@@ -502,7 +505,6 @@ const CSS = `
   .tl-auth[data-mode="register"] .tl-auth__pane--signin { display: none; }
 }
 
-/* ── Respect reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .tl-auth,
   .tl-auth * {
@@ -511,7 +513,6 @@ const CSS = `
   }
 }
 
-/* Visually hidden, still announced */
 .tl-auth__sr {
   position: absolute;
   width: 1px; height: 1px;

@@ -14,7 +14,7 @@ const BODY = "'Inter', sans-serif";
 // ────────────────────────────────────────────────────────────────────────────
 
 const categories = [
- { name: "Sehaj", slug: "rings", img: "/sehajcateg.png" },
+  { name: "Sehaj", slug: "rings", img: "/sehajcateg.png" },
   { name: "Kanak", slug: "necklaces", img: "/kanakcateg.png" },
   { name: "Raunak", slug: "earrings", img: "/raunakcateg.png" },
   { name: "Mehfil", slug: "bracelets", img: "/mehfilcateg.png" },
@@ -42,7 +42,7 @@ export default function ShopByCategory() {
   });
 
   return (
-    <section ref={ref} className="py-12 md:py-20 bg-[#f5efe8]">
+    <section ref={ref} className="py-12 md:py-20 bg-[#faf7f2]">
       <div className="max-w-[1320px] mx-auto px-4 md:px-6">
 
         {/* ── Section Header (unified pattern) ── */}
@@ -77,7 +77,7 @@ export default function ShopByCategory() {
                 style={{
                   fontWeight: 400,
                   fontStyle: "italic",
-                  color: "#c9a96e",
+                  color: "#a67c2e",
                   letterSpacing: "-0.01em",
                 }}
               >
@@ -88,7 +88,7 @@ export default function ShopByCategory() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-[10px] bg-[#f0e8df] p-3 md:p-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-[10px] p-3 md:p-1">
           {categories.map(({ name, slug, img }, i) => {
             const subtitles = ["Fine & bridal", "Pendants & chains", "Studs & drops", "Bangles & cuffs", "For every occasion"];
             return (

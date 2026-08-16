@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
-import { fmtPrice } from "../lib/api";
+import { fmtPrice, downloadInvoice } from "../lib/api";
 import { useCart } from "../lib/CartContext";
 import { useAuth, authFetch } from "../lib/AuthContext";
 
@@ -451,7 +451,24 @@ function PaymentStep({ payment, setPayment, onNext, onBack, placing, placeError 
 }
 
 /* ─── STEP 4: Confirmation ─────────────── */
-function ConfirmStep({ form, total, orderId }) {
+function ConfirmStep({ form, total, orderId, orderResult }) {
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
+  const isPaid = orderResult?.paymentStatus === "paid";
+
+  const handleDownloadInvoice = async () => {
+    if (!orderResult?._id) return;
+    setDownloadError("");
+    setDownloading(true);
+    try {
+      await downloadInvoice(orderResult._id, orderResult.orderNumber);
+    } catch (err) {
+      setDownloadError(err.message || "Failed to download invoice");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   return (
     <div className="text-center py-8 max-w-lg mx-auto">
       <div className="relative w-20 h-20 mx-auto mb-6">
@@ -486,6 +503,24 @@ function ConfirmStep({ form, total, orderId }) {
           ))}
         </div>
       </div>
+
+      {isPaid && (
+        <div className="mb-6">
+          <button
+            onClick={handleDownloadInvoice}
+            disabled={downloading}
+            className="px-8 py-4 rounded-full font-bold text-xs uppercase transition-all hover-lift active:scale-95 disabled:opacity-60 inline-flex items-center gap-2"
+            style={{ fontFamily: "var(--font-jost)", border: `1.5px solid ${C.border}`, color: C.brown, letterSpacing: "0.15em" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><path d="M12 15V3" />
+            </svg>
+            {downloading ? "Preparing…" : "Download Invoice"}
+          </button>
+          {downloadError && (
+            <p style={{ fontFamily: "var(--font-jost)", fontSize: 12, color: "#c0392b", marginTop: 8 }}>{downloadError}</p>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link href="/shop"
@@ -718,7 +753,7 @@ export default function CheckoutScreen() {
               {step === 0 && <BagStep items={items} onNext={() => setStep(1)} />}
               {step === 1 && <DeliveryStep form={form} setForm={setForm} onNext={() => setStep(2)} onBack={() => setStep(0)} />}
               {step === 2 && <PaymentStep payment={payment} setPayment={setPayment} onNext={placeOrder} onBack={() => setStep(1)} placing={placing} placeError={placeError} />}
-              {step === 3 && <ConfirmStep form={form} total={total} orderId={orderResult?.orderNumber || orderId} />}
+              {step === 3 && <ConfirmStep form={form} total={total} orderId={orderResult?.orderNumber || orderId} orderResult={orderResult} />}
             </div>
 
             {step !== 3 && (
