@@ -8,6 +8,7 @@ import Image from "next/image";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
+  { href: "/admin/hero", label: "Hero Section", icon: "🖼️" },
   { href: "/admin/products", label: "Products", icon: "💎" },
   { href: "/admin/low-stock", label: "Low Stock", icon: "⚠️" },
   { href: "/admin/out-of-stock", label: "Out of Stock", icon: "🚫" },
@@ -32,18 +33,18 @@ export default function AdminShell({ children }) {
   const isActive = (href) => href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 
   return (
-    <div className="min-h-screen bg-[#f5efe8] flex">
+    <div className="min-h-screen bg-[#f5efe8] flex z-[100]">
       {/* Sidebar */}
       <aside className={`fixed md:sticky md:top-0 z-40 inset-y-0 left-0 w-60 h-screen bg-[#1a0c06] text-[#e8d5b0] flex flex-col transition-transform duration-200 ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
-        <div className="px-5 py-4 border-b border-[#3d2a1a] shrink-0">
+        <div className="px-5 py-3 border-b border-[#3d2a1a] shrink-0">
           {/* <span className="text-[#c9a96e] text-[20px] font-semibold tracking-wide" >Taleo</span> */}
           <p className="text-[12px] uppercase font-bold tracking-widest text-[#e8d5b0]/50 mt-0.5">Admin Panel</p>
         </div>
-        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto min-h-0 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/90 hover:[&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/50">
+        <nav className="flex-1 px-3 py-3 space-y-2.5 overflow-y-auto min-h-0 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/90 hover:[&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/50">
           {NAV.map(item => (
             <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 px-3 py-[8px] font-bold rounded-lg text-[11.5px] uppercase tracking-normal transition-colors ${isActive(item.href) ? "bg-[#3d2a1a] text-[#e8d5b0]" : "text-[#e8d5b0]/80 hover:bg-[#1a1008] hover:text-[#f5e6c8]"}`}>
-              <span className="text-[15px]">{item.icon}</span>{item.label}
+              className={`flex items-center gap-3 px-3 py-[10px] overflow-y-auto font-bold rounded-lg text-[13px] uppercase tracking-normal transition-colors ${isActive(item.href) ? "bg-[#3d2a1a] text-[#e8d5b0] py-1" : "text-[#e8d5b0]/80 hover:bg-[#1a1008] hover:text-[#f5e6c8]"}`}>
+              <span className="text-[18px]">{item.icon}</span>{item.label}
             </Link>
           ))}
         </nav>
@@ -69,17 +70,14 @@ export default function AdminShell({ children }) {
             <button onClick={() => setOpen(true)} className="text-[#e8d5b0] text-xl">☰</button>
           </div>
         </header>
-        <div className="hidden md:flex items-center justify-between px-6 border-b border-[#ede4d8] bg-white/90 sticky top-0 z-500">
-          {/* <span className="text-[#1a0c06] text-[20px] font-bold tracking-[0.18em] uppercase">
-            TALEO
-          </span> */}
+        <div className="hidden md:flex items-center justify-between px-6 h-16 border-b border-[#ede4d8] bg-white sticky top-0 z-50">
           <Image
             src="/logonew.png"
             alt="Taleo Fine Jewellery"
-            width={520}
-            height={1000}
+            width={500}
+            height={900}
             priority
-            className="h-16 md:h-20 lg:h-16 w-auto dark:hidden"
+            className="h-14 w-auto dark:hidden"
           />
           <div className="flex items-center gap-3">
             <span className="text-[12px] text-[#9c8a78] italic font-bold">

@@ -1,11 +1,16 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
+import { API, imgUrl } from "../../lib/api";
 
 const CATEGORY = "VIRSA";
 const INSTAGRAM_URL = "https://www.instagram.com/taleojewels/"; // update to real handle
 
-const CHAPTERS = [
+/**
+ * Fallback slides — used only when the admin panel has no active hero slides
+ * (or the API is unreachable). Manage live slides at /admin/hero.
+ */
+const FALLBACK_CHAPTERS = [
   {
     isIntro: true,
     category: CATEGORY,
@@ -62,10 +67,50 @@ const CHAPTERS = [
 
 const AUTOPLAY_MS = 6000;
 
+/** Map an admin HeroSlide document into the shape this component renders. */
+function toChapter(s) {
+  const desktop = imgUrl(s.image) || "";
+  const mobile  = imgUrl(s.mobileImage) || desktop;
+  return {
+    id: s._id,
+    isIntro: !!s.isIntro,
+    category: s.category || "",
+    chapter: s.chapter || "",
+    title: s.title || "",
+    tagline: s.tagline || "",
+    body: s.body || "",
+    footnote: s.footnote || "",
+    image: desktop,
+    mobileImage: mobile,
+    cta: s.ctaLabel ? { label: s.ctaLabel, href: s.ctaHref || "/" } : null,
+  };
+}
+
 export default function HeroBanner() {
+  const [chapters, setChapters] = useState(FALLBACK_CHAPTERS);
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(false);
   const timerRef = useRef(null);
+
+  // Pull admin-managed slides; silently keep the fallback if none exist.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API}/hero`, { cache: "no-store" });
+        if (!res.ok) return;
+        const json = await res.json();
+        const slides = Array.isArray(json?.data) ? json.data : [];
+        if (!cancelled && slides.length > 0) {
+          setChapters(slides.map(toChapter));
+          setActive(0);
+        }
+      } catch {
+        /* keep fallback */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
@@ -74,10 +119,11 @@ export default function HeroBanner() {
 
   const startAutoplay = useCallback(() => {
     clearInterval(timerRef.current);
+    if (chapters.length < 2) return;
     timerRef.current = setInterval(() => {
-      setActive((prev) => (prev + 1) % CHAPTERS.length);
+      setActive((prev) => (prev + 1) % chapters.length);
     }, AUTOPLAY_MS);
-  }, []);
+  }, [chapters.length]);
 
   useEffect(() => {
     startAutoplay();
@@ -89,17 +135,19 @@ export default function HeroBanner() {
     startAutoplay();
   };
 
-  const goPrev = () => goTo((active - 1 + CHAPTERS.length) % CHAPTERS.length);
-  const goNext = () => goTo((active + 1) % CHAPTERS.length);
+  const goPrev = () => goTo((active - 1 + chapters.length) % chapters.length);
+  const goNext = () => goTo((active + 1) % chapters.length);
+
+  if (chapters.length === 0) return null;
 
   return (
     <section
       className="relative w-full overflow-hidden h-[91vh] min-h-[560px] lg:h-[100vh] lg:min-h-[680px] lg:max-h-[880px]"
       style={{ background: "#1a0c06" }}
     >
-      {CHAPTERS.map((c, i) => (
+      {chapters.map((c, i) => (
         <div
-          key={c.title}
+          key={c.id || c.title}
           className="absolute inset-0"
           style={{ opacity: active === i ? 1 : 0, transition: "opacity 1.1s ease", zIndex: 0 }}
           aria-hidden={active !== i}
@@ -111,7 +159,7 @@ export default function HeroBanner() {
             style={{ transform: active === i ? "scale(1.04)" : "scale(1)", transition: "transform 7s ease" }}
           />
           <img
-            src={c.mobileImage}
+            src={c.mobileImage || c.image}
             alt={c.title}
             className="block lg:hidden w-full h-full object-cover"
             style={{ transform: active === i ? "scale(1.04)" : "scale(1)", transition: "transform 7s ease" }}
@@ -128,9 +176,9 @@ export default function HeroBanner() {
 
       <div className="relative z-10 h-full max-w-[1320px] mx-auto pl-14 pr-6 lg:px-16 lg:mt-6 flex items-center">
         <div className="max-w-[550px] w-full">
-          {CHAPTERS.map((c, i) => (
+          {chapters.map((c, i) => (
             <div
-              key={c.title}
+              key={c.id || c.title}
               style={{
                 display: active === i ? "block" : "none",
                 paddingLeft: c.isIntro ? 22 : 0,
@@ -138,18 +186,20 @@ export default function HeroBanner() {
               }}
               className={c.isIntro ? "mt-16 sm:mt-0" : ""}
             >
-              {!c.isIntro && <CategoryLabel label={c.category} visible={visible} />}
-              {!c.isIntro && <ChapterEyebrow label={c.chapter} visible={visible} />}
+              {!c.isIntro && c.category && <CategoryLabel label={c.category} visible={visible} />}
+              {!c.isIntro && c.chapter && <ChapterEyebrow label={c.chapter} visible={visible} />}
               <ChapterTitle title={c.title} big={c.isIntro} visible={visible} />
-              <ChapterTagline text={c.tagline} visible={visible} />
-              <ChapterBody text={c.body} wide={c.isIntro} visible={visible} />
+              {c.tagline && <ChapterTagline text={c.tagline} visible={visible} />}
+              {c.body && <ChapterBody text={c.body} wide={c.isIntro} visible={visible} />}
               {c.footnote && <ChapterFootnote text={c.footnote} visible={visible} />}
-              <ChapterCTA cta={c.cta} outline={c.isIntro} visible={visible} />
+              {c.cta && <ChapterCTA cta={c.cta} outline={c.isIntro} visible={visible} />}
             </div>
           ))}
         </div>
       </div>
 
+      {chapters.length > 1 && (
+      <>
       <button
         onClick={goPrev}
         aria-label="Previous chapter"
@@ -164,12 +214,15 @@ export default function HeroBanner() {
       >
         ›
       </button>
+      </>
+      )}
 
       <InstagramSideTab />
 
+      {chapters.length > 1 && (
       <div className="absolute bottom-7 left-0 right-0 z-20 flex items-center justify-center gap-3">
-        {CHAPTERS.map((c, i) => (
-          <button key={c.title} onClick={() => goTo(i)} aria-label={`Go to ${c.title}`} className="group flex items-center gap-2">
+        {chapters.map((c, i) => (
+          <button key={c.id || c.title} onClick={() => goTo(i)} aria-label={`Go to ${c.title}`} className="group flex items-center gap-2">
             <span
               style={{
                 display: "block",
@@ -195,6 +248,7 @@ export default function HeroBanner() {
           </button>
         ))}
       </div>
+      )}
     </section>
   );
 }
