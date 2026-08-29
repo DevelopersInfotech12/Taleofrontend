@@ -40,15 +40,15 @@ export default function AdminShell({ children }) {
           {/* <span className="text-[#c9a96e] text-[20px] font-semibold tracking-wide" >Taleo</span> */}
           <p className="text-[12px] uppercase font-bold tracking-widest text-[#e8d5b0]/50 mt-0.5">Admin Panel</p>
         </div>
-        <nav className="flex-1 px-3 py-3 space-y-2.5 overflow-y-auto min-h-0 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/90 hover:[&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/50">
+        <nav className="flex-1 px-3 py-5 overflow-y-auto min-h-0 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/90 hover:[&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/50">
           {NAV.map(item => (
             <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 px-3 py-[10px] overflow-y-auto font-bold rounded-lg text-[13px] uppercase tracking-normal transition-colors ${isActive(item.href) ? "bg-[#3d2a1a] text-[#e8d5b0] py-1" : "text-[#e8d5b0]/80 hover:bg-[#1a1008] hover:text-[#f5e6c8]"}`}>
+              className={`flex items-center gap-3 px-3 ${isActive(item.href) ? "py-[6px] bg-[#3d2a1a] text-[#e8d5b0]" : "py-[5px] text-[#e8d5b0]/80 hover:bg-[#1a1008] hover:text-[#f5e6c8]"} overflow-y-auto font-bold rounded-lg text-[13px] uppercase tracking-normal transition-colors`}>
               <span className="text-[18px]">{item.icon}</span>{item.label}
             </Link>
           ))}
         </nav>
-        <div className="px-4 py-3 border-t border-[#3d2a1a] shrink-0">
+        <div className="px-4 py-2 border-t border-[#3d2a1a] shrink-0">
           <p className="text-[12px] text-[#e8d5b0] truncate">{user?.name}</p>
           <p className="text-[10px] text-[#c9a96e]/50 truncate mb-2">{user?.email}</p>
           <button onClick={logout}
