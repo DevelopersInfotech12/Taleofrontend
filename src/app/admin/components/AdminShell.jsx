@@ -77,7 +77,7 @@ export default function AdminShell({ children }) {
             width={500}
             height={900}
             priority
-            className="h-14 w-auto dark:hidden"
+            className="h-20 w-auto dark:hidden"
           />
           <div className="flex items-center gap-3">
             <span className="text-[12px] text-[#9c8a78] italic font-bold">
