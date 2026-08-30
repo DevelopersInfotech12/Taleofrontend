@@ -3,21 +3,21 @@ import { useEffect } from "react";
 
 // ── Status Badge ───────────────────────────────────────────
 const STATUS_MAP = {
-  pending:    "bg-yellow-50 text-yellow-700 border-yellow-200",
-  placed:     "bg-yellow-50 text-yellow-700 border-yellow-200",
-  confirmed:  "bg-sky-50 text-sky-700 border-sky-200",
+  pending: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  placed: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  confirmed: "bg-sky-50 text-sky-700 border-sky-200",
   processing: "bg-blue-50 text-blue-700 border-blue-200",
-  shipped:    "bg-indigo-50 text-indigo-700 border-indigo-200",
-  delivered:  "bg-green-50 text-green-700 border-green-200",
-  cancelled:  "bg-red-50 text-red-700 border-red-200",
-  returned:   "bg-gray-50 text-gray-600 border-gray-200",
-  paid:       "bg-green-50 text-green-700 border-green-200",
-  failed:     "bg-red-50 text-red-700 border-red-200",
-  refunded:   "bg-gray-50 text-gray-600 border-gray-200",
-  active:     "bg-green-50 text-green-700 border-green-200",
-  inactive:   "bg-gray-50 text-gray-600 border-gray-200",
-  admin:      "bg-purple-50 text-purple-700 border-purple-200",
-  customer:   "bg-gray-50 text-gray-600 border-gray-200",
+  shipped: "bg-indigo-50 text-indigo-700 border-indigo-200",
+  delivered: "bg-green-50 text-green-700 border-green-200",
+  cancelled: "bg-red-50 text-red-700 border-red-200",
+  returned: "bg-gray-50 text-gray-600 border-gray-200",
+  paid: "bg-green-50 text-green-700 border-green-200",
+  failed: "bg-red-50 text-red-700 border-red-200",
+  refunded: "bg-gray-50 text-gray-600 border-gray-200",
+  active: "bg-green-50 text-green-700 border-green-200",
+  inactive: "bg-gray-50 text-gray-600 border-gray-200",
+  admin: "bg-purple-50 text-purple-700 border-purple-200",
+  customer: "bg-gray-50 text-gray-600 border-gray-200",
 };
 
 export function Badge({ status, label }) {
@@ -146,7 +146,7 @@ export function Pagination({ page, pages, onChange, total, limit = 10 }) {
 export function Field({ label, children, span }) {
   return (
     <div className={span ? "col-span-2" : ""}>
-      <label className="block text-[11px] uppercase tracking-widest text-[#9c8a78] mb-1.5">{label}</label>
+      <label className="block text-[12px] font-bold uppercase tracking-widest text-[#887766] mb-1.5">{label}</label>
       {children}
     </div>
   );
@@ -157,7 +157,7 @@ export const selectCls = inputCls + " appearance-none";
 
 export function PrimaryButton({ children, ...props }) {
   return (
-    <button {...props} className={`bg-[#1a1008] text-[#e8d5b0] px-4 py-2 rounded-lg text-[12px] uppercase tracking-widest font-medium hover:bg-[#3d2a1a] transition-colors disabled:opacity-60 ${props.className || ""}`}>
+    <button {...props} className={`bg-[#1a1008] text-[#e8d5b0] px-4 py-2 rounded-lg text-[12px] uppercase tracking-widest font-semibold hover:bg-[#3d2a1a] transition-colors disabled:opacity-60 ${props.className || ""}`}>
       {children}
     </button>
   );
@@ -219,7 +219,7 @@ export function StatStrip({ stats }) {
               style={{ background: "linear-gradient(90deg, #c9a84c, #e8c97a, #c9a84c)" }}
             />
           )}
-          <p className={`text-[10px] tracking-[0.15em] uppercase font-bold m-0 ${i === 0 ? "text-[#c9a84c]" : "text-[#9c8a78]"}`}>
+          <p className={`text-[12px] tracking-[0.15em] uppercase font-bold m-0 ${i === 0 ? "text-[#c9a84c]" : "text-[#9c8a78]"}`}>
             {label}
           </p>
           <p
@@ -251,7 +251,7 @@ export function FilterBar({ children }) {
 }
 
 export function FilterLabel({ children }) {
-  return <label className="block text-[9px] tracking-[0.18em] uppercase text-[#9c8a78] font-bold mb-[5px]">{children}</label>;
+  return <label className="block text-[11px] tracking-[0.18em] uppercase text-[#9c8a78] font-bold mb-[5px]">{children}</label>;
 }
 
 export function ResetButton({ onClick, children = "Clear" }) {

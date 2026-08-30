@@ -1,10 +1,20 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
+import { API, imgUrl } from "../../lib/api";
 
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
 
-const FAQS = [
+const FALLBACK_COPY = {
+  eyebrow: "Got Questions",
+  headingMain: "Frequently",
+  headingAccent: "asked",
+  subtitle: "Everything you need to know before your purchase.",
+  badgeText: "Doubts? Ask TALEO.",
+  image: "./faq.png",
+};
+
+const FAQS_FALLBACK = [
   { q: "How long does shipping take?", a: "All orders ship free via insured courier and arrive within 3–7 business days domestically. International orders may take 7–14 days." },
   { q: "Is your gold hallmarked?", a: "Every piece is BIS 916 hallmarked, certifying purity and authenticity. A certificate accompanies each order." },
   { q: "Can I return or exchange an item?", a: "Yes — return any unworn piece in its original packaging within 30 days for a full refund or exchange." },
@@ -123,6 +133,39 @@ export default function Faq() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   const [openIndex, setOpenIndex] = useState(0);
+  const [copy, setCopy] = useState(FALLBACK_COPY);
+  const [faqs, setFaqs] = useState(FAQS_FALLBACK);
+
+  // Pull admin-managed content; silently keep the built-in fallback if none
+  // exists yet or the API is unreachable. Manage this at /admin/faq.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API}/faq`, { cache: "no-store" });
+        const json = await res.json();
+        const doc = json?.data;
+        if (cancelled || !doc) return;
+
+        setCopy({
+          eyebrow: doc.eyebrow || FALLBACK_COPY.eyebrow,
+          headingMain: doc.headingMain || FALLBACK_COPY.headingMain,
+          headingAccent: doc.headingAccent || FALLBACK_COPY.headingAccent,
+          subtitle: doc.subtitle || FALLBACK_COPY.subtitle,
+          badgeText: doc.badgeText || FALLBACK_COPY.badgeText,
+          image: doc.image ? imgUrl(doc.image) : FALLBACK_COPY.image,
+        });
+
+        if (Array.isArray(doc.items) && doc.items.length > 0) {
+          const sorted = [...doc.items].sort((a, b) => a.sortOrder - b.sortOrder);
+          setFaqs(sorted.map((it) => ({ q: it.question, a: it.answer })));
+        }
+      } catch {
+        // keep fallback
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -157,26 +200,26 @@ export default function Faq() {
             <div className="flex items-center gap-3" style={fade(0)}>
               <span style={{ display: "block", width: 24, height: 1 }} className="bg-[#a67c2e]" />
               <span style={{ fontFamily: DISPLAY, fontSize: 11, fontWeight: 700, letterSpacing: "0.32em", textTransform: "uppercase" }} className="text-[#a67c2e]">
-                Got Questions
+                {copy.eyebrow}
               </span>
             </div>
             <div style={fade(0.1)}>
               <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2rem, 3.6vw, 2.8rem)", fontWeight: 700, color: "#3d1f10", lineHeight: 1.1, margin: 0, letterSpacing: "-0.02em" }}>
-                Frequently{" "}
+                {copy.headingMain}{" "}
                 <span style={{ fontWeight: 400, fontStyle: "italic", letterSpacing: "-0.01em" }} className="text-[#9b7020]">
-                  asked
+                  {copy.headingAccent}
                 </span>
               </h2>
             </div>
             <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.6, margin: "8px 0 0", fontWeight: 600, ...fade(0.2) }} className="text-[#7a6a5a]">
-              Everything you need to know before your purchase.
+              {copy.subtitle}
             </p>
 
             <div
               className="sm:h-[290px] relative"
               style={{ ...fade(0.3), marginTop: 28, borderRadius: 18, overflow: "hidden", aspectRatio: "4/5" }}
             >
-              <img src="./faq.png" alt="Gold jewelry close up" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img src={copy.image} alt="Gold jewelry close up" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               <div
                 aria-hidden
                 style={{
@@ -199,7 +242,7 @@ export default function Faq() {
                 }}
               >
                 <span style={{ fontFamily: DISPLAY, fontSize: 13, fontWeight: 600 }} className="text-[#3d1f10] mx-auto text-center block">
-                  Doubts? Ask TALEO.
+                  {copy.badgeText}
                 </span>
               </div>
             </div>
@@ -207,7 +250,7 @@ export default function Faq() {
 
           {/* Right — accordion list */}
           <div>
-            {FAQS.map((item, i) => (
+            {faqs.map((item, i) => (
               <FaqItem
                 key={item.q}
                 item={item}

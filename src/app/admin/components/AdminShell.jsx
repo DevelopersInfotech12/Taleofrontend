@@ -9,6 +9,10 @@ import Image from "next/image";
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
   { href: "/admin/hero", label: "Hero Section", icon: "🖼️" },
+  { href: "/admin/heritage", label: "Heritage Craft", icon: "🏺" },
+  { href: "/admin/products-hero", label: "Products Hero", icon: "🎞️" },
+  { href: "/admin/promo-banners", label: "Promo Banner", icon: "🎯" },
+  { href: "/admin/faq", label: "FAQ Section", icon: "❓" },
   { href: "/admin/products", label: "Products", icon: "💎" },
   { href: "/admin/low-stock", label: "Low Stock", icon: "⚠️" },
   { href: "/admin/out-of-stock", label: "Out of Stock", icon: "🚫" },
@@ -30,7 +34,8 @@ export default function AdminShell({ children }) {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const isActive = (href) => href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
+  const isActive = (href) =>
+    href === "/admin" ? pathname === "/admin" : pathname === href || pathname.startsWith(href + "/");
 
   return (
     <div className="min-h-screen bg-[#f5efe8] flex z-[100]">
@@ -40,7 +45,7 @@ export default function AdminShell({ children }) {
           {/* <span className="text-[#c9a96e] text-[20px] font-semibold tracking-wide" >Taleo</span> */}
           <p className="text-[12px] uppercase font-bold tracking-widest text-[#e8d5b0]/50 mt-0.5">Admin Panel</p>
         </div>
-        <nav className="flex-1 px-3 py-5 overflow-y-auto min-h-0 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/90 hover:[&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/50">
+        <nav className="flex-1 px-3 py-3 overflow-y-auto min-h-0 [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/90 hover:[&::-webkit-scrollbar-thumb]:bg-[#c9a96e]/50">
           {NAV.map(item => (
             <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
               className={`flex items-center gap-3 px-3 ${isActive(item.href) ? "py-[6px] bg-[#3d2a1a] text-[#e8d5b0]" : "py-[5px] text-[#e8d5b0]/80 hover:bg-[#1a1008] hover:text-[#f5e6c8]"} overflow-y-auto font-bold rounded-lg text-[13px] uppercase tracking-normal transition-colors`}>
@@ -70,14 +75,14 @@ export default function AdminShell({ children }) {
             <button onClick={() => setOpen(true)} className="text-[#e8d5b0] text-xl">☰</button>
           </div>
         </header>
-        <div className="hidden md:flex items-center justify-between px-6 h-16 border-b border-[#ede4d8] bg-white sticky top-0 z-50">
+        <div className="hidden md:flex items-center justify-between pl-6 pr-6 h-16 border-b border-[#ede4d8] bg-white sticky top-0 z-50">
           <Image
-            src="/logonew.png"
+            src="/logo/logonew.png"
             alt="Taleo Fine Jewellery"
-            width={500}
+            width={300}
             height={900}
             priority
-            className="h-20 w-auto dark:hidden"
+            className="h-12 w-auto dark:hidden"
           />
           <div className="flex items-center gap-3">
             <span className="text-[12px] text-[#9c8a78] italic font-bold">

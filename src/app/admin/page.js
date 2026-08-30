@@ -11,7 +11,7 @@ function StatCard({ label, value, sub, icon, accent, href }) {
     <div className={`bg-white rounded-xl p-5 border border-[#ede4d8] flex items-start gap-4 h-full ${href ? "hover:border-[#c9a84c] transition-colors" : ""}`}>
       <div className={`w-11 h-11 rounded-lg flex items-center justify-center text-xl shrink-0 ${accent}`}>{icon}</div>
       <div className="min-w-0">
-        <p className="text-[10px] uppercase tracking-widest text-[#9c8a78] font-bold">{label}</p>
+        <p className="text-[12px] uppercase tracking-widest text-[#9c8a78] font-bold">{label}</p>
         <p className="text-[22px] font-semibold text-[#1a1008] leading-tight mt-0.5 truncate">{value}</p>
         {sub && <p className="text-[11px] text-[#b0a090] mt-0.5 font-poppins">{sub}</p>}
       </div>
@@ -121,11 +121,11 @@ function MiniChart({ data }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-1">
-        <div className="flex gap-4 text-[11px] text-[#9c8a78]">
+        <div className="flex gap-4 text-[13px] text-[#9c8a78]">
           <span>Avg: {fmt(avg)}/mo</span>
           <span>Peak: {fmt(peak)} ({peakMonth})</span>
         </div>
-        <span className="text-[11px] text-[#9c8a78]">
+        <span className="text-[12px] text-[#9c8a78]">
           Total: ₹{(total / 1000).toFixed(0)}k
         </span>
       </div>
@@ -224,8 +224,8 @@ export default function DashboardPage() {
                 <span className="text-[11px] text-[#b0a090] w-4">{i + 1}</span>
                 {p.images?.[0] && <img src={p.images[0]} alt="" className="w-8 h-8 rounded object-cover border border-[#ede4d8]" />}
                 <div className="flex-1 min-w-0">
-                  <p className="text-[12px] text-[#1a1008] truncate">{p.name}</p>
-                  <p className="text-[10px] text-[#9c8a78]">{p.soldCount || 0} sold</p>
+                  <p className="text-[13px] font-semibold text-[#1a1008] truncate">{p.name}</p>
+                  <p className="text-[12px] text-[#9c8a78]">{p.soldCount || 0} sold</p>
                 </div>
                 <p className="text-[12px] font-medium font-poppins text-[#1a1008]">{fmtCurrency(p.price)}</p>
               </div>
@@ -252,12 +252,12 @@ export default function DashboardPage() {
           <EmptyState message="No pending shipments — all orders are shipped" />
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[14px]">
               <Thead headers={["Order #", "Customer", "Amount", "Status", "Placed"]} />
               <tbody>
                 {pending.orders.map((o) => (
                   <tr key={o._id} className={rowCls}>
-                    <AccentCell className="pl-5 font-poppins text-[11px] text-[#5c4f42]">{o.orderNumber || o._id?.slice(-8).toUpperCase()}</AccentCell>
+                    <AccentCell className="pl-5 font-poppins text-[13px] text-[#5c4f42]">{o.orderNumber || o._id?.slice(-8).toUpperCase()}</AccentCell>
                     <td className="px-4 py-3 text-[#1a1008]">{o.user?.name || "—"}</td>
                     <td className="px-4 py-3 font-semibold font-poppins text-[#1a1008]">{fmtCurrency(o.total)}</td>
                     <td className="px-4 py-3"><Badge status={o.status} /></td>
@@ -281,12 +281,12 @@ export default function DashboardPage() {
           <EmptyState message="No orders yet" />
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[14px]">
               <Thead headers={["Order #", "Customer", "Amount", "Status", "Date"]} />
               <tbody>
                 {data.recentOrders.map((o) => (
                   <tr key={o._id} className={rowCls}>
-                    <AccentCell className="pl-5 font-poppins text-[11px] text-[#5c4f42]">{o.orderNumber || o._id?.slice(-8).toUpperCase()}</AccentCell>
+                    <AccentCell className="pl-5 font-poppins text-[13px] text-[#5c4f42]">{o.orderNumber || o._id?.slice(-8).toUpperCase()}</AccentCell>
                     <td className="px-4 py-3 text-[#1a1008]">{o.user?.name || "—"}</td>
                     <td className="px-4 py-3 font-semibold font-poppins text-[#1a1008]">{fmtCurrency(o.total)}</td>
                     <td className="px-4 py-3"><Badge status={o.status} /></td>

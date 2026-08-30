@@ -10,12 +10,7 @@ export default function ProductsPage() {
         title="Products"
         subtitle="Discover our jewellery"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Products" }]}
-        desktopImages={[
-          "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1600&q=80&fit=crop",
-        ]}
-        mobileImages={[
-          "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80&fit=crop",
-        ]}
+        useAdminSlides
       />
       <Footer />
     </div>

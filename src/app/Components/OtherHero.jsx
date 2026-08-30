@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
+import { API, imgUrl } from "../lib/api";
 
 const INTERVAL = 6000;
 
@@ -36,12 +37,31 @@ const DEFAULT_SLIDES = [
     },
 ];
 
+/** Maps an admin ProductHeroSlide document into this component's slide shape. */
+function toSlide(s) {
+    const desktop = imgUrl(s.image) || "";
+    const mobile = imgUrl(s.mobileImage) || desktop;
+    return {
+        desktop,
+        mobile,
+        heading: s.heading || "",
+        meta: s.meta || "",
+        collection: s.collection || "",
+        description: s.description || "",
+        cta: s.ctaLabel || "",
+        ctaHref: s.ctaHref || "",
+    };
+}
+
 export default function OtherHero({
     title,
     subtitle,
     breadcrumb = [],
     desktopImages,
     mobileImages,
+    // When true, this instance pulls its slides from /admin/products-hero
+    // instead of the built-in defaults. Manage them at /admin/products-hero.
+    useAdminSlides = false,
 }) {
     const [cur, setCur] = useState(0);
     const [prev, setPrev] = useState(null);
@@ -50,11 +70,32 @@ export default function OtherHero({
     const [isMob, setIsMob] = useState(false);
     const [entered, setEntered] = useState(false);
     const [descKey, setDescKey] = useState(0);
+    const [adminSlides, setAdminSlides] = useState(null);
     const timerRef = useRef(null);
     const rafRef = useRef(null);
     const t0Ref = useRef(null);
 
-    const slides = DEFAULT_SLIDES.map((s, i) => ({
+    // Pull admin-managed slides when opted in; silently keep the built-in
+    // defaults if none exist yet or the API is unreachable.
+    useEffect(() => {
+        if (!useAdminSlides) return;
+        let cancelled = false;
+        (async () => {
+            try {
+                const res = await fetch(`${API}/product-hero`, { cache: "no-store" });
+                const json = await res.json();
+                if (!cancelled && Array.isArray(json?.data) && json.data.length) {
+                    setAdminSlides(json.data.map(toSlide));
+                }
+            } catch {
+                // keep defaults
+            }
+        })();
+        return () => { cancelled = true; };
+    }, [useAdminSlides]);
+
+    const baseSlides = adminSlides && adminSlides.length ? adminSlides : DEFAULT_SLIDES;
+    const slides = baseSlides.map((s, i) => ({
         ...s,
         desktop: desktopImages?.[i] || s.desktop,
         mobile: mobileImages?.[i] || s.mobile,
@@ -230,13 +271,23 @@ export default function OtherHero({
 
                         {/* CTA */}
                         <div key={`cta-${descKey}`} className="oh2-desc" style={{ animationDelay: "0.5s" }}>
-                            <button className="oh2-cta">
-                                {s.cta}
-                                <svg width="14" height="10" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                    <line x1="0" y1="7" x2="17" y2="7" />
-                                    <polyline points="11,1 17,7 11,13" />
-                                </svg>
-                            </button>
+                            {s.ctaHref ? (
+                                <a href={s.ctaHref} className="oh2-cta">
+                                    {s.cta}
+                                    <svg width="14" height="10" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                        <line x1="0" y1="7" x2="17" y2="7" />
+                                        <polyline points="11,1 17,7 11,13" />
+                                    </svg>
+                                </a>
+                            ) : (
+                                <button className="oh2-cta">
+                                    {s.cta}
+                                    <svg width="14" height="10" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                        <line x1="0" y1="7" x2="17" y2="7" />
+                                        <polyline points="11,1 17,7 11,13" />
+                                    </svg>
+                                </button>
+                            )}
                         </div>
                     </div>
 

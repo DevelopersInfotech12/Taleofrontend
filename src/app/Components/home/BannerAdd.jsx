@@ -3,18 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "../motion/Reveal";
+import { API, imgUrl } from "../../lib/api";
 
-const desktopBanners = [
-  { id: "d1", src: "./banneraddnew.png", alt: "Banner 1" },
-  { id: "d2", src: "./banneraddnew2.png", alt: "Banner 2" },
-  { id: "d3", src: "./banneraddnew3.png", alt: "Banner 3" },
-  { id: "d4", src: "./banneraddnew4.png", alt: "Banner 4" },
+const desktopBannersFallback = [
+  { id: "d1", src: "./banneraddnew.png", alt: "Banner 1", href: "" },
+  { id: "d2", src: "./banneraddnew2.png", alt: "Banner 2", href: "" },
+  { id: "d3", src: "./banneraddnew3.png", alt: "Banner 3", href: "" },
+  { id: "d4", src: "./banneraddnew4.png", alt: "Banner 4", href: "" },
 ];
 
-const mobileBanners = [
-  { id: "m1", src: "./bannermobileadd1.png", alt: "Banner 1" },
-  { id: "m2", src: "./bannermobileadd2.png", alt: "Banner 2" },
-  { id: "m3", src: "./bannermobileadd3.png", alt: "Banner 3" },
+const mobileBannersFallback = [
+  { id: "m1", src: "./bannermobileadd1.png", alt: "Banner 1", href: "" },
+  { id: "m2", src: "./bannermobileadd2.png", alt: "Banner 2", href: "" },
+  { id: "m3", src: "./bannermobileadd3.png", alt: "Banner 3", href: "" },
 ];
 
 function Slider({ banners, height }) {
@@ -24,15 +25,19 @@ function Slider({ banners, height }) {
   const total = banners.length;
 
   const go = (n) => {
+    if (total === 0) return;
     setIdx((n + total) % total);
     clearInterval(timer.current);
     timer.current = setInterval(() => setIdx((p) => (p + 1) % total), 4000);
   };
 
   useEffect(() => {
+    if (total === 0) return;
     timer.current = setInterval(() => setIdx((p) => (p + 1) % total), 4000);
     return () => clearInterval(timer.current);
   }, [total]);
+
+  if (total === 0) return null;
 
   return (
     <div style={{ position: "relative", width: "100%", height }}>
@@ -41,13 +46,25 @@ function Slider({ banners, height }) {
         <div style={{ display: "flex", height: "100%", transform: `translateX(-${idx * 100}%)`, transition: "transform 0.6s cubic-bezier(0.4,0,0.2,1)" }}>
           {banners.map((b) => (
             <div key={b.id} style={{ minWidth: "100%", height: "100%" , borderRadius: 16, overflow: "hidden" }}>
-              <motion.img
-                src={b.src}
-                alt={b.alt}
-                style={{ width: "100%", height: "85%", objectFit: "cover",borderRadius: 16 , display: "block" }}
-                whileHover={{ scale: 1.04 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              />
+              {b.href ? (
+                <a href={b.href} style={{ display: "block", width: "100%", height: "100%" }}>
+                  <motion.img
+                    src={b.src}
+                    alt={b.alt}
+                    style={{ width: "100%", height: "85%", objectFit: "cover",borderRadius: 16 , display: "block" }}
+                    whileHover={{ scale: 1.04 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                </a>
+              ) : (
+                <motion.img
+                  src={b.src}
+                  alt={b.alt}
+                  style={{ width: "100%", height: "85%", objectFit: "cover",borderRadius: 16 , display: "block" }}
+                  whileHover={{ scale: 1.04 }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -75,6 +92,33 @@ function Slider({ banners, height }) {
 }
 
 export default function BannerAdd() {
+  const [desktopBanners, setDesktopBanners] = useState(desktopBannersFallback);
+  const [mobileBanners, setMobileBanners] = useState(mobileBannersFallback);
+
+  // Pull admin-managed slides; silently keep the built-in fallback if none
+  // exist yet or the API is unreachable. Manage these at /admin/promo-banners.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API}/promo-banners`, { cache: "no-store" });
+        const json = await res.json();
+        const data = json?.data;
+        if (cancelled || !Array.isArray(data) || data.length === 0) return;
+
+        setDesktopBanners(data.map((b) => ({
+          id: b._id, src: imgUrl(b.image), alt: b.alt || "", href: b.href || "",
+        })));
+        setMobileBanners(data.map((b) => ({
+          id: b._id, src: imgUrl(b.mobileImage || b.image), alt: b.alt || "", href: b.href || "",
+        })));
+      } catch {
+        // keep fallback
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
   return (
     <section style={{ backgroundColor: "#f5f0e8" }} className="w-full px-4 sm:px-8 py-5 sm:py-8">
       <Reveal as="div" className="hidden md:block">
