@@ -148,25 +148,25 @@ export default function UsersPage() {
       <TableShell>
         {loading ? <Spinner /> : filtered.length === 0 ? <EmptyState message="No users found" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px]">
               <Thead headers={["User", "Phone", "Role", "Addresses", "Joined", "Status", "Actions"]} />
               <tbody>
                 {filtered.map((u) => (
                   <tr key={u._id} className={rowCls}>
                     <AccentCell className="pl-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-[#e8d5b0] text-[#8b6914] flex items-center justify-center text-[11px] font-semibold flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-[#e8d5b0] text-[#8b6914] flex items-center justify-center text-[12px] font-semibold flex-shrink-0">
                           {initials(u.name)}
                         </div>
                         <div>
-                          <p className="text-[#1a1008] font-semibold text-[12.5px]">{u.name}</p>
-                          <p className="text-[10px] text-[#9c8a78]">{u.email}</p>
+                          <p className="text-[#1a1008] font-semibold text-[13.5px]">{u.name}</p>
+                          <p className="text-[11px] text-[#9c8a78]">{u.email}</p>
                         </div>
                       </div>
                     </AccentCell>
                     <td className="px-4 py-3 text-[#5c4f42]">{u.phone || "—"}</td>
                     <td className="px-4 py-3">
-                      <select className={selectCls + " text-[11px] py-1"} value={u.role} onChange={e => changeRole(u, e.target.value)}>
+                      <select className={selectCls + " text-[12px] py-1"} value={u.role} onChange={e => changeRole(u, e.target.value)}>
                         <option value="customer">Customer</option>
                         <option value="admin">Admin</option>
                       </select>

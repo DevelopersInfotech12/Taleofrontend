@@ -91,27 +91,29 @@ export default function OutOfStockPage() {
       ]} />
 
       <FilterBar>
-        <div className="flex-1 min-w-[160px]">
+        <div className="flex-1 min-w-[160px] text-[13px]">
           <FilterLabel>Search</FilterLabel>
-          <input className={filterInputCls} placeholder="Name or SKU…" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
+          <input className={`${filterInputCls} text-[13px]`} placeholder="Name or SKU…" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Category</FilterLabel>
-          <select className={filterSelectCls + " min-w-[150px] pr-8"} value={category} onChange={e => { setCategory(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[150px] pr-8 text-[13px]"} value={category} onChange={e => { setCategory(e.target.value); setPage(1); }}>
             <option value="">All Categories</option>
             {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Sort</FilterLabel>
-          <select className={filterSelectCls + " min-w-[160px] pr-8"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[160px] pr-8 text-[13px]"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
             <option value="name-asc">Name: A-Z</option>
             <option value="popular">Most Sold (before running out)</option>
           </select>
         </div>
-        <ResetButton onClick={resetFilters} />
+        <div className="text-[13px]">
+          <ResetButton onClick={resetFilters} />
+        </div>
       </FilterBar>
 
       <ErrorBanner message={error} />
@@ -119,7 +121,7 @@ export default function OutOfStockPage() {
       <TableShell>
         {loading ? <Spinner /> : products.length === 0 ? <EmptyState message="Nothing is out of stock right now" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px]">
               <Thead headers={["Product", "Category", "Price", "Stock", "Status", "SKU", "Actions"]} />
               <tbody>
                 {products.map((p) => (
@@ -127,16 +129,20 @@ export default function OutOfStockPage() {
                     <AccentCell className="pl-5">
                       <div className="flex items-center gap-3">
                         {p.images?.[0] ? <img src={imgUrl(p.images[0])} alt="" className="w-10 h-10 rounded object-cover border border-[#ede4d8]" /> : <div className="w-10 h-10 rounded bg-[#f0e8dc]" />}
-                        <p className="text-[#706152] font-[650] max-w-[190px] text-[12.5px] truncate">{p.name}</p>
+                        <p className="text-[#706152] font-[650] max-w-[190px] text-[13.5px] truncate">{p.name}</p>
                       </div>
                     </AccentCell>
                     <td className="px-4 py-3 text-[#5c4f42]">{p.category?.name || "—"}</td>
                     <td className="px-4 py-3 text-[#1a1008] font-medium font-poppins">{fmtCurrency(p.price)}</td>
                     <td className="px-4 py-3 font-poppins text-red-600 font-semibold">0</td>
-                    <td className="px-4 py-3"><Badge status={p.isActive ? "cancelled" : "inactive"} label={p.isActive ? "Out of Stock" : "Inactive"} /></td>
+                    <td className="px-4 py-3">
+                      <div className="scale-110 origin-left inline-block">
+                        <Badge status={p.isActive ? "cancelled" : "inactive"} label={p.isActive ? "Out of Stock" : "Inactive"} />
+                      </div>
+                    </td>
                     <td className="px-4 py-3 text-[#9c8a78]">{p.sku || "—"}</td>
                     <td className="px-4 py-3">
-                      <button onClick={() => openEdit(p)} className={editBtnCls}>Restock</button>
+                      <button onClick={() => openEdit(p)} className={`${editBtnCls} text-[13px]`}>Restock</button>
                     </td>
                   </tr>
                 ))}

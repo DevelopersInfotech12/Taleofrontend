@@ -100,28 +100,30 @@ export default function CouponsPage() {
       ]} />
 
       <FilterBar>
-        <div className="flex-1 min-w-[160px]">
+        <div className="flex-1 min-w-[160px] text-[13px]">
           <FilterLabel>Search</FilterLabel>
-          <input className={filterInputCls} placeholder="Code…" value={search} onChange={e => setSearch(e.target.value)} />
+          <input className={`${filterInputCls} text-[13px]`} placeholder="Code…" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Type</FilterLabel>
-          <select className={filterSelectCls + " min-w-[130px]"} value={type} onChange={e => setType(e.target.value)}>
+          <select className={filterSelectCls + " min-w-[130px] text-[13px]"} value={type} onChange={e => setType(e.target.value)}>
             <option value="">All</option>
             <option value="percent">Percent</option>
             <option value="flat">Flat</option>
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Status</FilterLabel>
-          <select className={filterSelectCls + " min-w-[130px]"} value={status} onChange={e => setStatus(e.target.value)}>
+          <select className={filterSelectCls + " min-w-[130px] text-[13px]"} value={status} onChange={e => setStatus(e.target.value)}>
             <option value="">All</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
             <option value="expired">Expired</option>
           </select>
         </div>
-        <ResetButton onClick={resetFilters} />
+        <div className="text-[13px]">
+          <ResetButton onClick={resetFilters} />
+        </div>
       </FilterBar>
 
       <ErrorBanner message={error} />
@@ -129,7 +131,7 @@ export default function CouponsPage() {
       <TableShell>
         {loading ? <Spinner /> : filtered.length === 0 ? <EmptyState message="No coupons found" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px]">
               <Thead headers={["Code", "Type", "Value", "Min Order", "Used / Limit", "Expires", "Status", "Actions"]} />
               <tbody>
                 {filtered.map((c) => {
@@ -137,19 +139,27 @@ export default function CouponsPage() {
                   return (
                     <tr key={c._id} className={rowCls}>
                       <AccentCell className="pl-5">
-                        <span className="font-poppins text-[11px] bg-[#f0e8dc] text-[#8b6914] px-2 py-1 rounded font-medium">{c.code}</span>
-                        {c.description && <p className="text-[10px] text-[#9c8a78] mt-1">{c.description}</p>}
+                        <span className="font-poppins text-[12px] bg-[#f0e8dc] text-[#8b6914] px-2 py-1 rounded font-medium">{c.code}</span>
+                        {c.description && <p className="text-[11px] text-[#9c8a78] mt-1">{c.description}</p>}
                       </AccentCell>
-                      <td className="px-4 py-3"><Badge status={c.discountType} label={c.discountType === "percent" ? "Percent" : "Flat"} /></td>
+                      <td className="px-4 py-3">
+                        <div className="scale-110 origin-left inline-block [&>*]:justify-center [&>*]:text-center [&>*]:w-full">
+                          <Badge status={c.discountType} label={c.discountType === "percent" ? "Percent" : "Flat"} />
+                        </div>
+                      </td>
                       <td className="px-4 py-3 font-medium text-[#1a1008]">{c.discountType === "percent" ? `${c.discountValue}%` : fmtCurrency(c.discountValue)}</td>
                       <td className="px-4 py-3 text-[#5c4f42]">{c.minOrderValue ? fmtCurrency(c.minOrderValue) : "—"}</td>
                       <td className="px-4 py-3 text-[#5c4f42]">{c.usedCount || 0} / {c.usageLimit || "∞"}</td>
                       <td className="px-4 py-3 text-[#9c8a78]">{c.expiresAt ? fmtDate(c.expiresAt) : "Never"}</td>
-                      <td className="px-4 py-3"><Badge status={st.key} label={st.label} /></td>
+                      <td className="px-4 py-3">
+                        <div className="scale-110 origin-left inline-block [&>*]:justify-center [&>*]:text-center [&>*]:w-full">
+                          <Badge status={st.key} label={st.label} />
+                        </div>
+                      </td>
                       <td className="px-4 py-3">
                         <div className="flex gap-3">
-                          <button onClick={() => openEdit(c)} className={editBtnCls}>Edit</button>
-                          <button onClick={() => setDeleteTarget(c)} className={delBtnCls}>Del</button>
+                          <button onClick={() => openEdit(c)} className={`${editBtnCls} text-[13px]`}>Edit</button>
+                          <button onClick={() => setDeleteTarget(c)} className={`${delBtnCls} text-[13px]`}>Del</button>
                         </div>
                       </td>
                     </tr>

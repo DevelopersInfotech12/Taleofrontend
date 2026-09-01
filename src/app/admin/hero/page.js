@@ -111,7 +111,7 @@ export default function HeroPage() {
           <EmptyState message="No hero slides yet — add one. Until then the homepage shows its built-in default slides." />
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px] font-semibold">
               <Thead headers={["Order", "Preview", "Slide", "Button", "Status", "Actions"]} />
               <tbody>
                 {items.map((s, i) => (
@@ -137,35 +137,35 @@ export default function HeroPage() {
                       <div className="w-20 h-14 rounded-md overflow-hidden border border-[#ede4d8] bg-[#1a0c06] flex items-center justify-center">
                         {s.image
                           ? <img src={imgUrl(s.image)} alt="" className="w-full h-full object-cover" />
-                          : <span className="text-[9px] text-[#c9a84c]/60">none</span>}
+                          : <span className="text-[10px] text-[#c9a84c]/60">none</span>}
                       </div>
                     </td>
 
                     <td className="px-4 py-3">
-                      <p className="font-semibold text-[13px] text-[#1a1008]">
+                      <p className="font-semibold text-[16px] font-semibold text-[#1a1008]">
                         {s.title}
-                        {s.isIntro && <span className="ml-2 text-[9px] uppercase tracking-widest text-[#c9a84c]">intro</span>}
+                        {s.isIntro && <span className="ml-2 text-[10px] uppercase tracking-widest text-[#c9a84c]">intro</span>}
                       </p>
-                      {s.chapter && <p className="text-[11px] text-[#9c8a78] mt-0.5">{s.chapter}</p>}
-                      {s.tagline && <p className="text-[11px] text-[#706152] italic mt-0.5 max-w-[320px] truncate">{s.tagline}</p>}
+                      {s.chapter && <p className="text-[12px] text-[#9c8a78] mt-0.5">{s.chapter}</p>}
+                      {s.tagline && <p className="text-[13px] text-[#706152] italic mt-0.5 max-w-[320px] truncate">{s.tagline}</p>}
                     </td>
 
                     <td className="px-4 py-3">
                       {s.ctaLabel
-                        ? <span className="text-[11px] text-[#5c4f42]">{s.ctaLabel}<br /><span className="text-[10px] text-[#b0a090]">{s.ctaHref}</span></span>
-                        : <span className="text-[11px] text-[#b0a090]">—</span>}
+                        ? <span className="text-[13px] font-semibold text-[#5c4f42]">{s.ctaLabel}<br /><span className="text-[11px] text-[#b0a090]">{s.ctaHref}</span></span>
+                        : <span className="text-[12px] text-[#b0a090]">—</span>}
                     </td>
 
                     <td className="px-4 py-3">
-                      <button onClick={() => toggleActive(s)}>
+                      <button onClick={() => toggleActive(s)} className="text-[12px] [&_*]:text-[12px]">
                         <Badge status={s.isActive ? "active" : "inactive"} label={s.isActive ? "Live" : "Hidden"} />
                       </button>
                     </td>
 
                     <td className="px-4 py-3">
                       <div className="flex gap-3">
-                        <button onClick={() => openEdit(s)} className={editBtnCls}>Edit</button>
-                        <button onClick={() => setDeleteTarget(s)} className={delBtnCls}>Del</button>
+                        <button onClick={() => openEdit(s)} className={`${editBtnCls} text-[12px]`}>Edit</button>
+                        <button onClick={() => setDeleteTarget(s)} className={`${delBtnCls} text-[12px]`}>Del</button>
                       </div>
                     </td>
                   </tr>

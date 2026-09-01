@@ -143,18 +143,18 @@ export default function TasksPage() {
       <TableShell>
         {loading ? <Spinner /> : tasks.length === 0 ? <EmptyState message="No tasks found" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px]">
               <Thead headers={["Task", "Priority", "Status", "Due Date", "Assigned To", "Created", "Actions"]} />
               <tbody>
                 {tasks.map((t) => (
                   <tr key={t._id} className={rowCls}>
                     <AccentCell className="pl-5">
-                      <p className="text-[#1a1008] font-semibold text-[12.5px]">{t.title}</p>
-                      {t.description && <p className="text-[10px] text-[#9c8a78] truncate max-w-[260px]">{t.description}</p>}
+                      <p className="text-[#1a1008] font-semibold text-[13.5px]">{t.title}</p>
+                      {t.description && <p className="text-[11px] text-[#9c8a78] truncate max-w-[260px]">{t.description}</p>}
                     </AccentCell>
                     <td className="px-4 py-3"><Badge status={PRIORITY_BADGE[t.priority]} label={t.priority} /></td>
                     <td className="px-4 py-3">
-                      <select className={selectCls + " text-[11px] py-1"} value={t.status} onChange={e => quickStatus(t, e.target.value)}>
+                      <select className={selectCls + " text-[12px] py-1"} value={t.status} onChange={e => quickStatus(t, e.target.value)}>
                         <option value="todo">To Do</option>
                         <option value="in_progress">In Progress</option>
                         <option value="done">Done</option>

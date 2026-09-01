@@ -63,6 +63,20 @@ export async function fetchBestsellers(limit = 8) {
   }
 }
 
+// ── Collections ──────────────────────────────────────────────────────────────
+
+export async function fetchCollections(limit) {
+  try {
+    const res = await fetch(`${API}/collections`, { next: { revalidate: 60 } });
+    if (!res.ok) return [];
+    const json = await res.json();
+    const cols = json.data ?? [];
+    return typeof limit === "number" ? cols.slice(0, limit) : cols;
+  } catch {
+    return [];
+  }
+}
+
 // ── Categories ────────────────────────────────────────────────────────────────
 
 export async function fetchCategories() {

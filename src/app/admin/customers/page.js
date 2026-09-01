@@ -71,20 +71,22 @@ export default function CustomersPage() {
       ]} />
 
       <FilterBar>
-        <div className="flex-1 min-w-[160px]">
+        <div className="flex-1 min-w-[160px] text-[13px]">
           <FilterLabel>Search</FilterLabel>
-          <input className={filterInputCls} placeholder="Name, email or phone…" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
+          <input className={`${filterInputCls} text-[13px]`} placeholder="Name, email or phone…" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Sort</FilterLabel>
-          <select className={filterSelectCls + " min-w-[160px]"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[160px] text-[13px]"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
             <option value="spent-desc">Total Spent: High to Low</option>
             <option value="orders-desc">Most Orders</option>
           </select>
         </div>
-        <ResetButton onClick={resetFilters} />
+        <div className="text-[13px]">
+          <ResetButton onClick={resetFilters} />
+        </div>
       </FilterBar>
 
       <ErrorBanner message={error} />
@@ -92,19 +94,19 @@ export default function CustomersPage() {
       <TableShell>
         {loading ? <Spinner /> : customers.length === 0 ? <EmptyState message="No customers found" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px]">
               <Thead headers={["Customer", "Phone", "Orders", "Total Spent", "Last Order", "Joined", "Status", ""]} />
               <tbody>
                 {customers.map((c) => (
                   <tr key={c._id} className={rowCls}>
                     <AccentCell className="pl-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-[#e8d5b0] text-[#8b6914] flex items-center justify-center text-[11px] font-semibold flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-[#e8d5b0] text-[#8b6914] flex items-center justify-center text-[12px] font-semibold flex-shrink-0">
                           {initials(c.name)}
                         </div>
                         <div>
-                          <p className="text-[#1a1008] font-semibold text-[12.5px]">{c.name}</p>
-                          <p className="text-[10px] text-[#9c8a78]">{c.email}</p>
+                          <p className="text-[#1a1008] font-semibold text-[13.5px]">{c.name}</p>
+                          <p className="text-[11px] text-[#9c8a78]">{c.email}</p>
                         </div>
                       </div>
                     </AccentCell>
@@ -113,9 +115,13 @@ export default function CustomersPage() {
                     <td className="px-4 py-3 font-semibold text-[#1a1008]">{fmtCurrency(c.totalSpent)}</td>
                     <td className="px-4 py-3 text-[#9c8a78]">{c.lastOrderAt ? fmtDate(c.lastOrderAt) : "—"}</td>
                     <td className="px-4 py-3 text-[#9c8a78]">{fmtDate(c.createdAt)}</td>
-                    <td className="px-4 py-3"><Badge status={c.isActive ? "active" : "inactive"} label={c.isActive ? "Active" : "Inactive"} /></td>
                     <td className="px-4 py-3">
-                      <button onClick={() => setSelectedCustomer(c._id)} className={editBtnCls}>View</button>
+                      <div className="scale-110 origin-left inline-block [&>*]:justify-center [&>*]:text-center [&>*]:w-full">
+                        <Badge status={c.isActive ? "active" : "inactive"} label={c.isActive ? "Active" : "Inactive"} />
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <button onClick={() => setSelectedCustomer(c._id)} className={`${editBtnCls} text-[13px]`}>View</button>
                     </td>
                   </tr>
                 ))}

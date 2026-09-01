@@ -85,20 +85,20 @@ export default function OrdersPage() {
       ]} />
 
       <FilterBar>
-        <div className="flex-1 min-w-[160px]">
+        <div className="flex-1 min-w-[160px] text-[13px]">
           <FilterLabel>Search Order #</FilterLabel>
-          <input className={filterInputCls} placeholder="AMM-00001" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
+          <input className={`${filterInputCls} text-[13px]`} placeholder="AMM-00001" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Status</FilterLabel>
-          <select className={filterSelectCls + " min-w-[130px]"} value={status} onChange={e => { setStatus(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[130px] text-[13px]"} value={status} onChange={e => { setStatus(e.target.value); setPage(1); }}>
             <option value="">All</option>
             {STATUSES.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Payment Status</FilterLabel>
-          <select className={filterSelectCls + " min-w-[130px]"} value={paymentStatus} onChange={e => { setPaymentStatus(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[130px] text-[13px]"} value={paymentStatus} onChange={e => { setPaymentStatus(e.target.value); setPage(1); }}>
             <option value="">All</option>
             <option value="pending">Pending</option>
             <option value="paid">Paid</option>
@@ -106,32 +106,34 @@ export default function OrdersPage() {
             <option value="refunded">Refunded</option>
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Payment Method</FilterLabel>
-          <select className={filterSelectCls + " min-w-[120px]"} value={paymentMethod} onChange={e => { setPaymentMethod(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[120px] text-[13px]"} value={paymentMethod} onChange={e => { setPaymentMethod(e.target.value); setPage(1); }}>
             <option value="">All</option>
             <option value="cod">COD</option>
             <option value="prepaid">Prepaid</option>
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>From</FilterLabel>
-          <input type="date" className={filterSelectCls + " min-w-[130px]"} value={startDate} onChange={e => { setStartDate(e.target.value); setPage(1); }} />
+          <input type="date" className={filterSelectCls + " min-w-[130px] text-[13px]"} value={startDate} onChange={e => { setStartDate(e.target.value); setPage(1); }} />
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>To</FilterLabel>
-          <input type="date" className={filterSelectCls + " min-w-[130px]"} value={endDate} onChange={e => { setEndDate(e.target.value); setPage(1); }} />
+          <input type="date" className={filterSelectCls + " min-w-[130px] text-[13px]"} value={endDate} onChange={e => { setEndDate(e.target.value); setPage(1); }} />
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Sort</FilterLabel>
-          <select className={filterSelectCls + " min-w-[150px]"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[150px] text-[13px]"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
             <option value="total-desc">Total: High to Low</option>
             <option value="total-asc">Total: Low to High</option>
           </select>
         </div>
-        <ResetButton onClick={resetFilters} />
+        <div className="text-[13px]">
+          <ResetButton onClick={resetFilters} />
+        </div>
       </FilterBar>
 
       <ErrorBanner message={error} />
@@ -139,28 +141,32 @@ export default function OrdersPage() {
       <TableShell>
         {loading ? <Spinner /> : orders.length === 0 ? <EmptyState message="No orders found" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px]">
               <Thead headers={["Order #", "Customer", "Items", "Total", "Payment", "Status", "Date", ""]} />
               <tbody>
                 {orders.map((o) => (
                   <tr key={o._id} className={rowCls}>
-                    <AccentCell className="pl-5 font-poppins text-[11px] text-[#5c4f42]">{o.orderNumber}</AccentCell>
+                    <AccentCell className="pl-5 font-poppins text-[12px] text-[#5c4f42]">{o.orderNumber}</AccentCell>
                     <td className="px-4 py-3">
                       <p className="text-[#1a1008] font-medium">{o.user?.name || "—"}</p>
-                      <p className="text-[10px] text-[#9c8a78]">{o.user?.email}</p>
+                      <p className="text-[11px] text-[#9c8a78]">{o.user?.email}</p>
                     </td>
                     <td className="px-4 py-3 text-[#5c4f42]">{o.items?.length}</td>
                     <td className="px-4 py-3 font-semibold text-[#1a1008]">{fmtCurrency(o.total)}</td>
                     <td className="px-4 py-3">
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col gap-1 scale-110 origin-left [&_span]:justify-center [&_span]:text-center [&_span]:w-full">
                         <Badge status={o.paymentMethod === "cod" ? "pending" : "paid"} label={o.paymentMethod?.toUpperCase()} />
                         <Badge status={o.paymentStatus} />
                       </div>
                     </td>
-                    <td className="px-4 py-3"><Badge status={o.status} /></td>
+                    <td className="px-4 py-3">
+                      <div className="scale-110 origin-left inline-block">
+                        <Badge status={o.status} />
+                      </div>
+                    </td>
                     <td className="px-4 py-3 text-[#9c8a78]">{fmtDate(o.createdAt)}</td>
                     <td className="px-4 py-3">
-                      <button onClick={() => setSelectedOrder(o._id)} className={editBtnCls}>View</button>
+                      <button onClick={() => setSelectedOrder(o._id)} className={`${editBtnCls} text-[13px]`}>View</button>
                     </td>
                   </tr>
                 ))}

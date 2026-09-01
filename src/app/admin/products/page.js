@@ -123,28 +123,28 @@ export default function ProductsPage() {
       ]} />
 
       <FilterBar>
-        <div className="flex-1 min-w-[160px]">
+        <div className="flex-1 min-w-[160px] text-[13px]">
           <FilterLabel>Search</FilterLabel>
-          <input className={filterInputCls} placeholder="Name or SKU…" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
+          <input className={`${filterInputCls} text-[13px]`} placeholder="Name or SKU…" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Category</FilterLabel>
-          <select className={filterSelectCls + " min-w-[150px] pr-8"} value={category} onChange={e => { setCategory(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[150px] pr-8 text-[13px]"} value={category} onChange={e => { setCategory(e.target.value); setPage(1); }}>
             <option value="">All Categories</option>
             {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Status</FilterLabel>
-          <select className={filterSelectCls + " min-w-[130px] pr-8"} value={status} onChange={e => { setStatus(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[130px] pr-8 text-[13px]"} value={status} onChange={e => { setStatus(e.target.value); setPage(1); }}>
             <option value="">All</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Tag / Stock</FilterLabel>
-          <select className={filterSelectCls + " min-w-[150px] pr-8"} value={flag} onChange={e => { setFlag(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[150px] pr-8 text-[13px]"} value={flag} onChange={e => { setFlag(e.target.value); setPage(1); }}>
             <option value="">All</option>
             <option value="featured">Featured</option>
             <option value="new">New Arrival</option>
@@ -153,9 +153,9 @@ export default function ProductsPage() {
             <option value="out">Out of Stock</option>
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Sort</FilterLabel>
-          <select className={filterSelectCls + " min-w-[160px] pr-8"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
+          <select className={filterSelectCls + " min-w-[160px] pr-8 text-[13px]"} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
             <option value="price-asc">Price: Low to High</option>
@@ -166,7 +166,9 @@ export default function ProductsPage() {
             <option value="popular">Most Sold</option>
           </select>
         </div>
-        <ResetButton onClick={resetFilters} />
+        <div className="text-[13px]">
+          <ResetButton onClick={resetFilters} />
+        </div>
       </FilterBar>
 
       <ErrorBanner message={error} />
@@ -174,7 +176,7 @@ export default function ProductsPage() {
       <TableShell>
         {loading ? <Spinner /> : products.length === 0 ? <EmptyState message="No products found" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[14px]">
               <Thead headers={["Product", "Category", "Price", "Stock", "Tags", "Status", "Actions"]} />
               <tbody>
                 {products.map((p) => (
@@ -183,33 +185,35 @@ export default function ProductsPage() {
                       <div className="flex items-center gap-3">
                         {p.images?.[0] ? <img src={imgUrl(p.images[0])} alt="" className="w-10 h-10 rounded object-cover border border-[#ede4d8]" /> : <div className="w-10 h-10 rounded bg-[#f0e8dc]" />}
                         <div className="min-w-0">
-                          <p className="text-[#706152] font-[650] max-w-[180px] text-[12.5px]">{p.name}</p>
-                          <p className="text-[10px] text-[#9c8a78]">{p.sku || "—"}</p>
+                          <p className="text-[#706152] font-[650] max-w-[180px] text-[14px]">{p.name}</p>
+                          <p className="text-[11px] text-[#9c8a78]">{p.sku || "—"}</p>
                         </div>
                       </div>
                     </AccentCell>
-                    <td className="px-4 py-3 text-[#5c4f42]">{p.category?.name || "—"}</td>
-                    <td className="px-4 py-3 text-[#1a1008] font-medium font-poppins">
+                    <td className="px-4 py-3 text-[#5c4f42] font-semibold">{p.category?.name || "—"}</td>
+                    <td className="px-4 py-3 text-[#1a1008] text-[13px] font-bold font-poppins">
                       {fmtCurrency(p.price)}
-                      {p.comparePrice > p.price && <span className="block text-[10px] text-[#b0a090] line-through">{fmtCurrency(p.comparePrice)}</span>}
+                      {p.comparePrice > p.price && <span className="block text-[13px] text-[#b0a090] line-through">{fmtCurrency(p.comparePrice)}</span>}
                     </td>
                     <td className="px-4 py-3 font-poppins">
                       <span className={p.stock === 0 ? "text-red-600 font-medium" : p.stock < 10 ? "text-amber-600 font-medium" : "text-[#5c4f42]"}>{p.stock}</span>
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex flex-wrap gap-1">
+                      <div className="flex flex-wrap gap-1 scale-110 origin-left">
                         {p.isFeatured && <Badge status="active" label="Featured" />}
                         {p.isNewArrival && <Badge status="confirmed" label="New" />}
                         {p.isBestseller && <Badge status="pending" label="Bestseller" />}
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <Badge status={p.isActive ? "active" : "inactive"} label={p.isActive ? "Active" : "Inactive"} />
+                      <div className="scale-110 origin-left inline-block">
+                        <Badge status={p.isActive ? "active" : "inactive"} label={p.isActive ? "Active" : "Inactive"} />
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-3">
-                        <button onClick={() => openEdit(p)} className={editBtnCls}>Edit</button>
-                        <button onClick={() => setDeleteTarget(p)} className={delBtnCls}>Delete</button>
+                        <button onClick={() => openEdit(p)} className={`${editBtnCls} text-[13px]`}>Edit</button>
+                        <button onClick={() => setDeleteTarget(p)} className={`${delBtnCls} text-[13px]`}>Delete</button>
                       </div>
                     </td>
                   </tr>

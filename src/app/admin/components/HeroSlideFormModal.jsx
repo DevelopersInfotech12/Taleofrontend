@@ -13,6 +13,15 @@ const emptyForm = {
   footnote: "",
   ctaLabel: "",
   ctaHref: "/collections",
+  // Mobile overrides — each falls back to the desktop field above when left blank
+  mobileCategory: "",
+  mobileChapter: "",
+  mobileTitle: "",
+  mobileTagline: "",
+  mobileBody: "",
+  mobileFootnote: "",
+  mobileCtaLabel: "",
+  mobileCtaHref: "",
   isIntro: false,
   isActive: true,
 };
@@ -83,6 +92,14 @@ export default function HeroSlideFormModal({ open, onClose, slide, onSaved, show
         footnote: slide.footnote || "",
         ctaLabel: slide.ctaLabel || "",
         ctaHref: slide.ctaHref || "/",
+        mobileCategory: slide.mobileCategory || "",
+        mobileChapter: slide.mobileChapter || "",
+        mobileTitle: slide.mobileTitle || "",
+        mobileTagline: slide.mobileTagline || "",
+        mobileBody: slide.mobileBody || "",
+        mobileFootnote: slide.mobileFootnote || "",
+        mobileCtaLabel: slide.mobileCtaLabel || "",
+        mobileCtaHref: slide.mobileCtaHref || "",
         isIntro: !!slide.isIntro,
         isActive: slide.isActive !== false,
       });
@@ -163,6 +180,38 @@ export default function HeroSlideFormModal({ open, onClose, slide, onSaved, show
           <Field label="Button Link">
             <input className={inputCls} value={form.ctaHref} onChange={(e) => update("ctaHref", e.target.value)} placeholder="/collections/mehfil" />
           </Field>
+        </div>
+
+        {/* Mobile copy overrides */}
+        <div className="pt-1">
+          <p className="text-[11px] uppercase tracking-widest text-[#9c8a78] mb-1">Mobile Content (optional)</p>
+          <p className="text-[11px] text-[#b0a090] mb-3">Shown on screens under 1024px. Leave any field blank to reuse the desktop copy above.</p>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Title (big headline)" span>
+              <input className={inputCls} value={form.mobileTitle} onChange={(e) => update("mobileTitle", e.target.value)} placeholder={form.title || "Same as desktop"} />
+            </Field>
+            <Field label="Category Tag">
+              <input className={inputCls} value={form.mobileCategory} onChange={(e) => update("mobileCategory", e.target.value)} placeholder={form.category || "Same as desktop"} />
+            </Field>
+            <Field label="Chapter Eyebrow">
+              <input className={inputCls} value={form.mobileChapter} onChange={(e) => update("mobileChapter", e.target.value)} placeholder={form.chapter || "Same as desktop"} />
+            </Field>
+            <Field label="Tagline (italic line)" span>
+              <input className={inputCls} value={form.mobileTagline} onChange={(e) => update("mobileTagline", e.target.value)} placeholder={form.tagline || "Same as desktop"} />
+            </Field>
+            <Field label="Body Paragraph" span>
+              <textarea rows={3} className={inputCls} value={form.mobileBody} onChange={(e) => update("mobileBody", e.target.value)} placeholder={form.body || "Same as desktop — consider a shorter version for small screens"} />
+            </Field>
+            <Field label="Footnote (optional)" span>
+              <textarea rows={2} className={inputCls} value={form.mobileFootnote} onChange={(e) => update("mobileFootnote", e.target.value)} placeholder={form.footnote || "Same as desktop"} />
+            </Field>
+            <Field label="Button Label">
+              <input className={inputCls} value={form.mobileCtaLabel} onChange={(e) => update("mobileCtaLabel", e.target.value)} placeholder={form.ctaLabel || "Same as desktop"} />
+            </Field>
+            <Field label="Button Link">
+              <input className={inputCls} value={form.mobileCtaHref} onChange={(e) => update("mobileCtaHref", e.target.value)} placeholder={form.ctaHref || "Same as desktop"} />
+            </Field>
+          </div>
         </div>
 
         {/* Images */}

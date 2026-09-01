@@ -67,27 +67,73 @@ const FALLBACK_CHAPTERS = [
 
 const AUTOPLAY_MS = 6000;
 
-/** Map an admin HeroSlide document into the shape this component renders. */
+/**
+ * Map an admin HeroSlide document into the shape this component renders.
+ * Each slide carries a `desktop` copy block (≥1024px) and a `mobile` copy
+ * block (<1024px). Any mobile* field left blank in the admin panel falls
+ * back to its desktop counterpart, same as mobileImage already does.
+ */
 function toChapter(s) {
-  const desktop = imgUrl(s.image) || "";
-  const mobile  = imgUrl(s.mobileImage) || desktop;
+  const desktopImg = imgUrl(s.image) || "";
+  const mobileImg  = imgUrl(s.mobileImage) || desktopImg;
   return {
     id: s._id,
     isIntro: !!s.isIntro,
-    category: s.category || "",
-    chapter: s.chapter || "",
-    title: s.title || "",
-    tagline: s.tagline || "",
-    body: s.body || "",
-    footnote: s.footnote || "",
-    image: desktop,
-    mobileImage: mobile,
-    cta: s.ctaLabel ? { label: s.ctaLabel, href: s.ctaHref || "/" } : null,
+    image: desktopImg,
+    mobileImage: mobileImg,
+    desktop: {
+      category: s.category || "",
+      chapter: s.chapter || "",
+      title: s.title || "",
+      tagline: s.tagline || "",
+      body: s.body || "",
+      footnote: s.footnote || "",
+      cta: s.ctaLabel ? { label: s.ctaLabel, href: s.ctaHref || "/" } : null,
+    },
+    mobile: {
+      category: s.mobileCategory || s.category || "",
+      chapter: s.mobileChapter || s.chapter || "",
+      title: s.mobileTitle || s.title || "",
+      tagline: s.mobileTagline || s.tagline || "",
+      body: s.mobileBody || s.body || "",
+      footnote: s.mobileFootnote || s.footnote || "",
+      cta: (s.mobileCtaLabel || s.ctaLabel)
+        ? { label: s.mobileCtaLabel || s.ctaLabel, href: s.mobileCtaHref || s.ctaHref || "/" }
+        : null,
+    },
+  };
+}
+
+/** Same normalisation for the static fallback slides below, so both sources render identically. */
+function toChapterFromFallback(f) {
+  return {
+    id: f.title,
+    isIntro: !!f.isIntro,
+    image: f.image,
+    mobileImage: f.mobileImage || f.image,
+    desktop: {
+      category: f.category || "",
+      chapter: f.chapter || "",
+      title: f.title || "",
+      tagline: f.tagline || "",
+      body: f.body || "",
+      footnote: f.footnote || "",
+      cta: f.cta || null,
+    },
+    mobile: {
+      category: f.mobileCategory || f.category || "",
+      chapter: f.mobileChapter || f.chapter || "",
+      title: f.mobileTitle || f.title || "",
+      tagline: f.mobileTagline || f.tagline || "",
+      body: f.mobileBody || f.body || "",
+      footnote: f.mobileFootnote || f.footnote || "",
+      cta: f.mobileCta || f.cta || null,
+    },
   };
 }
 
 export default function HeroBanner() {
-  const [chapters, setChapters] = useState(FALLBACK_CHAPTERS);
+  const [chapters, setChapters] = useState(() => FALLBACK_CHAPTERS.map(toChapterFromFallback));
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(false);
   const timerRef = useRef(null);
@@ -147,20 +193,20 @@ export default function HeroBanner() {
     >
       {chapters.map((c, i) => (
         <div
-          key={c.id || c.title}
+          key={c.id || c.desktop.title}
           className="absolute inset-0"
           style={{ opacity: active === i ? 1 : 0, transition: "opacity 1.1s ease", zIndex: 0 }}
           aria-hidden={active !== i}
         >
           <img
             src={c.image}
-            alt={c.title}
+            alt={c.desktop.title}
             className="hidden lg:block w-full h-full object-cover"
             style={{ transform: active === i ? "scale(1.04)" : "scale(1)", transition: "transform 7s ease" }}
           />
           <img
             src={c.mobileImage || c.image}
-            alt={c.title}
+            alt={c.mobile.title}
             className="block lg:hidden w-full h-full object-cover"
             style={{ transform: active === i ? "scale(1.04)" : "scale(1)", transition: "transform 7s ease" }}
           />
@@ -177,22 +223,40 @@ export default function HeroBanner() {
       <div className="relative z-10 h-full max-w-[1320px] mx-auto pl-14 pr-6 lg:px-16 lg:mt-6 flex items-center">
         <div className="max-w-[550px] w-full">
           {chapters.map((c, i) => (
-            <div
-              key={c.id || c.title}
-              style={{
-                display: active === i ? "block" : "none",
-                paddingLeft: c.isIntro ? 22 : 0,
-                borderLeft: c.isIntro ? "1px solid rgba(201,169,110,0.4)" : "none",
-              }}
-              className={c.isIntro ? "mt-16 sm:mt-0" : ""}
-            >
-              {!c.isIntro && c.category && <CategoryLabel label={c.category} visible={visible} />}
-              {!c.isIntro && c.chapter && <ChapterEyebrow label={c.chapter} visible={visible} />}
-              <ChapterTitle title={c.title} big={c.isIntro} visible={visible} />
-              {c.tagline && <ChapterTagline text={c.tagline} visible={visible} />}
-              {c.body && <ChapterBody text={c.body} wide={c.isIntro} visible={visible} />}
-              {c.footnote && <ChapterFootnote text={c.footnote} visible={visible} />}
-              {c.cta && <ChapterCTA cta={c.cta} outline={c.isIntro} visible={visible} />}
+            <div key={c.id || c.desktop.title} style={{ display: active === i ? "block" : "none" }}>
+              {/* Desktop copy — ≥1024px */}
+              <div
+                className={`hidden lg:block${c.isIntro ? " mt-16 sm:mt-0" : ""}`}
+                style={{
+                  paddingLeft: c.isIntro ? 22 : 0,
+                  borderLeft: c.isIntro ? "1px solid rgba(201,169,110,0.4)" : "none",
+                }}
+              >
+                {!c.isIntro && c.desktop.category && <CategoryLabel label={c.desktop.category} visible={visible} />}
+                {!c.isIntro && c.desktop.chapter && <ChapterEyebrow label={c.desktop.chapter} visible={visible} />}
+                <ChapterTitle title={c.desktop.title} big={c.isIntro} visible={visible} />
+                {c.desktop.tagline && <ChapterTagline text={c.desktop.tagline} visible={visible} />}
+                {c.desktop.body && <ChapterBody text={c.desktop.body} wide={c.isIntro} visible={visible} />}
+                {c.desktop.footnote && <ChapterFootnote text={c.desktop.footnote} visible={visible} />}
+                {c.desktop.cta && <ChapterCTA cta={c.desktop.cta} outline={c.isIntro} visible={visible} />}
+              </div>
+
+              {/* Mobile copy — <1024px, falls back to desktop copy per-field when blank */}
+              <div
+                className={`block lg:hidden${c.isIntro ? " mt-16 sm:mt-0" : ""}`}
+                style={{
+                  paddingLeft: c.isIntro ? 22 : 0,
+                  borderLeft: c.isIntro ? "1px solid rgba(201,169,110,0.4)" : "none",
+                }}
+              >
+                {!c.isIntro && c.mobile.category && <CategoryLabel label={c.mobile.category} visible={visible} />}
+                {!c.isIntro && c.mobile.chapter && <ChapterEyebrow label={c.mobile.chapter} visible={visible} />}
+                <ChapterTitle title={c.mobile.title} big={c.isIntro} visible={visible} />
+                {c.mobile.tagline && <ChapterTagline text={c.mobile.tagline} visible={visible} />}
+                {c.mobile.body && <ChapterBody text={c.mobile.body} wide={c.isIntro} visible={visible} />}
+                {c.mobile.footnote && <ChapterFootnote text={c.mobile.footnote} visible={visible} />}
+                {c.mobile.cta && <ChapterCTA cta={c.mobile.cta} outline={c.isIntro} visible={visible} />}
+              </div>
             </div>
           ))}
         </div>
@@ -222,7 +286,7 @@ export default function HeroBanner() {
       {chapters.length > 1 && (
       <div className="absolute bottom-7 left-0 right-0 z-20 flex items-center justify-center gap-3">
         {chapters.map((c, i) => (
-          <button key={c.id || c.title} onClick={() => goTo(i)} aria-label={`Go to ${c.title}`} className="group flex items-center gap-2">
+          <button key={c.id || c.desktop.title} onClick={() => goTo(i)} aria-label={`Go to ${c.desktop.title}`} className="group flex items-center gap-2">
             <span
               style={{
                 display: "block",
@@ -243,7 +307,7 @@ export default function HeroBanner() {
                 transition: "color 0.4s ease",
               }}
             >
-              {c.title}
+              {c.desktop.title}
             </span>
           </button>
         ))}

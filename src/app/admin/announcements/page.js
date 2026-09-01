@@ -107,7 +107,7 @@ export default function AnnouncementsPage() {
       <TableShell>
         {loading ? <Spinner /> : items.length === 0 ? <EmptyState message="No offers yet — add one to populate the top scrolling strip" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px]">
               <Thead headers={["Order", "Offer Text", "Status", "Actions"]} />
               <tbody>
                 {items.map((a, i) => (
@@ -128,16 +128,16 @@ export default function AnnouncementsPage() {
                         >▼</button>
                       </div>
                     </AccentCell>
-                    <td style={{color: "#706152"}} className="px-4 font-bold py-3 text">✦ {a.text}</td>
+                    <td style={{ color: "#706152" }} className="px-4 font-bold py-3 text-[13px]">✦ {a.text}</td>
                     <td className="px-4 py-3">
-                      <button onClick={() => toggleActive(a)}>
+                      <button onClick={() => toggleActive(a)} className="scale-110 origin-left inline-block [&>*]:justify-center [&>*]:text-center [&>*]:w-full">
                         <Badge status={a.isActive ? "active" : "inactive"} label={a.isActive ? "Active" : "Hidden"} />
                       </button>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-3">
-                        <button onClick={() => openEdit(a)} className={editBtnCls}>Edit</button>
-                        <button onClick={() => setDeleteTarget(a)} className={delBtnCls}>Del</button>
+                        <button onClick={() => openEdit(a)} className={`${editBtnCls} text-[13px]`}>Edit</button>
+                        <button onClick={() => setDeleteTarget(a)} className={`${delBtnCls} text-[13px]`}>Del</button>
                       </div>
                     </td>
                   </tr>

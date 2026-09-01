@@ -1,14 +1,59 @@
 "use client";
-import { useState, useEffect } from "react";
-import { apiFetch } from "../lib/api";
+import { useState, useEffect, useRef } from "react";
+import { apiFetch, imgUrl } from "../lib/api";
 import { useAuth } from "../lib/AdminAuthContext";
 import { Modal, Field, inputCls, PrimaryButton, SecondaryButton } from "./ui";
 
 const emptyForm = { name: "", slug: "", description: "", tags: "", sortOrder: 0, isFeatured: false, isActive: true };
 
+/** Single image picker with preview + remove (shown on homepage "New chapters to explore" tile). */
+function ImagePicker({ label, hint, existing, file, onFile, onClear }) {
+  const inputRef = useRef(null);
+  const preview = file ? URL.createObjectURL(file) : existing ? imgUrl(existing) : "";
+
+  useEffect(() => {
+    return () => { if (file) URL.revokeObjectURL(preview); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [file]);
+
+  return (
+    <div>
+      <label className="block text-[11px] uppercase tracking-widest text-[#9c8a78] mb-1.5">{label}</label>
+      <div className="flex items-start gap-3">
+        <div className="w-20 h-24 rounded-lg overflow-hidden border border-[#e0d4c4] bg-[#fdfaf6] flex items-center justify-center shrink-0">
+          {preview
+            ? <img src={preview} alt="" className="w-full h-full object-cover" />
+            : <span className="text-[10px] text-[#b0a090] text-center px-2">No image</span>}
+        </div>
+        <div className="flex-1 min-w-0">
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            onChange={(e) => onFile(e.target.files?.[0] || null)}
+            className="text-[12px] text-[#5c4f42] w-full"
+          />
+          {hint && <p className="text-[10px] text-[#b0a090] mt-1.5 leading-relaxed">{hint}</p>}
+          {preview && (
+            <button
+              type="button"
+              onClick={() => { onClear(); if (inputRef.current) inputRef.current.value = ""; }}
+              className="text-[10px] text-red-500 hover:text-red-700 mt-1 uppercase tracking-widest"
+            >
+              Remove image
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CollectionFormModal({ open, onClose, collection, onSaved, showToast }) {
   const { token } = useAuth();
   const [form, setForm] = useState(emptyForm);
+  const [existingImage, setExistingImage] = useState("");
+  const [imageFile, setImageFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,9 +68,12 @@ export default function CollectionFormModal({ open, onClose, collection, onSaved
         isFeatured: !!collection.isFeatured,
         isActive: collection.isActive !== false,
       });
+      setExistingImage(collection.image || "");
     } else {
       setForm(emptyForm);
+      setExistingImage("");
     }
+    setImageFile(null);
     setError("");
   }, [collection, open]);
 
@@ -45,6 +93,7 @@ export default function CollectionFormModal({ open, onClose, collection, onSaved
       fd.append("sortOrder", form.sortOrder);
       fd.append("isFeatured", form.isFeatured);
       fd.append("isActive", form.isActive);
+      if (imageFile) fd.append("image", imageFile);
 
       if (collection) {
         await apiFetch(`/collections/${collection._id}`, token, { method: "PUT", body: fd });
@@ -72,6 +121,14 @@ export default function CollectionFormModal({ open, onClose, collection, onSaved
         <Field label="Slug (optional)">
           <input className={inputCls} value={form.slug} onChange={e => update("slug", e.target.value)} placeholder="auto-generated" />
         </Field>
+        <ImagePicker
+          label="Tile Image"
+          hint="Shown on the homepage “New chapters to explore” section."
+          existing={existingImage}
+          file={imageFile}
+          onFile={(f) => setImageFile(f)}
+          onClear={() => { setImageFile(null); setExistingImage(""); }}
+        />
         <Field label="Description">
           <textarea rows={2} className={inputCls} value={form.description} onChange={e => update("description", e.target.value)} />
         </Field>

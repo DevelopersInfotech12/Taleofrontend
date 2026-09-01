@@ -101,26 +101,28 @@ export default function CategoriesPage() {
       ]} />
 
       <FilterBar>
-        <div className="flex-1 min-w-[160px]">
+        <div className="flex-1 min-w-[160px] text-[13px]">
           <FilterLabel>Search</FilterLabel>
-          <input className={filterInputCls} placeholder="Name or slug…" value={search} onChange={e => setSearch(e.target.value)} />
+          <input className={`${filterInputCls} text-[13px]`} placeholder="Name or slug…" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Status</FilterLabel>
-          <select className={filterSelectCls + " min-w-[130px]"} value={status} onChange={e => setStatus(e.target.value)}>
+          <select className={filterSelectCls + " min-w-[130px] text-[13px]"} value={status} onChange={e => setStatus(e.target.value)}>
             <option value="">All</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
         </div>
-        <div>
+        <div className="text-[13px]">
           <FilterLabel>Collection</FilterLabel>
-          <select className={filterSelectCls + " min-w-[150px]"} value={collectionFilter} onChange={e => setCollectionFilter(e.target.value)}>
+          <select className={filterSelectCls + " min-w-[150px] text-[13px]"} value={collectionFilter} onChange={e => setCollectionFilter(e.target.value)}>
             <option value="">All</option>
             {collections.map(col => <option key={col._id} value={col._id}>{col.name}</option>)}
           </select>
         </div>
-        <ResetButton onClick={resetFilters} />
+        <div className="text-[13px]">
+          <ResetButton onClick={resetFilters} />
+        </div>
       </FilterBar>
 
       <ErrorBanner message={error} />
@@ -128,7 +130,7 @@ export default function CategoriesPage() {
       <TableShell>
         {loading ? <Spinner /> : filtered.length === 0 ? <EmptyState message="No categories found" /> : (
           <div className="overflow-x-auto">
-            <table className="w-full text-[12px]">
+            <table className="w-full text-[13px]">
               <Thead headers={["Category", "Slug", "Collection", "Sort", "Status", "Created", "Actions"]} />
               <tbody>
                 {filtered.map((c) => (
@@ -136,18 +138,26 @@ export default function CategoriesPage() {
                     <AccentCell className="pl-5">
                       <div className="flex items-center gap-3">
                         {c.image ? <img src={imgUrl(c.image)} alt="" className="w-10 h-10 rounded object-cover border border-[#ede4d8]" /> : <div className="w-10 h-10 rounded bg-[#f0e8dc]" />}
-                        <p className="text-[#1a1008] font-semibold text-[12.5px]">{c.name}</p>
+                        <p className="text-[#1a1008] font-semibold text-[13.5px]">{c.name}</p>
                       </div>
                     </AccentCell>
-                    <td className="px-4 py-3 font-mono text-[11px] text-[#9c8a78]">{c.slug}</td>
-                    <td className="px-4 py-3">{c.collection?.name ? <Badge status="active" label={c.collection.name} /> : <span className="text-[#9c8a78]">—</span>}</td>
+                    <td className="px-4 py-3 font-mono text-[12px] text-[#9c8a78]">{c.slug}</td>
+                    <td className="px-4 py-3">
+                      {c.collection?.name
+                        ? <div className="scale-110 origin-left inline-block"><Badge status="active" label={c.collection.name} /></div>
+                        : <span className="text-[#9c8a78]">—</span>}
+                    </td>
                     <td className="px-4 py-3 text-[#5c4f42]">{c.sortOrder}</td>
-                    <td className="px-4 py-3"><Badge status={c.isActive ? "active" : "inactive"} label={c.isActive ? "Active" : "Inactive"} /></td>
+                    <td className="px-4 py-3">
+                      <div className="scale-110 origin-left inline-block">
+                        <Badge status={c.isActive ? "active" : "inactive"} label={c.isActive ? "Active" : "Inactive"} />
+                      </div>
+                    </td>
                     <td className="px-4 py-3 text-[#9c8a78]">{fmtDate(c.createdAt)}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-3">
-                        <button onClick={() => openEdit(c)} className={editBtnCls}>Edit</button>
-                        <button onClick={() => setDeleteTarget(c)} className={delBtnCls}>Del</button>
+                        <button onClick={() => openEdit(c)} className={`${editBtnCls} text-[13px]`}>Edit</button>
+                        <button onClick={() => setDeleteTarget(c)} className={`${delBtnCls} text-[13px]`}>Del</button>
                       </div>
                     </td>
                   </tr>

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { fetchCollections, imgUrl } from "../../lib/api";
 
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
 const BODY = "'Inter', sans-serif";
@@ -13,17 +14,35 @@ const BODY = "'Inter', sans-serif";
 // Sub-line: Inter 11px / 400 / tracking 0.2em / uppercase / muted
 // ────────────────────────────────────────────────────────────────────────────
 
-const categories = [
-  { name: "Sehaj", slug: "rings", img: "/sehajcateg.png" },
-  { name: "Kanak", slug: "necklaces", img: "/kanakcateg.png" },
-  { name: "Raunak", slug: "earrings", img: "/raunakcateg.png" },
-  { name: "Mehfil", slug: "bracelets", img: "/mehfilcateg.png" },
-  { name: "Virsa", slug: "gifts", img: "/virsa.png" },
+// Fallback, shown only until the admin-managed collections load (or if none exist yet)
+const FALLBACK_CATEGORIES = [
+  { name: "Sehaj", slug: "rings", img: "/sehajcateg.png", description: "Fine & bridal" },
+  { name: "Kanak", slug: "necklaces", img: "/kanakcateg.png", description: "Pendants & chains" },
+  { name: "Raunak", slug: "earrings", img: "/raunakcateg.png", description: "Studs & drops" },
+  { name: "Mehfil", slug: "bracelets", img: "/mehfilcateg.png", description: "Bangles & cuffs" },
+  { name: "Virsa", slug: "gifts", img: "/virsa.png", description: "For every occasion" },
 ];
 
 export default function ShopByCategory() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
+  const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
+
+  useEffect(() => {
+    fetchCollections(5).then((cols) => {
+      if (cols.length > 0) {
+        setCategories(
+          cols.map((c) => ({
+            name: c.name,
+            slug: c.slug,
+            img: c.image ? imgUrl(c.image) : "/sehajcateg.png",
+            description: c.description || "",
+          }))
+        );
+      }
+    });
+  }, []);
+
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.1 });
     if (ref.current) obs.observe(ref.current);
@@ -90,7 +109,6 @@ export default function ShopByCategory() {
         {/* Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-[10px] p-3 md:p-1">
           {categories.map(({ name, slug, img }, i) => {
-            const subtitles = ["Fine & bridal", "Pendants & chains", "Studs & drops", "Bangles & cuffs", "For every occasion"];
             return (
               <Link
                 key={slug}

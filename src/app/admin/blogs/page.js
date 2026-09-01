@@ -22,7 +22,7 @@ export default function BlogsPage() {
   const [status, setStatus] = useState("");
   const [tag, setTag] = useState("");
 
-  const [mode, setMode] = useState("list"); // "list" | "editor"
+  const [mode, setMode] = useState("list");
   const [editing, setEditing] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
@@ -102,9 +102,8 @@ export default function BlogsPage() {
       {/* ── Header ── */}
       <div className="flex items-end justify-between mb-8">
         <div>
-          {/* Eyebrow */}
           <p style={{
-            fontSize: 10,
+            fontSize: 11,
             letterSpacing: "0.2em",
             textTransform: "uppercase",
             color: "#c9a84c",
@@ -135,7 +134,7 @@ export default function BlogsPage() {
             background: "linear-gradient(135deg, #c9a84c 0%, #e8c97a 50%, #c9a84c 100%)",
             color: "#1a1008",
             fontWeight: 700,
-            fontSize: 11,
+            fontSize: 12,
             letterSpacing: "0.15em",
             textTransform: "uppercase",
             padding: "0 22px",
@@ -181,7 +180,7 @@ export default function BlogsPage() {
               }} />
             )}
             <p style={{
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               fontWeight: 700,
@@ -217,7 +216,7 @@ export default function BlogsPage() {
         borderRadius: 10,
       }}>
         <div style={{ flex: 1, minWidth: 160 }}>
-          <label style={{ display: "block", fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9c8a78", fontWeight: 700, marginBottom: 5 }}>
+          <label style={{ display: "block", fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9c8a78", fontWeight: 700, marginBottom: 5 }}>
             Search
           </label>
           <input
@@ -227,7 +226,7 @@ export default function BlogsPage() {
               border: "1px solid #ddd5c8",
               borderRadius: 6,
               padding: "0 12px",
-              fontSize: 12,
+              fontSize: 13,
               color: "#1a1008",
               background: "#fff",
               outline: "none",
@@ -253,7 +252,7 @@ export default function BlogsPage() {
           }
         ].map(({ label, value, onChange, options }) => (
           <div key={label}>
-            <label style={{ display: "block", fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9c8a78", fontWeight: 700, marginBottom: 5 }}>
+            <label style={{ display: "block", fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "#9c8a78", fontWeight: 700, marginBottom: 5 }}>
               {label}
             </label>
             <select
@@ -262,7 +261,7 @@ export default function BlogsPage() {
                 border: "1px solid #ddd5c8",
                 borderRadius: 6,
                 padding: "0 12px",
-                fontSize: 12,
+                fontSize: 13,
                 color: "#1a1008",
                 background: "#fff",
                 outline: "none",
@@ -285,7 +284,7 @@ export default function BlogsPage() {
             background: "transparent",
             border: "1px solid #ddd5c8",
             borderRadius: 6,
-            fontSize: 10,
+            fontSize: 11,
             letterSpacing: "0.15em",
             textTransform: "uppercase",
             color: "#7a6a5a",
@@ -327,7 +326,7 @@ export default function BlogsPage() {
                     <th key={h} style={{
                       textAlign: "left",
                       padding: "11px 16px",
-                      fontSize: 9,
+                      fontSize: 10,
                       letterSpacing: "0.18em",
                       textTransform: "uppercase",
                       color: "#b8a898",
@@ -362,7 +361,7 @@ export default function BlogsPage() {
           borderTop: "1px solid #f0e8dc",
           background: "#fdfaf6",
         }}>
-          <span style={{ fontSize: 11, color: "#b8a898", letterSpacing: "0.05em" }}>
+          <span style={{ fontSize: 12, color: "#b8a898", letterSpacing: "0.05em" }}>
             {Math.min((page - 1) * 10 + 1, total)}–{Math.min(page * 10, total)} of {total} posts
           </span>
           <div style={{ display: "flex", gap: 4 }}>
@@ -375,7 +374,7 @@ export default function BlogsPage() {
                   minWidth: 28,
                   padding: "0 8px",
                   borderRadius: 5,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: 600,
                   border: p === page ? "1px solid #c9a84c" : "1px solid #ede4d8",
                   background: p === page ? "#1a1008" : "#fff",
@@ -431,7 +430,7 @@ function TableRow({ b, idx, onEdit, onDelete }) {
           transition: "opacity 0.15s",
         }} />
         <span style={{
-          fontSize: 13.5,
+          fontSize: 14.5,
           fontWeight: 600,
           color: "#1a1008",
           display: "block",
@@ -450,7 +449,7 @@ function TableRow({ b, idx, onEdit, onDelete }) {
           display: "inline-block",
           background: "#f5ece0",
           color: "#7a5c2e",
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: 600,
           letterSpacing: "0.06em",
           padding: "3px 10px",
@@ -462,7 +461,7 @@ function TableRow({ b, idx, onEdit, onDelete }) {
       </td>
 
       {/* Author */}
-      <td style={{ padding: "14px 16px", fontSize: 12, color: "#5c4f42", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      <td style={{ padding: "14px 16px", fontSize: 13, color: "#5c4f42", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {b.author?.name || b.author || "—"}
       </td>
 
@@ -475,7 +474,7 @@ function TableRow({ b, idx, onEdit, onDelete }) {
             gap: 6,
             background: "#edf7f1",
             color: "#1e6640",
-            fontSize: 10.5,
+            fontSize: 11.5,
             fontWeight: 600,
             padding: "4px 10px",
             borderRadius: 20,
@@ -492,7 +491,7 @@ function TableRow({ b, idx, onEdit, onDelete }) {
             gap: 6,
             background: "#f5f0e8",
             color: "#7a6a4a",
-            fontSize: 10.5,
+            fontSize: 11.5,
             fontWeight: 600,
             padding: "4px 10px",
             borderRadius: 20,
@@ -506,7 +505,7 @@ function TableRow({ b, idx, onEdit, onDelete }) {
       </td>
 
       {/* Date */}
-      <td style={{ padding: "14px 16px", fontSize: 11.5, color: "#a89888", letterSpacing: "0.02em" }}>
+      <td style={{ padding: "14px 16px", fontSize: 12.5, color: "#a89888", letterSpacing: "0.02em" }}>
         {b.createdAt ? fmtDate(b.createdAt) : "—"}
       </td>
 
@@ -533,7 +532,7 @@ function ActionBtn({ onClick, color, hoverColor, label }) {
         border: "none",
         padding: 0,
         cursor: "pointer",
-        fontSize: 10.5,
+        fontSize: 11.5,
         fontWeight: 700,
         letterSpacing: "0.12em",
         textTransform: "uppercase",

@@ -148,15 +148,15 @@ export default function PromoBannersPage() {
                     </td>
 
                     <td className="px-4 py-3">
-                      <button onClick={() => toggleActive(b)}>
+                      <button onClick={() => toggleActive(b)} className="scale-122 origin-left">
                         <Badge status={b.isActive ? "active" : "inactive"} label={b.isActive ? "Live" : "Hidden"} />
                       </button>
                     </td>
 
                     <td className="px-4 py-3">
                       <div className="flex gap-3">
-                        <button onClick={() => openEdit(b)} className={editBtnCls}>Edit</button>
-                        <button onClick={() => setDeleteTarget(b)} className={delBtnCls}>Del</button>
+                        <button onClick={() => openEdit(b)} className={`${editBtnCls} text-[12px]`}>Edit</button>
+                        <button onClick={() => setDeleteTarget(b)} className={`${delBtnCls} text-[12px]`}>Del</button>
                       </div>
                     </td>
                   </tr>
