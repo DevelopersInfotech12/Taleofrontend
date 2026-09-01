@@ -13,16 +13,7 @@ const ShopScreen = () => {
                 title="Our Collections"
                 subtitle="Timeless pieces for every moment"
                 breadcrumb={[{ label: "Home", href: "/" }, { label: "Collections" }]}
-                desktopImages={[
-                    "./banner3.png",
-                    "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1600&q=80&fit=crop",
-                    "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1600&q=80&fit=crop",
-                ]}
-                mobileImages={[
-                    "./banner3.png",
-                    "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80&fit=crop&crop=center",
-                    "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80&fit=crop&crop=center",
-                ]}
+                useAdminSlides
             />
             <ShopPage />
             <Footer />
