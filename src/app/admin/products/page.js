@@ -233,6 +233,7 @@ export default function ProductsPage() {
         collections={collections}
         onSaved={fetchProducts}
         onCategoryAdded={fetchTaxonomy}
+        onCategoryRemoved={fetchTaxonomy}
         showToast={showToast}
       />
 
