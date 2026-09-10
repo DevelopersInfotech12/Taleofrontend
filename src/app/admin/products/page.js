@@ -41,19 +41,19 @@ export default function ProductsPage() {
     return () => clearTimeout(t);
   }, [searchInput]);
 
-  useEffect(() => {
+  const fetchTaxonomy = useCallback(async () => {
     if (!token) return;
-    (async () => {
-      try {
-        const [catRes, colRes] = await Promise.all([
-          apiFetch("/categories?includeInactive=true", token),
-          apiFetch("/collections?includeInactive=true", token),
-        ]);
-        setCategories(catRes.data || []);
-        setCollections(colRes.data || []);
-      } catch { /* non-fatal */ }
-    })();
+    try {
+      const [catRes, colRes] = await Promise.all([
+        apiFetch("/categories?includeInactive=true", token),
+        apiFetch("/collections?includeInactive=true", token),
+      ]);
+      setCategories(catRes.data || []);
+      setCollections(colRes.data || []);
+    } catch { /* non-fatal */ }
   }, [token]);
+
+  useEffect(() => { fetchTaxonomy(); }, [fetchTaxonomy]);
 
   const fetchProducts = useCallback(async () => {
     if (!token) return;
@@ -232,6 +232,7 @@ export default function ProductsPage() {
         categories={categories}
         collections={collections}
         onSaved={fetchProducts}
+        onCategoryAdded={fetchTaxonomy}
         showToast={showToast}
       />
 

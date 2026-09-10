@@ -16,7 +16,7 @@ const DEFAULT_SLIDES = [
         cta: "Explore Necklaces",
     },
     {
-        desktop: "./bannner1.png",
+        desktop: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1600&q=80&fit=crop",
         mobile: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80&fit=crop",
         label: "No. 02",
         heading: "Worn Like\na Secret",
@@ -136,10 +136,16 @@ export default function OtherHero({
         startBar();
         timerRef.current = setInterval(() => goTo((cur + 1) % total), INTERVAL);
         return () => { clearInterval(timerRef.current); cancelAnimationFrame(rafRef.current); };
-    }, [cur]);
+    }, [cur, total]);
+
+    // Clamp cur back in range if slide count shrinks (e.g. admin slides load
+    // with fewer items than the defaults cur had already advanced past).
+    useEffect(() => {
+        if (cur >= total) setCur(0);
+    }, [total, cur]);
 
     const BC = breadcrumb.map(c => typeof c === "string" ? { label: c, href: null } : c);
-    const s = slides[cur];
+    const s = slides[cur] || slides[0];
     const imgSrc = isMob ? s.mobile : s.desktop;
 
     return (
@@ -372,7 +378,7 @@ export default function OtherHero({
                     minHeight: isMob ? 200 : undefined,
                 }}>
                     {[cur, prev].map(idx => {
-                        if (idx === null) return null;
+                        if (idx === null || !slides[idx]) return null;
                         const isActive = idx === cur;
                         const src = isMob ? slides[idx].mobile : slides[idx].desktop;
                         return (
