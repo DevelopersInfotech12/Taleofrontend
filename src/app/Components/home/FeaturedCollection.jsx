@@ -94,7 +94,7 @@ export default function FeaturedCollection() {
             <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(2rem, 3.5vw, 3.5rem)", fontWeight: 400, fontStyle: "italic", margin: 0, lineHeight: 1.1 }} className="text-[#a67c2e] dark:text-[#c9a96e]">
               Worn like a secret.
             </h2>
-            <p style={{ fontFamily: BODY, fontSize: 13, lineHeight: 1.7, marginTop: 12, maxWidth: 360, fontWeight: 400 }} className="text-[#6b5d44] dark:text-[#7e6c4d]">
+            <p style={{ fontFamily: BODY, fontSize: 13, lineHeight: 1.7, marginTop: 12, maxWidth: 360, fontWeight: 500 }} className="text-[#6b5d44] dark:text-[#7e6c4d]">
               Heirloom-grade pieces, each made by hand in small batches.
             </p>
           </RevealSide>
@@ -104,15 +104,15 @@ export default function FeaturedCollection() {
               {[{ value: "22k", label: "Gold Standard" }, { value: "40+", label: "Artisans" }, { value: "100%", label: "Handcrafted" }].map((s) => (
                 <div key={s.label} className="flex flex-col items-center gap-0.5">
                   <span style={{ fontFamily: BODY, fontSize: 22, fontWeight: 600, letterSpacing: "0.1em" }} className="text-[#a67c2e] dark:text-[#c9a96e]">{s.value}</span>
-                  <span style={{ fontFamily: BODY, fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 400 }} className="text-[#a67c2e] dark:text-[#c9a96e]">{s.label}</span>
+                  <span style={{ fontFamily: BODY, fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 600 }} className="text-[#a67c2e] dark:text-[#c9a96e]">{s.label}</span>
                 </div>
               ))}
             </div>
 
             <a
               href="/shop"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full transition-all hover:brightness-110 whitespace-nowrap border border-[#d8cdb8] dark:border-[#3d3020] text-[#a67c2e] dark:text-[#c9a96e]"
-              style={{ fontFamily: BODY, fontSize: 13, fontWeight: 400, background: "transparent", textDecoration: "none" }}
+              className="flex items-center gap-2 px-5 py-2.5  rounded-full transition-all hover:brightness-110 whitespace-nowrap border border-[#d8cdb8] dark:border-[#3d3020] text-[#a67c2e] dark:text-[#c9a96e] font-bold"
+              style={{ fontFamily: BODY, fontSize: 13, fontWeight: 600, background: "transparent", textDecoration: "none" }}
             >
               View full collection
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>

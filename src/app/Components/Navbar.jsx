@@ -188,7 +188,7 @@ export default function Navbar() {
                 <div key={href} className="relative group">
                   <Link
                     href={href}
-                    className={`flex items-center gap-1 text-[11.5px] tracking-[0.14em] font-sans font-[700] uppercase transition-colors duration-200 pb-1 ${active ? "text-[#c9a96e]" : "text-[#3d1f10]/85 dark:text-[#e8d5b0]/85 hover:text-[#c9a96e]"
+                    className={`flex items-center gap-1 text-[12px] tracking-[0.14em] font-sans font-[700] uppercase transition-colors duration-200 pb-1 ${active ? "text-[#c9a96e]" : "text-[#3d1f10]/85 dark:text-[#e8d5b0]/85 hover:text-[#c9a96e]"
                       }`}
                   >
                     {label}
