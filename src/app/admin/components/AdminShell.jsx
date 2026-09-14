@@ -54,12 +54,16 @@ export default function AdminShell({ children }) {
           ))}
         </nav>
         <div className="px-4 py-2 border-t border-[#3d2a1a] shrink-0">
-          <p className="text-[12px] text-[#e8d5b0] truncate">{user?.name}</p>
-          <p className="text-[10px] text-[#c9a96e]/50 truncate mb-2">{user?.email}</p>
-          <button onClick={logout}
-            className="w-full text-[11px] uppercase tracking-widest text-[#c9a96e] hover:text-[#e8d5b0] transition-colors border border-[#c9a96e]/30 px-3 py-1.5 rounded">
-            Logout
-          </button>
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-[12px] text-[#e8d5b0] truncate">{user?.name}</p>
+              <p className="text-[10px] text-[#c9a96e]/50 truncate">{user?.email}</p>
+            </div>
+            <button onClick={logout}
+              className="shrink-0 text-[11px] uppercase tracking-widest text-[#c9a96e] hover:text-[#e8d5b0] transition-colors border border-[#c9a96e]/30 px-3 py-1.5 rounded">
+              Logout
+            </button>
+          </div>
         </div>
       </aside>
 

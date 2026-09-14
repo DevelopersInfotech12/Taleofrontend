@@ -88,7 +88,7 @@ export function Modal({ open, onClose, title, children, width = "max-w-2xl" }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 animate-fadeIn">
       <div className={`bg-white rounded-2xl shadow-xl border border-[#ede4d8] w-full ${width} max-h-[90vh] overflow-y-auto`}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#ede4d8] sticky top-0 bg-white rounded-t-2xl z-10">
-          <h2 className="text-[15px] font-semibold text-[#1a1008]" style={{ fontFamily: "Georgia, serif" }}>{title}</h2>
+          <h2 className="text-[16px] font-bold text-[#1a1008]" style={{ fontFamily: "Georgia, serif" }}>{title}</h2>
           <button onClick={onClose} className="text-[#9c8a78] hover:text-[#1a1008] text-lg leading-none">✕</button>
         </div>
         <div className="px-6 py-5">{children}</div>
