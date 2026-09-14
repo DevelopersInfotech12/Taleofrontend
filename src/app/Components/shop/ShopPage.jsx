@@ -6,20 +6,20 @@ import ProductCard from "./ProductCard";
 import { API, normaliseProduct } from "../../lib/api";
 
 const SORT_OPTIONS = [
-  { label: "Featured",           value: "featured"   },
-  { label: "Newest First",       value: "newest"     },
-  { label: "Price: Low to High", value: "price_asc"  },
+  { label: "Featured", value: "featured" },
+  { label: "Newest First", value: "newest" },
+  { label: "Price: Low to High", value: "price_asc" },
   { label: "Price: High to Low", value: "price_desc" },
-  { label: "Top Rated",          value: "rating"     },
-  { label: "Best Sellers",       value: "bestseller" },
+  { label: "Top Rated", value: "rating" },
+  { label: "Best Sellers", value: "bestseller" },
 ];
 
 const SORT_MAP = {
-  featured:   "newest",
-  newest:     "newest",
-  price_asc:  "price-asc",
+  featured: "newest",
+  newest: "newest",
+  price_asc: "price-asc",
   price_desc: "price-desc",
-  rating:     "popular",
+  rating: "popular",
   bestseller: "popular",
 };
 
@@ -28,11 +28,11 @@ function toggleArrayItem(arr = [], item) {
 }
 
 const PRICE_RANGES = [
-  { label: "Under ₹5,000",        min: 0,      max: 5000   },
-  { label: "₹5,000 – ₹15,000",    min: 5000,   max: 15000  },
-  { label: "₹15,000 – ₹50,000",   min: 15000,  max: 50000  },
-  { label: "₹50,000 – ₹1,00,000", min: 50000,  max: 100000 },
-  { label: "Above ₹1,00,000",     min: 100000, max: null   },
+  { label: "Under ₹5,000", min: 0, max: 5000 },
+  { label: "₹5,000 – ₹15,000", min: 5000, max: 15000 },
+  { label: "₹15,000 – ₹50,000", min: 15000, max: 50000 },
+  { label: "₹50,000 – ₹1,00,000", min: 50000, max: 100000 },
+  { label: "Above ₹1,00,000", min: 100000, max: null },
 ];
 
 function buildQueryParams(filters, sort, page, categoryId, search) {
@@ -58,9 +58,9 @@ function buildQueryParams(filters, sort, page, categoryId, search) {
   }
   if (filters.minPrice) p.minPrice = filters.minPrice;
   if (filters.maxPrice) p.maxPrice = filters.maxPrice;
-  if (filters.toggles?.includes("onSale"))      p.onSale = true;
+  if (filters.toggles?.includes("onSale")) p.onSale = true;
   if (filters.toggles?.includes("newArrivals")) p.newArrival = true;
-  if (filters.toggles?.includes("inStock"))     p.inStock = true;
+  if (filters.toggles?.includes("inStock")) p.inStock = true;
   if (sort === "bestseller") p.bestseller = true;
   p.sort = SORT_MAP[sort] || "newest";
   return p;
@@ -70,20 +70,20 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
   const searchParams = useSearchParams();
   const urlSearch = searchParams.get("search") || "";
 
-  const [filters, setFilters]                     = useState(initialFilters);
-  const [sort, setSort]                           = useState("featured");
-  const [searchTerm, setSearchTerm]                = useState(urlSearch);
-  const [viewMode, setViewMode]                   = useState("grid");
-  const [sidebarOpen, setSidebarOpen]             = useState(true);
+  const [filters, setFilters] = useState(initialFilters);
+  const [sort, setSort] = useState("featured");
+  const [searchTerm, setSearchTerm] = useState(urlSearch);
+  const [viewMode, setViewMode] = useState("grid");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  const [products, setProducts]     = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [error, setError]           = useState(null);
-  const [page, setPage]             = useState(1);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal]           = useState(0);
-  const [animKey, setAnimKey]       = useState(0);
+  const [total, setTotal] = useState(0);
+  const [animKey, setAnimKey] = useState(0);
   const [categoryId, setCategoryId] = useState(null);
 
   const abortRef = useRef(null);
@@ -96,7 +96,7 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
       const cats = json.data ?? [];
       const found = cats.find(c => c.slug === categorySlug || c.name?.toLowerCase() === categorySlug?.toLowerCase());
       if (found) setCategoryId(found._id);
-    }).catch(() => {});
+    }).catch(() => { });
   }, [categorySlug]);
 
   const loadProducts = useCallback(async (f, s, pg, term) => {
@@ -148,7 +148,7 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
   })();
 
   return (
-    <div className="min-h-screen bg-[#fdfaf6]">
+    <div className="min-h-screen bg-[#fbf7ef]">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap');
         * { font-family: 'Jost', sans-serif; }
@@ -399,13 +399,12 @@ export default function ShopPage({ initialFilters = {}, categorySlug = null }) {
                     <button
                       key={i}
                       onClick={() => typeof p === "number" && setPage(p)}
-                      className={`flex h-9 w-9 items-center justify-center rounded border text-[13px] transition-all ${
-                        p === page
-                          ? "border-[#2c2418] bg-[#2c2418] text-[#e8d5b0]"
-                          : typeof p === "number"
+                      className={`flex h-9 w-9 items-center justify-center rounded border text-[13px] transition-all ${p === page
+                        ? "border-[#2c2418] bg-[#2c2418] text-[#e8d5b0]"
+                        : typeof p === "number"
                           ? "border-[#e0d4c4] text-[#9c8a78] hover:border-[#b8975a] hover:text-[#b8975a]"
                           : "border-transparent text-[#9c8a78] cursor-default"
-                      }`}
+                        }`}
                     >
                       {p}
                     </button>

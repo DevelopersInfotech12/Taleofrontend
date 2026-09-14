@@ -104,8 +104,9 @@ export default function ProductCard({
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="group relative w-full overflow-hidden rounded-2xl flex flex-col h-full transition-shadow duration-500 bg-white dark:bg-[#150f0a] border border-[#e8d5b0]/40 dark:border-transparent"
-      onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 18px 36px -18px rgba(42,26,14,0.28)")}
-      onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "0 1px 2px rgba(42,26,14,0.04)")}
+      style={{ boxShadow: "0 8px 20px -10px rgba(42,26,14,0.22)" }}
+      onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 20px 38px -14px rgba(42,26,14,0.32)")}
+      onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "0 8px 20px -10px rgba(42,26,14,0.22)")}
     >
       {/* ── Image ── */}
       <div className="relative h-72 sm:h-72 overflow-hidden flex-shrink-0">
