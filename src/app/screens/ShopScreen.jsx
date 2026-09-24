@@ -13,7 +13,7 @@ const ShopScreen = () => {
                 title="Our Collections"
                 subtitle="Timeless pieces for every moment"
                 breadcrumb={[{ label: "Home", href: "/" }, { label: "Collections" }]}
-                useAdminSlides
+                heroKey="shop"
             />
             <ShopPage />
             <Footer />

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import ShopSidebar from "./ShopSidebar";
+import ShopSidebar, { PRICE_RANGES } from "./ShopSidebar";
 import ProductCard from "./ProductCard";
 import { API, normaliseProduct } from "../../lib/api";
 
@@ -27,14 +27,6 @@ function toggleArrayItem(arr = [], item) {
   return arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item];
 }
 
-const PRICE_RANGES = [
-  { label: "Under ₹5,000", min: 0, max: 5000 },
-  { label: "₹5,000 – ₹15,000", min: 5000, max: 15000 },
-  { label: "₹15,000 – ₹50,000", min: 15000, max: 50000 },
-  { label: "₹50,000 – ₹1,00,000", min: 50000, max: 100000 },
-  { label: "Above ₹1,00,000", min: 100000, max: null },
-];
-
 function buildQueryParams(filters, sort, page, categoryId, search) {
   const p = { page, limit: 18 };
   if (search) p.search = search;
@@ -43,7 +35,7 @@ function buildQueryParams(filters, sort, page, categoryId, search) {
   } else if (filters.categoryIds?.length === 1) {
     p.category = filters.categoryIds[0];
   }
-  const tagFilters = [...(filters.gemstones || []), ...(filters.metals || []), ...(filters.stoneColors || [])];
+  const tagFilters = [...(filters.gemstones || [])];
   if (tagFilters.length) p.tag = tagFilters.join(",");
   if (filters.priceRanges?.length) {
     const matched = PRICE_RANGES.filter(r => filters.priceRanges.includes(r.label));

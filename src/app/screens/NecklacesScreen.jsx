@@ -9,6 +9,7 @@ const NecklacesScreen = () => {
         <div>
             <Navbar />
             <OtherHero
+                heroKey="category:necklaces"
                 title="Necklaces"
                 subtitle="Worn close to the heart"
                 breadcrumb={[{ label: "Home", href: "/" }, { label: "Necklaces" }]}

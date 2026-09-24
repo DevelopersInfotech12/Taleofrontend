@@ -79,6 +79,7 @@ export default function CollectionScreen({ collectionSlug }) {
     <div>
       <Navbar />
       <OtherHero
+        heroKey={`collection:${collectionSlug}`}
         title={data.title}
         subtitle={data.subtitle}
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Collections", href: "/collections" }, { label: data.title }]}

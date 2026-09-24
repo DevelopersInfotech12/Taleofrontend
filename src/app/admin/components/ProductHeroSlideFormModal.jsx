@@ -2,9 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import { apiFetch, imgUrl } from "../lib/api";
 import { useAuth } from "../lib/AdminAuthContext";
-import { Modal, Field, inputCls, PrimaryButton, SecondaryButton } from "./ui";
+import { Modal, Field, inputCls, selectCls, PrimaryButton, SecondaryButton } from "./ui";
+import { useHeroTargets } from "../lib/heroTargets";
 
 const emptyForm = {
+  pageKey: "all",
   collection: "",
   heading: "",
   meta: "",
@@ -57,8 +59,9 @@ function ImagePicker({ label, hint, existing, file, onFile, onClear }) {
   );
 }
 
-export default function ProductHeroSlideFormModal({ open, onClose, slide, onSaved, showToast }) {
+export default function ProductHeroSlideFormModal({ open, onClose, slide, onSaved, showToast, defaultPageKey = "all" }) {
   const { token } = useAuth();
+  const { groups } = useHeroTargets();
   const [form, setForm] = useState(emptyForm);
   const [existingImage, setExistingImage] = useState("");
   const [existingMobile, setExistingMobile] = useState("");
@@ -70,6 +73,7 @@ export default function ProductHeroSlideFormModal({ open, onClose, slide, onSave
   useEffect(() => {
     if (slide) {
       setForm({
+        pageKey: slide.pageKey || "all",
         collection: slide.collection || "",
         heading: slide.heading || "",
         meta: slide.meta || "",
@@ -81,7 +85,7 @@ export default function ProductHeroSlideFormModal({ open, onClose, slide, onSave
       setExistingImage(slide.image || "");
       setExistingMobile(slide.mobileImage || "");
     } else {
-      setForm(emptyForm);
+      setForm({ ...emptyForm, pageKey: defaultPageKey || "all" });
       setExistingImage("");
       setExistingMobile("");
     }
@@ -128,6 +132,23 @@ export default function ProductHeroSlideFormModal({ open, onClose, slide, onSave
     <Modal open={open} onClose={onClose} title={slide ? "Edit Products Hero Slide" : "Add Products Hero Slide"} width="max-w-3xl">
       {error && <div className="mb-4 px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-[12px] text-red-700">{error}</div>}
       <form onSubmit={submit} className="space-y-5">
+
+        {/* Which page shows this slide */}
+        <Field label="Show on page">
+          <select className={selectCls} value={form.pageKey} onChange={(e) => update("pageKey", e.target.value)}>
+            {!groups.some((g) => g.options.some((o) => o.value === form.pageKey)) && (
+              <option value={form.pageKey}>{form.pageKey}</option>
+            )}
+            {groups.map((g) => (
+              <optgroup key={g.group} label={g.group}>
+                {g.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </optgroup>
+            ))}
+          </select>
+          <p className="text-[10px] text-[#b0a090] mt-1 leading-relaxed">
+            A page uses its own slides if it has any, otherwise the "All product pages" slides.
+          </p>
+        </Field>
 
         {/* Copy */}
         <div className="grid grid-cols-2 gap-4">

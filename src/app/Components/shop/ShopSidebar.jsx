@@ -40,18 +40,12 @@ const CheckItem = ({ label, count, checked, onChange }) => (
   </label>
 );
 
-const SwatchItem = ({ label, hex, selected, onChange }) => (
-  <button onClick={onChange} title={label} className={`relative h-7 w-7 rounded-full transition-all duration-200 ${selected ? "scale-110 ring-2 ring-[#b8975a] ring-offset-2" : "hover:scale-105"}`} style={{ backgroundColor: hex }} />
-);
-
 const GEMSTONES = ["Diamond", "Ruby", "Emerald", "Sapphire", "Pearl", "Amethyst", "Moissanite", "No Stone"];
-const METALS = ["Yellow Gold", "White Gold", "Rose Gold", "Platinum", "Silver 925", "Two-Tone"];
-const PRICE_RANGES = [
-  { label: "Under ₹5,000", min: 0, max: 5000 },
-  { label: "₹5,000 – ₹15,000", min: 5000, max: 15000 },
-  { label: "₹15,000 – ₹50,000", min: 15000, max: 50000 },
-  { label: "₹50,000 – ₹1,00,000", min: 50000, max: 100000 },
-  { label: "Above ₹1,00,000", min: 100000, max: null },
+export const PRICE_RANGES = [
+  { label: "Under ₹3,000", min: 0, max: 3000 },
+  { label: "₹3,000 – ₹5,000", min: 3000, max: 5000 },
+  { label: "₹5,000 – ₹8,000", min: 5000, max: 8000 },
+  { label: "Under ₹10,000", min: 0, max: 10000 },
 ];
 
 export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideClearHeader = false, sort, onSortChange }) {
@@ -136,18 +130,6 @@ export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideC
           </div>
         </FilterSection>
 
-        {/* Metal */}
-        <FilterSection title="Metal Type">
-          {METALS.map((m) => (
-            <CheckItem
-              key={m}
-              label={m}
-              checked={filters.metals?.includes(m)}
-              onChange={() => onFilterChange("metals", m)}
-            />
-          ))}
-        </FilterSection>
-
         {/* Gemstone */}
         <FilterSection title="Gemstone">
           {GEMSTONES.map((g) => (
@@ -158,24 +140,6 @@ export default function ShopSidebar({ filters, onFilterChange, onClearAll, hideC
               onChange={() => onFilterChange("gemstones", g)}
             />
           ))}
-        </FilterSection>
-
-        {/* Stone Color */}
-        <FilterSection title="Stone Color">
-          <div className="flex flex-wrap gap-2.5">
-            {[
-              { label: "White", hex: "#F8F4F0" },
-              { label: "Yellow", hex: "#F5C842" },
-              { label: "Pink", hex: "#E8829A" },
-              { label: "Blue", hex: "#3B7DC8" },
-              { label: "Green", hex: "#3DAA6C" },
-              { label: "Red", hex: "#C83B3B" },
-              { label: "Purple", hex: "#8B5CF6" },
-              { label: "Black", hex: "#2C2C2C" },
-            ].map((c) => (
-              <SwatchItem key={c.label} {...c} selected={filters.stoneColors?.includes(c.label)} onChange={() => onFilterChange("stoneColors", c.label)} />
-            ))}
-          </div>
         </FilterSection>
 
         {/* Toggles */}

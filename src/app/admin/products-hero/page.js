@@ -3,11 +3,12 @@ import { useState, useEffect, useCallback } from "react";
 import { apiFetch, imgUrl } from "../lib/api";
 import { useAuth } from "../lib/AdminAuthContext";
 import {
-  Spinner, ErrorBanner, EmptyState, Badge, Toast, ConfirmDialog,
+  Spinner, ErrorBanner, filterSelectCls, EmptyState, Badge, Toast, ConfirmDialog,
   PageHeader, HeaderButton, StatStrip,
   TableShell, Thead, rowCls, AccentCell, editBtnCls, delBtnCls,
 } from "../components/ui";
 import ProductHeroSlideFormModal from "../components/ProductHeroSlideFormModal";
+import { useHeroTargets } from "../lib/heroTargets";
 
 export default function ProductsHeroPage() {
   const { token } = useAuth();
@@ -15,6 +16,8 @@ export default function ProductsHeroPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [toast, setToast] = useState(null);
+  const [pageFilter, setPageFilter] = useState(""); // "" = every page
+  const { groups, labelFor } = useHeroTargets();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -29,14 +32,16 @@ export default function ProductsHeroPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await apiFetch("/product-hero?includeInactive=true", token);
+      const qs = new URLSearchParams({ includeInactive: "true" });
+      if (pageFilter) qs.set("pageKey", pageFilter);
+      const res = await apiFetch(`/product-hero?${qs}`, token);
       setItems(res.data || []);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [token, pageFilter]);
 
   useEffect(() => { fetchItems(); }, [fetchItems]);
 
@@ -104,15 +109,27 @@ export default function ProductsHeroPage() {
         { label: "Hidden", value: items.length - activeCount },
       ]} />
 
+      <div className="mb-4 flex items-center gap-2">
+        <label className="text-[11px] uppercase tracking-widest text-[#9c8a78]">Page</label>
+        <select className={filterSelectCls} value={pageFilter} onChange={(e) => setPageFilter(e.target.value)}>
+          <option value="">All slides</option>
+          {groups.map((g) => (
+            <optgroup key={g.group} label={g.group}>
+              {g.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+
       <ErrorBanner message={error} />
 
       <TableShell>
         {loading ? <Spinner /> : items.length === 0 ? (
-          <EmptyState message="No slides yet — add one. Until then the products page shows its built-in default slides (The Art of Gold / Worn Like a Secret / Sculpted in Warmth)." />
+          <EmptyState message={"No slides here yet — add one. A page with no slides of its own uses the \"All pages\" slides, then the built-in defaults."} />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-[12px]">
-              <Thead headers={["Order", "Preview", "Slide", "Button", "Status", "Actions"]} />
+              <Thead headers={["Order", "Preview", "Slide", "Page", "Button", "Status", "Actions"]} />
               <tbody>
                 {items.map((s, i) => (
                   <tr key={s._id} className={rowCls}>
@@ -150,6 +167,10 @@ export default function ProductsHeroPage() {
                     </td>
 
                     <td className="px-4 py-3">
+                      <span className="text-[11px] text-[#5c4f42] whitespace-nowrap">{labelFor(s.pageKey)}</span>
+                    </td>
+
+                    <td className="px-4 py-3">
                       {s.ctaLabel
                         ? <span className="text-[11px] text-[#5c4f42]">{s.ctaLabel}<br /><span className="text-[10px] text-[#b0a090]">{s.ctaHref}</span></span>
                         : <span className="text-[11px] text-[#b0a090]">—</span>}
@@ -180,13 +201,14 @@ export default function ProductsHeroPage() {
         onClose={() => setModalOpen(false)}
         slide={editing}
         onSaved={fetchItems}
+        defaultPageKey={pageFilter || "all"}
         showToast={showToast}
       />
 
       <ConfirmDialog
         open={!!deleteTarget}
         title="Delete this slide?"
-        message={`This slide will be removed from the products page hero.`}
+        message="This slide will be removed from its page hero."
         onConfirm={confirmDelete}
         onCancel={() => setDeleteTarget(null)}
         loading={deleting}

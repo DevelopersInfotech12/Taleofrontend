@@ -59,10 +59,18 @@ export default function OtherHero({
     breadcrumb = [],
     desktopImages,
     mobileImages,
-    // When true, this instance pulls its slides from /admin/products-hero
-    // instead of the built-in defaults. Manage them at /admin/products-hero.
+    // Which admin "Products Hero" slides this page shows. Manage them at
+    // /admin/products-hero (each slide has a "Show on page" setting).
+    //   "shop" | "products" | "best-arrivals"
+    //   "category:<slug>"    e.g. "category:rings"
+    //   "collection:<slug>"  e.g. "collection:bridal-collection"
+    // Falls back to the slides marked "All product pages", then to the
+    // built-in defaults / desktopImages + mobileImages props.
+    heroKey,
+    // Legacy alias: same as heroKey="all".
     useAdminSlides = false,
 }) {
+    const resolvedKey = heroKey || (useAdminSlides ? "all" : null);
     const [cur, setCur] = useState(0);
     const [prev, setPrev] = useState(null);
     const [busy, setBusy] = useState(false);
@@ -71,37 +79,48 @@ export default function OtherHero({
     const [entered, setEntered] = useState(false);
     const [descKey, setDescKey] = useState(0);
     const [adminSlides, setAdminSlides] = useState(null);
+    // true once the admin fetch settled (success or failure) — avoids flashing
+    // the built-in defaults before the real slides arrive.
+    const [fetched, setFetched] = useState(!resolvedKey);
     const timerRef = useRef(null);
     const rafRef = useRef(null);
     const t0Ref = useRef(null);
 
-    // Pull admin-managed slides when opted in; silently keep the built-in
+    // Pull the admin-managed slides for this page; silently keep the built-in
     // defaults if none exist yet or the API is unreachable.
     useEffect(() => {
-        if (!useAdminSlides) return;
+        if (!resolvedKey) { setAdminSlides(null); setFetched(true); return; }
         let cancelled = false;
+        setFetched(false);
+        setAdminSlides(null);
+        setCur(0);
         (async () => {
             try {
-                const res = await fetch(`${API}/product-hero`, { cache: "no-store" });
+                const res = await fetch(`${API}/product-hero?pageKey=${encodeURIComponent(resolvedKey)}`, { cache: "no-store" });
                 const json = await res.json();
                 if (!cancelled && Array.isArray(json?.data) && json.data.length) {
                     setAdminSlides(json.data.map(toSlide));
                 }
             } catch {
                 // keep defaults
+            } finally {
+                if (!cancelled) setFetched(true);
             }
         })();
         return () => { cancelled = true; };
-    }, [useAdminSlides]);
+    }, [resolvedKey]);
 
-    const baseSlides = adminSlides && adminSlides.length ? adminSlides : DEFAULT_SLIDES;
-    const slides = baseSlides.map((s, i) => ({
-        ...s,
-        desktop: desktopImages?.[i] || s.desktop,
-        mobile: mobileImages?.[i] || s.mobile,
-        heading: s.heading,
-        meta: s.meta,
-    }));
+    // Admin slides carry their own images. The desktopImages / mobileImages props
+    // only decorate the built-in fallback slides.
+    const hasAdmin = !!(adminSlides && adminSlides.length);
+    const baseSlides = hasAdmin ? adminSlides : DEFAULT_SLIDES;
+    const slides = hasAdmin
+        ? baseSlides
+        : baseSlides.map((s, i) => ({
+            ...s,
+            desktop: desktopImages?.[i] || s.desktop,
+            mobile: mobileImages?.[i] || s.mobile,
+        }));
     const total = slides.length;
 
     useEffect(() => {
@@ -143,6 +162,17 @@ export default function OtherHero({
     useEffect(() => {
         if (cur >= total) setCur(0);
     }, [total, cur]);
+
+    // Reserve the hero's space (no flash of default slides) until admin slides settle.
+    if (!fetched) {
+        return (
+            <section aria-hidden="true" style={{
+                width: "100%", background: "#1a0c06",
+                height: isMob ? undefined : "clamp(300px,40vw,560px)",
+                minHeight: isMob ? 480 : undefined,
+            }} />
+        );
+    }
 
     const BC = breadcrumb.map(c => typeof c === "string" ? { label: c, href: null } : c);
     const s = slides[cur] || slides[0];

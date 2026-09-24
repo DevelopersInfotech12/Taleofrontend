@@ -10,7 +10,7 @@ export default function ProductsPage() {
         title="Products"
         subtitle="Discover our jewellery"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Products" }]}
-        useAdminSlides
+        heroKey="products"
       />
       <Footer />
     </div>

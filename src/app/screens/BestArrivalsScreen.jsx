@@ -9,6 +9,7 @@ const BestArrivalsScreen = () => {
         <div>
             <Navbar />
             <OtherHero
+                heroKey="best-arrivals"
                 title="Best Arrivals"
                 subtitle="Our most celebrated new pieces"
                 breadcrumb={[{ label: "Home", href: "/" }, { label: "Best Arrivals" }]}
