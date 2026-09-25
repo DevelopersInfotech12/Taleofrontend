@@ -67,7 +67,7 @@ export const AnimatedTestimonialsDemo = () => {
       </div>
 
       {/* Card */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto bg-white dark:bg-[#1e1510] rounded-2xl p-8 border border-[#e8d5b0]/10 dark:border-[#c9a96e]/10 transition-colors duration-300">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-4xl mx-auto bg-white dark:bg-[#1e1510] rounded-2xl p-8 border border-[#e8d5b0]/10 dark:border-[#c9a96e]/10 transition-colors duration-300">
 
         {/* Image stack */}
         <div className="relative h-80 w-full">

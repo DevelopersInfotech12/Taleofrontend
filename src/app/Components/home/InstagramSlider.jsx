@@ -333,7 +333,7 @@ export default function InstagramSlider() {
       className="w-full py-16 overflow-hidden bg-[#faf7f2] dark:bg-[#1a0c06] transition-colors duration-300"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
 
         {/* ── Section Header (unified pattern) ── */}
         <div
