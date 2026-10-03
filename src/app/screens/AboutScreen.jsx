@@ -12,7 +12,7 @@ const values = [
 ];
 
 const timeline = [
-  { year: "2008", event: "Founded in Mumbai by master goldsmith Aryan Mehta, Luxéor began as a single atelier in Zaveri Bazaar." },
+  { year: "2008", event: "Founded in Mumbai by master goldsmith Aryan Mehta, Taleo began as a single atelier in Zaveri Bazaar." },
   { year: "2012", event: "Launched the inaugural Signature Collection — 12 pieces, sold out in 3 days. The waiting list still runs 6 months." },
   { year: "2016", event: "Expanded to 5 flagship stores across India. Named 'Best Fine Jewellery Brand' by Vogue India." },
   { year: "2020", event: "Went digital — bringing the atelier experience online with virtual try-ons and personalised consultations." },
@@ -32,7 +32,7 @@ export default function AboutScreen() {
       <Navbar />
       <PageHeader
         label="Our Story"
-        title="About Luxéor"
+        title="About Taleo"
         subtitle="Crafted with passion, precision, and purpose"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About Us" }]}
       />
@@ -49,7 +49,7 @@ export default function AboutScreen() {
                 Jewellery with a soul
               </h2>
               <p className="font-[family-name:var(--font-jost)] text-[#2a1a0e]/60 leading-[1.9] mb-5" style={{ fontSize: "14.5px" }}>
-                Luxéor was founded on a single conviction: that fine jewellery should feel like an inheritance, not a purchase. Each piece we make carries the weight of intention — conceived by designers who study ancient goldsmithing techniques, executed by artisans who treat every millimetre as a moral question.
+                Taleo was founded on a single conviction: that fine jewellery should feel like an inheritance, not a purchase. Each piece we make carries the weight of intention — conceived by designers who study ancient goldsmithing techniques, executed by artisans who treat every millimetre as a moral question.
               </p>
               <p className="font-[family-name:var(--font-jost)] text-[#2a1a0e]/60 leading-[1.9]" style={{ fontSize: "14.5px" }}>
                 We don't follow trends. We follow the logic of beauty — what endures, what illuminates, what speaks without saying a word.
@@ -122,7 +122,7 @@ export default function AboutScreen() {
                 Made by hand, made to last
               </h2>
               <p className="font-[family-name:var(--font-jost)] text-[#2a1a0e]/55 max-w-xl mx-auto" style={{ fontSize: "14.5px", lineHeight: 1.85 }}>
-                Every Luxéor piece passes through the same four stages — a process unchanged since our founding, because some things should never be rushed.
+                Every Taleo piece passes through the same four stages — a process unchanged since our founding, because some things should never be rushed.
               </p>
             </Reveal>
             <Stagger className="grid sm:grid-cols-2 gap-6 mb-14">
